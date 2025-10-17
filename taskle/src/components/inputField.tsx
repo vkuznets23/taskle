@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { IoMdEyeOff } from 'react-icons/io'
+import { IoEye } from 'react-icons/io5'
 
 interface InputProps {
   type: string
@@ -26,8 +28,8 @@ export default function InputField({
           onChange={(e) => onChange(e.target.value)}
         />
         {errorMessage && <p role="alert">{errorMessage}</p>}
-        <button onClick={() => setShowPassword(!showPassword)}>
-          show password
+        <button type="button" onClick={() => setShowPassword(!showPassword)}>
+          {showPassword ? <IoMdEyeOff /> : <IoEye />}
         </button>
       </div>
     )
