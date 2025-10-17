@@ -1,11 +1,12 @@
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom'
+import RegistrationForm from './components/registrationForm'
 
 function PersonalData() {
-  return <h1>PersonalDatae</h1>
+  return <h1>PersonalData</h1>
 }
 
 function Home() {
-  return <h1>Home Page</h1>
+  return <RegistrationForm />
 }
 
 function App() {
