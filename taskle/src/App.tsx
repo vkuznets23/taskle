@@ -1,23 +1,18 @@
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom'
-import RegistrationForm from './components/registrationForm'
+import RegistrationToggle from './components/registrationToggle'
 
 function PersonalData() {
   return <h1>PersonalData</h1>
 }
 
 function Home() {
-  return <RegistrationForm />
+  return <RegistrationToggle />
 }
 
 function App() {
   return (
     <main>
       <BrowserRouter>
-        {/* Links */}
-        <nav>
-          <Link to="/">Home</Link>
-          <Link to="/account">Account</Link>
-        </nav>
         {/* Routes */}
         <Routes>
           <Route path="/" element={<Home />} />

@@ -1,9 +1,12 @@
 import { useState } from 'react'
+import { RegistrationFormValidation } from '../utils/Formvalidation'
+import InputField from './inputField'
 
-interface Error {
+export interface Error {
   emailMessage?: string
   passwordMessage?: string
   confirmPasswordMessage?: string
+  others?: string
 }
 
 export default function RegistrationForm() {
@@ -15,36 +18,11 @@ export default function RegistrationForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const newError: Error = {}
-
-    // Validate email
-    if (!email || email.trim() === '') {
-      newError.emailMessage = 'Email is required'
-    } else {
-      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-      if (!emailRegex.test(email)) {
-        newError.emailMessage = 'Invalid email address'
-      }
-    }
-
-    // Validate password
-    if (!password || password.trim() === '') {
-      newError.passwordMessage = 'Password is required'
-    } else {
-      const passwordRegex =
-        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,32}$/
-      if (!passwordRegex.test(password)) {
-        newError.passwordMessage =
-          'Password must be 8-32 characters with at least one letter, one number, and one special character'
-      }
-    }
-
-    // Validate confirm password
-    if (!confirmPassword || confirmPassword.trim() === '') {
-      newError.confirmPasswordMessage = 'Confirm password is required'
-    } else if (password !== confirmPassword) {
-      newError.confirmPasswordMessage = 'Passwords do not match'
-    }
+    const newError = RegistrationFormValidation(
+      email,
+      password,
+      confirmPassword
+    )
 
     // If there are any errors, show them all and return
     if (Object.keys(newError).length > 0) {
@@ -62,48 +40,51 @@ export default function RegistrationForm() {
         body: JSON.stringify({ email, password }),
       })
       const data = await res.json()
+
       if (res.ok) {
-        // Success
+        console.log(data)
         setEmail('')
         setPassword('')
         setConfirmPassword('')
         setError({})
       } else {
-        // Server error
-        if (data.error && data.error.includes('already exists')) {
-          setError({ emailMessage: 'User with this email already exists' })
-        } else {
-          setError({ emailMessage: data.error || 'Registration failed' })
-        }
+        if (data.error && data.error.includes('already exists'))
+          setError({ others: 'User with this email already exists' })
+        else setError({ others: data.error || 'Registration failed' })
       }
     } catch (err) {
       console.error(err)
-      setError({ emailMessage: 'Network error. Please try again.' })
+      setError({ others: 'Network error. Please try again.' })
     }
   }
+
+  const { emailMessage, passwordMessage, confirmPasswordMessage, others } =
+    error
+
   return (
     <form onSubmit={handleSubmit}>
-      <input
+      <InputField
         type="email"
         placeholder="email"
         value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        onChange={setEmail}
+        errorMessage={emailMessage}
       />
-      {error.emailMessage && <p>{error.emailMessage}</p>}
-      <input
+      <InputField
         type="password"
         placeholder="password"
         value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        onChange={setPassword}
+        errorMessage={passwordMessage}
       />
-      {error.passwordMessage && <p>{error.passwordMessage}</p>}
-      <input
+      <InputField
         type="password"
         placeholder="confirm password"
         value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
+        onChange={setConfirmPassword}
+        errorMessage={confirmPasswordMessage}
       />
-      {error.confirmPasswordMessage && <p>{error.confirmPasswordMessage}</p>}
+      {others && <p>{others}</p>}
       <button type="submit">Register</button>
     </form>
   )
