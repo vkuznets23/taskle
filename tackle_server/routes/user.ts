@@ -2,11 +2,10 @@ import { PrismaClient } from '../generated/prisma/index.js'
 import bcrypt from 'bcrypt'
 import express from 'express'
 import jwt, { JwtPayload } from 'jsonwebtoken'
+import cors from 'cors'
 
 const prisma = new PrismaClient()
 const router = express.Router()
-
-console.log(process.env.JWT_SECRET, process.env.JWT_REFRESH_SECRET)
 
 // Register a new user
 router.post('/register', async (req, res) => {
@@ -76,10 +75,21 @@ router.post('/login', async (req, res) => {
       { expiresIn: '7d' }
     )
 
+    // save to cookie
+    res.cookie('accessToken', token, {
+      httpOnly: true, // protection from XSS
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 1000, // 1 hour
+    })
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true, // protection from XSS
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    })
+
     return res.json({
       message: 'Login successful',
-      token,
-      refreshToken,
       user: {
         id: user.id,
         email: user.email,
@@ -93,8 +103,9 @@ router.post('/login', async (req, res) => {
 
 // refrech a token
 router.post('/refresh', async (req, res) => {
-  const refreshToken = req.headers.authorization?.split(' ')[1]
-  if (!refreshToken) return res.status(401).json({ error: 'Missing token' })
+  const refreshToken = req.cookies.refreshToken
+  if (!refreshToken)
+    return res.status(401).json({ error: 'Missing refresh token' })
 
   try {
     const decoded = jwt.verify(
@@ -106,11 +117,50 @@ router.post('/refresh', async (req, res) => {
       process.env.JWT_SECRET as string,
       { expiresIn: '1h' }
     )
-    return res.json({ accessToken: newAccessToken })
+
+    res.cookie('accessToken', newAccessToken, {
+      httpOnly: true,
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 1000,
+    })
+
+    return res.json({ message: 'Token refreshed' })
   } catch (err) {
     console.error(err)
     return res.status(401).json({ error: 'Invalid token' })
   }
+})
+
+// Check if user is authenticated
+router.get('/me', async (req, res) => {
+  const token = req.cookies.accessToken
+  if (!token) {
+    return res.status(401).json({ error: 'No token provided' })
+  }
+  try {
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET as string
+    ) as JwtPayload
+    const user = await prisma.user.findUnique({
+      where: { id: decoded.userId },
+      select: { id: true, email: true, createdAt: true },
+    })
+    if (!user) {
+      return res.status(401).json({ error: 'User not found' })
+    }
+    return res.json({ user })
+  } catch (err) {
+    console.error(err)
+    return res.status(401).json({ error: 'Invalid token' })
+  }
+})
+
+// Logout
+router.post('/logout', (req, res) => {
+  res.clearCookie('accessToken')
+  res.clearCookie('refreshToken')
+  res.json({ message: 'Logged out successfully' })
 })
 
 export default router
