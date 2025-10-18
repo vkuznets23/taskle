@@ -1,22 +1,22 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import RegistrationToggle from './components/registrationToggle'
-
-function PersonalData() {
-  return <h1>PersonalData</h1>
-}
+import { useAuth } from './hooks/useAuth'
+import { Dashboard } from './components/dashboard'
+import Loader from './components/loader'
 
 function Home() {
-  return <RegistrationToggle />
+  const { user, loading } = useAuth()
+
+  if (loading) return <Loader />
+  return user ? <Dashboard user={user} /> : <RegistrationToggle />
 }
 
 function App() {
   return (
     <main>
       <BrowserRouter>
-        {/* Routes */}
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/account" element={<PersonalData />} />
         </Routes>
       </BrowserRouter>
     </main>

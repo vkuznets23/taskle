@@ -1,0 +1,172 @@
+/* circles */
+.circle-container {
+  display: grid;
+  grid-template-columns: repeat(2, 20px);
+  width: max-content;
+}
+
+.circle {
+  width: 20px;
+  height: 20px;
+  background-color: #ef89e7;
+  border-radius: 50%;
+}
+
+/* half circles */
+.half-circle {
+  width: 40px;
+  height: 20px;
+  background-color: #ff7043;
+}
+
+.top {
+  border-top-left-radius: 100px;
+  border-top-right-radius: 100px;
+}
+
+.bottom {
+  border-bottom-left-radius: 100px;
+  border-bottom-right-radius: 100px;
+}
+
+/* lines */
+.rectangle-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.rectangle {
+  background-color: #6352f5;
+  width: 40px;
+  height: 10px;
+  margin-bottom: 5px;
+}
+
+/* arrow */
+.arrow-container {
+  position: relative;
+  width: 40px;
+  height: 12px;
+}
+
+.rectangle-arrow {
+  position: absolute;
+  background-color: #66dc7e;
+}
+
+.vertical {
+  width: 40px;
+  height: 10px;
+  left: -15px;
+  top: 15px;
+  transform: rotate(90deg);
+}
+
+.horizontal {
+  width: 40px;
+  height: 10px;
+  left: 2px;
+  top: 0px;
+}
+
+.diagonal {
+  width: 40px;
+  height: 10px;
+  left: 2px;
+  top: 18px;
+  transform: rotate(45deg);
+}
+
+/* loader */
+.loader-container {
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 40px);
+  grid-gap: 10px;
+}
+
+.shape1 {
+  animation: move1 1.5s infinite ease-in-out;
+}
+
+.shape2 {
+  animation: move2 1.5s infinite ease-in-out;
+}
+
+.shape3 {
+  animation: move3 1.5s infinite ease-in-out;
+}
+
+.shape4 {
+  animation: move4 1.5s infinite ease-in-out;
+}
+
+@keyframes move1 {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(50px, 0);
+  }
+  50% {
+    transform: translate(50px, 50px);
+  }
+  75% {
+    transform: translate(0px, 50px);
+  }
+}
+
+@keyframes move2 {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(0, 50px);
+  }
+  50% {
+    transform: translate(-50px, 50px);
+  }
+  75% {
+    transform: translate(-50px, 0px);
+  }
+}
+
+@keyframes move3 {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(0, -50px);
+  }
+  50% {
+    transform: translate(50px, -50px);
+  }
+  75% {
+    transform: translate(50px, 0);
+  }
+}
+
+@keyframes move4 {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-50px, 0);
+  }
+  50% {
+    transform: translate(-50px, -50px);
+  }
+  75% {
+    transform: translate(0, -50px);
+  }
+}

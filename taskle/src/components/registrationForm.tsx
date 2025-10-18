@@ -37,6 +37,7 @@ export default function RegistrationForm() {
       const res = await fetch('http://localhost:3005/api/users/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ email, password }),
       })
       const data = await res.json()
@@ -85,7 +86,9 @@ export default function RegistrationForm() {
         errorMessage={confirmPasswordMessage}
       />
       {others && <p>{others}</p>}
-      <button type="submit">Register</button>
+      <button className="form-submit-btn" type="submit">
+        Register
+      </button>
     </form>
   )
 }

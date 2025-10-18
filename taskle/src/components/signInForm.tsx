@@ -2,11 +2,13 @@ import { useState } from 'react'
 import InputField from './inputField'
 import { SignInFormValidation } from '../utils/Formvalidation'
 import { type Error } from '../components/registrationForm'
+import { useAuth } from '../hooks/useAuth'
 
 export default function SignInform() {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [error, setError] = useState<Error>({})
+  const { refreshUser } = useAuth()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -22,6 +24,7 @@ export default function SignInform() {
       const res = await fetch('http://localhost:3005/api/users/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ email, password }),
       })
 
@@ -32,6 +35,7 @@ export default function SignInform() {
         setEmail('')
         setPassword('')
         setError({})
+        await refreshUser()
       } else {
         // server errors
         if (data.error && data.error.includes('Invalid email or password'))
@@ -64,7 +68,9 @@ export default function SignInform() {
       />
       {error.others && <p>{error.others}</p>}
 
-      <button type="submit">Log in</button>
+      <button className="form-submit-btn" type="submit">
+        Log in
+      </button>
     </form>
   )
 }

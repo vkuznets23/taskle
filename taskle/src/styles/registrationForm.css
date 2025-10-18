@@ -6,7 +6,6 @@
 }
 
 .registration-toggle {
-  border: 1px solid red;
   max-width: 500px;
   width: 100%;
   display: flex;
@@ -18,9 +17,9 @@
   display: flex;
   width: 100%;
   height: 40px;
+  border: 1px solid black;
   border-radius: 50px;
-  align-items: row;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .buttons-toggle button {
@@ -40,12 +39,31 @@
 
 .toggle-bg {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: -1px;
+  left: -1px;
   width: 50%;
   height: 100%;
+  border: 1px solid black;
   background: #66dc7e;
   border-radius: 50px;
   transition: transform 0.4s ease-in-out;
   z-index: 0;
+}
+
+.form-submit-btn {
+  margin-top: 20px;
+  max-width: 500px;
+  width: 100%;
+  height: 40px;
+  border: 1px solid black;
+  border-radius: 50px;
+  background-color: #66dc7e;
+  font-size: 14px;
+  transition: transform 0.4s ease-in-out;
+  cursor: pointer;
+}
+
+.form-submit-btn:hover {
+  transform: scale(1.02);
+  background-color: #67e07f;
 }

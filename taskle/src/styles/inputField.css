@@ -1,0 +1,101 @@
+.password-container,
+.input-container {
+  position: relative;
+  max-width: 500px;
+  width: 100%;
+  margin-top: 15px;
+}
+
+.password-container input,
+.input-container input {
+  box-sizing: border-box;
+  width: 100%;
+  border-radius: 50px;
+  font-size: 16px;
+  padding: 15px 20px;
+  border: 1px solid black;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.password-container input:focus,
+.input-container input:focus {
+  border: 2px solid #52c86a;
+}
+
+.password-container label,
+.input-container label {
+  position: absolute;
+  left: 20px;
+  top: 12px;
+  color: #2d2d2d;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  background-color: white;
+}
+.password-container input:focus + label,
+.input-container input:focus + label {
+  top: -8px;
+  left: 15px;
+  font-size: 12px;
+  padding: 0 6px;
+  color: #52c86a;
+}
+
+.password-container input:not(:placeholder-shown) + label,
+.input-container input:not(:placeholder-shown) + label {
+  top: -8px;
+  left: 15px;
+  font-size: 12px;
+  padding: 0 6px;
+}
+
+.password-container .eye-button {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #2d2d2d;
+}
+
+.has-error input {
+  border: 2px solid #fa713c;
+}
+
+.has-error label {
+  color: #fa713c;
+}
+
+.input-error {
+  font-size: 12px;
+  margin: 1px 10px;
+  color: #fa713c;
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-5px);
+  }
+  40% {
+    transform: translateX(5px);
+  }
+  60% {
+    transform: translateX(-5px);
+  }
+  80% {
+    transform: translateX(5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.has-error.shake {
+  animation: shake 0.3s ease;
+}
