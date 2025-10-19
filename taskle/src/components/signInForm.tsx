@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import InputField from './inputField'
-import { type Error } from '../components/registrationForm'
-import { useAuth } from '../hooks/useAuth'
 import { SignInFormValidation } from '../utils/Formvalidation'
+import { type Error } from '../types/registrationTypes'
+import InputField from './inputField'
 import InputError from './inputError'
 import SubmitButton from './submitButton'
+import { useAuth } from '../hooks/useAuth'
 
 export default function SignInform() {
   const [email, setEmail] = useState<string>('')

@@ -1,15 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { RegistrationFormValidation } from '../utils/Formvalidation'
+import { type Error } from '../types/registrationTypes'
 import InputField from './inputField'
 import InputError from './inputError'
 import SubmitButton from './submitButton'
-
-export interface Error {
-  emailMessage?: string
-  passwordMessage?: string
-  confirmPasswordMessage?: string
-  others?: string
-}
 
 export default function RegistrationForm() {
   const [email, setEmail] = useState<string>('')
