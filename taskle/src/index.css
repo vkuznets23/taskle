@@ -3,14 +3,24 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color: black;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-.body {
+:root[data-theme="light"] {
+  --bg-color: #fff;
+  --text-color: #000;
+}
+
+:root[data-theme="dark"] {
+  --bg-color: #111;
+  --text-color: #fff;
+}
+
+body {
   height: 100vh;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }

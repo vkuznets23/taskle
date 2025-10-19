@@ -1,5 +1,4 @@
-import { type Error } from '../components/registrationForm'
-
+import { type Error } from '../types/registrationTypes'
 export function EmailValidation(email: string, errors: Error) {
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$/
   if (!email || !email.trim()) errors.emailMessage = 'Email is required'
