@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { RegistrationFormValidation } from '../utils/Formvalidation'
 import InputField from './inputField'
+import InputError from './inputError'
 
 export interface Error {
   emailMessage?: string
@@ -13,10 +14,13 @@ export default function RegistrationForm() {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [confirmPassword, setConfirmPassword] = useState<string>('')
+  const [submit, setSubmitting] = useState(false)
   const [error, setError] = useState<Error>({})
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    setSubmitting(true)
 
     const newError = RegistrationFormValidation(
       email,
@@ -27,6 +31,7 @@ export default function RegistrationForm() {
     // If there are any errors, show them all and return
     if (Object.keys(newError).length > 0) {
       setError(newError)
+      setSubmitting(false)
       return
     }
 
@@ -48,6 +53,7 @@ export default function RegistrationForm() {
         setPassword('')
         setConfirmPassword('')
         setError({})
+        setSubmitting(false)
       } else {
         if (data.error && data.error.includes('already exists'))
           setError({ others: 'User with this email already exists' })
@@ -56,6 +62,8 @@ export default function RegistrationForm() {
     } catch (err) {
       console.error(err)
       setError({ others: 'Network error. Please try again.' })
+    } finally {
+      setSubmitting(false)
     }
   }
 
@@ -85,9 +93,10 @@ export default function RegistrationForm() {
         onChange={setConfirmPassword}
         errorMessage={confirmPasswordMessage}
       />
-      {others && <p>{others}</p>}
+      <InputError errorMessage={others} />
+
       <button className="form-submit-btn" type="submit">
-        Register
+        {submit ? 'Registering...' : 'Register'}
       </button>
     </form>
   )

@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
+import { forwardRef, useEffect, useState } from 'react'
 import { IoMdEyeOff } from 'react-icons/io'
 import { IoEye } from 'react-icons/io5'
 import '../styles/inputField.css'
+import InputError from './inputError'
 
 interface InputProps {
   type: string
@@ -11,72 +12,67 @@ interface InputProps {
   errorMessage?: string
 }
 
-export default function InputField({
-  type,
-  placeholder,
-  value,
-  onChange,
-  errorMessage,
-}: InputProps) {
-  const [showPassword, setShowPassword] = useState(false)
-  const [shake, setShake] = useState(false)
+const InputField = forwardRef<HTMLInputElement, InputProps>(
+  ({ type, placeholder, value, onChange, errorMessage }: InputProps, ref) => {
+    const [showPassword, setShowPassword] = useState(false)
+    const [shake, setShake] = useState(false)
 
-  useEffect(() => {
-    if (errorMessage) {
-      setShake(true)
-      const timeout = setTimeout(() => setShake(false), 300)
-      return () => clearTimeout(timeout)
-    }
-  }, [errorMessage])
+    useEffect(() => {
+      if (errorMessage) {
+        setShake(true)
+        const timeout = setTimeout(() => setShake(false), 300)
+        return () => clearTimeout(timeout)
+      }
+    }, [errorMessage])
 
-  const containerClass = `${
-    type === 'password' ? 'password-container' : 'input-container'
-  } ${errorMessage ? 'has-error' : ''} ${shake ? 'shake' : ''}`
+    const containerClass = `${
+      type === 'password' ? 'password-container' : 'input-container'
+    } ${errorMessage ? 'has-error' : ''} ${shake ? 'shake' : ''}`
 
-  if (type === 'password')
+    if (type === 'password')
+      return (
+        <>
+          <div className={containerClass}>
+            <input
+              id={placeholder}
+              type={showPassword ? 'text' : 'password'}
+              placeholder=" "
+              value={value}
+              onChange={(e) => onChange(e.target.value)}
+              autoComplete="current-password"
+              ref={ref}
+            />
+            <label htmlFor={placeholder}>{placeholder}</label>
+
+            <button
+              aria-label="Show password"
+              type="button"
+              className="eye-button"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <IoMdEyeOff /> : <IoEye />}
+            </button>
+          </div>
+          <InputError errorMessage={errorMessage} />
+        </>
+      )
+
     return (
-      <>
-        <div className={containerClass}>
-          <input
-            id={placeholder}
-            type={showPassword ? 'text' : 'password'}
-            placeholder=" "
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-          />
-          <label htmlFor={placeholder}>{placeholder}</label>
-
-          <button
-            type="button"
-            className="eye-button"
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {showPassword ? <IoMdEyeOff /> : <IoEye />}
-          </button>
-        </div>
-        {errorMessage && (
-          <p className="input-error" role="alert">
-            {errorMessage}
-          </p>
-        )}
-      </>
+      <div className={containerClass}>
+        <input
+          id={placeholder}
+          type={type}
+          placeholder=" "
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          autoComplete="username"
+          ref={ref}
+        />
+        <label htmlFor={placeholder}>{placeholder}</label>
+        <InputError errorMessage={errorMessage} />
+      </div>
     )
+  }
+)
 
-  return (
-    <div className={containerClass}>
-      <input
-        id={placeholder}
-        type={type}
-        placeholder=" "
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-      />
-      <label htmlFor={placeholder}>{placeholder}</label>
-      {errorMessage && (
-        <p className="input-error" role="alert">
-          {errorMessage}
-        </p>
-      )}
-    </div>
-  )
-}
+export default InputField

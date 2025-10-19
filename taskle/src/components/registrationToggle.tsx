@@ -2,11 +2,13 @@ import { useState } from 'react'
 import RegistrationForm from './registrationForm'
 import SignInform from './signInForm'
 import '../styles/registrationForm.css'
+import Logo from './logoIcon'
 
 export default function RegistrationToggle() {
   const [isSignUp, setIsSignUp] = useState(true)
   return (
     <div className="registration-toggle-container">
+      <Logo theme="light" />
       <div className="registration-toggle">
         <div className="buttons-toggle">
           <div
@@ -28,8 +30,8 @@ export default function RegistrationToggle() {
             Sign In
           </button>
         </div>
-        {isSignUp && <RegistrationForm />}
-        {!isSignUp && <SignInform />}
+        {!isSignUp && <RegistrationForm />}
+        {isSignUp && <SignInform />}
       </div>
     </div>
   )
