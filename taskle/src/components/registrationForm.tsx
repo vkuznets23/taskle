@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { RegistrationFormValidation } from '../utils/Formvalidation'
 import InputField from './inputField'
 import InputError from './inputError'
+import SubmitButton from './submitButton'
 
 export interface Error {
   emailMessage?: string
@@ -16,6 +17,32 @@ export default function RegistrationForm() {
   const [confirmPassword, setConfirmPassword] = useState<string>('')
   const [submit, setSubmitting] = useState(false)
   const [error, setError] = useState<Error>({})
+  const [isShaking, setIsShaking] = useState(false)
+
+  const emailRef = useRef<HTMLInputElement>(null)
+  const passwordRef = useRef<HTMLInputElement>(null)
+  const confirmPasswordRef = useRef<HTMLInputElement>(null)
+
+  const focusFirstError = useCallback(() => {
+    if (error.emailMessage && emailRef.current) {
+      emailRef.current.focus()
+    } else if (error.passwordMessage && passwordRef.current) {
+      passwordRef.current.focus()
+    } else if (error.others && emailRef.current) {
+      emailRef.current.focus()
+    } else if (error.confirmPasswordMessage && confirmPasswordRef.current) {
+      confirmPasswordRef.current.focus()
+    }
+  }, [error, emailRef, passwordRef, confirmPasswordRef])
+
+  useEffect(() => {
+    if (Object.keys(error).length > 0) {
+      setIsShaking(true)
+      setTimeout(() => setIsShaking(false), 500)
+
+      setTimeout(() => focusFirstError(), 100)
+    }
+  }, [error, focusFirstError])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -69,10 +96,14 @@ export default function RegistrationForm() {
 
   const { emailMessage, passwordMessage, confirmPasswordMessage, others } =
     error
+  const containerClass = `${others ? 'has-error' : ''} ${
+    isShaking ? 'form-shake' : ''
+  }`
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className={containerClass}>
       <InputField
+        ref={emailRef}
         type="email"
         placeholder="email"
         value={email}
@@ -80,6 +111,7 @@ export default function RegistrationForm() {
         errorMessage={emailMessage}
       />
       <InputField
+        ref={passwordRef}
         type="password"
         placeholder="password"
         value={password}
@@ -87,6 +119,7 @@ export default function RegistrationForm() {
         errorMessage={passwordMessage}
       />
       <InputField
+        ref={confirmPasswordRef}
         type="password"
         placeholder="confirm password"
         value={confirmPassword}
@@ -94,10 +127,7 @@ export default function RegistrationForm() {
         errorMessage={confirmPasswordMessage}
       />
       <InputError errorMessage={others} />
-
-      <button className="form-submit-btn" type="submit">
-        {submit ? 'Registering...' : 'Register'}
-      </button>
+      <SubmitButton submit={submit} text1="Registering..." text2="Register" />
     </form>
   )
 }

@@ -4,6 +4,7 @@ import { type Error } from '../components/registrationForm'
 import { useAuth } from '../hooks/useAuth'
 import { SignInFormValidation } from '../utils/Formvalidation'
 import InputError from './inputError'
+import SubmitButton from './submitButton'
 
 export default function SignInform() {
   const [email, setEmail] = useState<string>('')
@@ -22,6 +23,8 @@ export default function SignInform() {
       emailRef.current.focus()
     } else if (error.passwordMessage && passwordRef.current) {
       passwordRef.current.focus()
+    } else if (error.others && emailRef.current) {
+      emailRef.current.focus()
     }
   }, [error, emailRef, passwordRef])
 
@@ -100,10 +103,7 @@ export default function SignInform() {
         errorMessage={passwordMessage}
       />
       <InputError errorMessage={others} />
-
-      <button className="form-submit-btn" type="submit">
-        {submit ? 'Logging in...' : 'Log in'}
-      </button>
+      <SubmitButton submit={submit} text1="Logging in..." text2="Log in" />
     </form>
   )
 }

@@ -1,4 +1,10 @@
-import { EmailValidation, PasswordValidation } from '../utils/Formvalidation'
+import {
+  ConfirmPasswordValidation,
+  EmailValidation,
+  PasswordValidation,
+  RegistrationFormValidation,
+  SignInFormValidation,
+} from '../utils/Formvalidation'
 import { type Error } from '../components/registrationForm'
 
 let newError: Error
@@ -89,7 +95,6 @@ describe('PasswordValidation', () => {
   })
 
   test('login skips regex check', () => {
-    const newError: Error = {}
     PasswordValidation('invalid!', newError, true)
     expect(newError.passwordMessage).toBeUndefined()
   })
@@ -129,10 +134,151 @@ describe('PasswordValidation', () => {
     test.each(validPasswords)(
       'does not return error for valid password %s',
       (password) => {
-        const newError: Error = {}
         PasswordValidation(password, newError, false)
         expect(newError.passwordMessage).toBeUndefined()
       }
     )
+  })
+
+  describe('pasword confirmation tests', () => {
+    const requiredMsg = 'Confirm password is required'
+    const mismatchMsg = 'Passwords do not match'
+
+    it('password confirmation test passes', () => {
+      ConfirmPasswordValidation('password1234!', 'password1234!', newError)
+      expect(newError.confirmPasswordMessage).toBeUndefined()
+    })
+    describe('fails when confirmation is missing', () => {
+      test.each(['', '   '])('input "%s"', (input) => {
+        ConfirmPasswordValidation(input, input, newError)
+        expect(newError.confirmPasswordMessage).toBe(requiredMsg)
+      })
+    })
+    it('passwords do not match', () => {
+      ConfirmPasswordValidation('password1234!', 'password12345!', newError)
+      expect(newError.confirmPasswordMessage).toBe(mismatchMsg)
+    })
+  })
+})
+
+describe('whole registration form validation', () => {
+  beforeEach(() => {
+    newError = {}
+  })
+
+  it('passing test', () => {
+    const validEmail = 'test@test.com'
+    const validPassword = 'asd!1234'
+    RegistrationFormValidation(validEmail, validPassword, validPassword)
+    expect(newError.emailMessage).toBeUndefined()
+    expect(newError.passwordMessage).toBeUndefined()
+    expect(newError.confirmPasswordMessage).toBeUndefined()
+  })
+
+  describe('non passing tests', () => {
+    const validEmail = 'test@test.com'
+    const validPassword = 'asd!1234'
+
+    const requiredEmailMsg = 'Email is required'
+    const requiredPasswordMsg = 'Password is required'
+    const requiredConfirmPasswordMsg = 'Confirm password is required'
+
+    const mismatchMsg = 'Passwords do not match'
+    const invalidEmailMsg = 'Invalid email address'
+    const invalidPasswordMsg =
+      'Password must be 8-32 characters with at least one letter, one number, and one special character'
+
+    it('not matching passwords', () => {
+      const result = RegistrationFormValidation(
+        validEmail,
+        validPassword,
+        'hello'
+      )
+      expect(result.emailMessage).toBeUndefined()
+      expect(result.passwordMessage).toBeUndefined()
+      expect(result.confirmPasswordMessage).toBe(mismatchMsg)
+    })
+
+    it('required passwords and email', () => {
+      const result = RegistrationFormValidation('', '', '')
+      expect(result.emailMessage).toBe(requiredEmailMsg)
+      expect(result.passwordMessage).toBe(requiredPasswordMsg)
+      expect(result.confirmPasswordMessage).toBe(requiredConfirmPasswordMsg)
+    })
+
+    it('invalid email', () => {
+      const result = RegistrationFormValidation(
+        'invalid email',
+        validPassword,
+        validPassword
+      )
+      expect(result.emailMessage).toBe(invalidEmailMsg)
+      expect(result.passwordMessage).toBeUndefined()
+      expect(result.confirmPasswordMessage).toBeUndefined()
+    })
+
+    it('invalid password', () => {
+      const result = RegistrationFormValidation(
+        validEmail,
+        'invalid password',
+        validPassword
+      )
+      expect(result.emailMessage).toBeUndefined()
+      expect(result.passwordMessage).toBe(invalidPasswordMsg)
+      expect(result.confirmPasswordMessage).toBe(mismatchMsg)
+    })
+
+    it('invalid password', () => {
+      const result = RegistrationFormValidation(
+        validEmail,
+        'invalid password',
+        'invalid password'
+      )
+      expect(result.emailMessage).toBeUndefined()
+      expect(result.passwordMessage).toBe(invalidPasswordMsg)
+      expect(result.confirmPasswordMessage).toBeUndefined()
+    })
+  })
+})
+
+describe('whole sign in form validation', () => {
+  beforeEach(() => {
+    newError = {}
+  })
+
+  it('passing test', () => {
+    const validEmail = 'test@test.com'
+    const validPassword = 'asd!1234'
+    SignInFormValidation(validEmail, validPassword)
+    expect(newError.emailMessage).toBeUndefined()
+    expect(newError.passwordMessage).toBeUndefined()
+  })
+
+  describe('non passing tests', () => {
+    const validEmail = 'test@test.com'
+    const validPassword = 'asd!1234'
+
+    const requiredEmailMsg = 'Email is required'
+    const requiredPasswordMsg = 'Password is required'
+
+    const invalidEmailMsg = 'Invalid email address'
+
+    it('invalid email', () => {
+      const result = SignInFormValidation('invalid email', validPassword)
+      expect(result.emailMessage).toBe(invalidEmailMsg)
+      expect(result.passwordMessage).toBeUndefined()
+    })
+
+    it('no email', () => {
+      const result = SignInFormValidation('', validPassword)
+      expect(result.emailMessage).toBe(requiredEmailMsg)
+      expect(result.passwordMessage).toBeUndefined()
+    })
+
+    it('not password', () => {
+      const result = SignInFormValidation(validEmail, '')
+      expect(result.emailMessage).toBeUndefined()
+      expect(result.passwordMessage).toBe(requiredPasswordMsg)
+    })
   })
 })
