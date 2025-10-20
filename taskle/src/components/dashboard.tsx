@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react'
 import Navbar from './navBar'
-import generatePriorityIcon from '../utils/generatePriorityIcon'
-import generateTagIcon from '../utils/generateTagIcon'
+import TableView from './tableView'
 
 export type Priority = 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH'
 export type Tag = 'NONE' | 'WORK' | 'PERSONAL' | 'STUDYING'
 export type Status = 'TODO' | 'IN_PROGRESS' | 'DONE'
 
-interface Task {
+export interface Task {
   id: number
   task: string
   priority: Priority
@@ -41,6 +40,28 @@ export function Dashboard() {
 
     fetchData()
   }, [])
+
+  const handleUpdate = async (id: number, updates: Partial<Task>) => {
+    try {
+      const res = await fetch(`http://localhost:3005/api/tasks/tasks/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(updates),
+      })
+
+      const data = await res.json()
+      if (res.ok) {
+        setTasks((prev) =>
+          prev.map((t) => (t.id === id ? { ...t, ...data } : t))
+        )
+      } else {
+        console.error(data.error)
+      }
+    } catch (err) {
+      console.error('Error updating task:', err)
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -110,26 +131,7 @@ export function Dashboard() {
       {errors?.serverErrorMsg && (
         <p style={{ color: 'red' }}>{errors.serverErrorMsg}</p>
       )}
-      <table>
-        <thead>
-          <tr>
-            <th>Task</th>
-            <th>Priority</th>
-            <th>Tag</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {tasks.map(({ id, task, priority, tag, status }) => (
-            <tr key={id}>
-              <td>{task}</td>
-              <td>{generatePriorityIcon(priority)}</td>
-              <td>{generateTagIcon(tag)}</td>
-              <td>{status}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <TableView tasks={tasks} handleUpdate={handleUpdate} />
     </div>
   )
 }

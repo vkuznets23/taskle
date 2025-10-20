@@ -1,0 +1,56 @@
+table {
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+  border-collapse: collapse;
+}
+
+td,
+th {
+  border-bottom: 1px solid #000000;
+  padding: 20px;
+  text-align: left;
+}
+
+th:first-child,
+td:first-child {
+  width: 500px;
+}
+
+th:nth-child(2),
+td:nth-child(2),
+th:nth-child(3),
+td:nth-child(3) {
+  width: auto;
+}
+
+th:last-child,
+td:last-child {
+  width: 150px;
+}
+
+.tag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid black;
+  border-radius: 50px;
+  height: 40px;
+  aspect-ratio: 2/1;
+}
+
+.tag.none {
+  border: none;
+}
+
+.tag.work {
+  background-color: #ef89e7;
+}
+
+.tag.personal {
+  background-color: #fa713c;
+}
+
+.tag.studying {
+  background-color: #948af5;
+}

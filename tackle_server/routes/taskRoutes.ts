@@ -60,4 +60,34 @@ router.get('/tasks', authenticateToken, async (req, res) => {
   }
 })
 
+// update task
+router.put('/tasks/:id', authenticateToken, async (req, res) => {
+  const { id } = req.params
+  const { task, priority, tag, status } = req.body
+
+  try {
+    const existingTask = await prisma.task.findUnique({
+      where: { id: Number(id) },
+    })
+
+    if (!existingTask || existingTask.userId !== req.userId)
+      return res.status(400).json({ error: 'Task not found' })
+
+    const updatedTask = await prisma.task.update({
+      where: { id: Number(id) },
+      data: {
+        task,
+        priority,
+        tag,
+        status,
+      },
+    })
+
+    res.status(200).json(updatedTask)
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: 'Unable to update task' })
+  }
+})
+
 export default router
