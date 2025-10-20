@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState, type ReactNode } from 'react'
 
-type Theme = 'light' | 'dark'
+type Theme = 'light' | 'dark' | 'system'
 interface ThemeContextType {
   theme: Theme
   setTheme: (theme: Theme) => void
@@ -8,25 +8,47 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
+const getInitialTheme = (): Theme => {
+  const stored = localStorage.getItem('theme') as Theme | null
+  if (stored) return stored
+  return 'system'
+}
+
+const computeActualTheme = (theme: Theme): 'light' | 'dark' => {
+  if (theme === 'system') {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'light'
+  }
+  return theme
+}
+
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  const [theme, setTheme] = useState<Theme>('light')
+  const [theme, setTheme] = useState<Theme>(getInitialTheme())
 
   useEffect(() => {
-    const storedTheme = localStorage.getItem('theme')
-    const darkThemeMq = window.matchMedia('(prefers-color-scheme: dark)')
-
-    if (storedTheme) {
-      setTheme(storedTheme as Theme)
-    } else if (darkThemeMq.matches) {
-      setTheme('dark')
-    } else {
-      setTheme('light')
-    }
+    const storedTheme = (localStorage.getItem('theme') as Theme) || 'system'
+    setTheme(storedTheme)
   }, [])
 
   useEffect(() => {
+    const actualTheme = computeActualTheme(theme)
+    document.documentElement.setAttribute('data-theme', actualTheme)
     localStorage.setItem('theme', theme)
-    document.documentElement.setAttribute('data-theme', theme)
+
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    const handleChange = () => {
+      if (theme === 'system') {
+        const newTheme = computeActualTheme('system')
+        document.documentElement.setAttribute('data-theme', newTheme)
+      }
+    }
+
+    mediaQuery.addEventListener('change', handleChange)
+
+    return () => {
+      mediaQuery.removeEventListener('change', handleChange)
+    }
   }, [theme])
 
   return (

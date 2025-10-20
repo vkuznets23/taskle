@@ -10,17 +10,26 @@
 }
 
 :root[data-theme="light"] {
-  --bg-color: #fff;
+  --bg-color: #e7e7e7;
   --text-color: #000;
+  --border-color: #000;
 }
 
 :root[data-theme="dark"] {
   --bg-color: #111;
-  --text-color: #fff;
+  --text-color: #e7e7e7;
+  --border-color: #e7e7e7;
+}
+
+/* autofill custom adjustments */
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px var(--bg-color) inset;
+  -webkit-text-fill-color: var(--text-color);
 }
 
 body {
   height: 100vh;
+  overflow: hidden;
   background-color: var(--bg-color);
   color: var(--text-color);
 }
