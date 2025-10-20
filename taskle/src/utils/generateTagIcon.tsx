@@ -4,8 +4,23 @@ import { FaBook } from 'react-icons/fa'
 import { type Tag } from '../components/dashboard'
 
 export default function generateTagIcon(tag: Tag) {
-  if (tag === 'PERSONAL') return <FaHeart />
-  else if (tag === 'STUDYING') return <FaBook />
-  else if (tag === 'WORK') return <MdOutlineWork />
+  if (tag === 'PERSONAL')
+    return (
+      <div className="tag-icon">
+        Personal <FaHeart />
+      </div>
+    )
+  else if (tag === 'STUDYING')
+    return (
+      <div className="tag-icon">
+        Studying <FaBook />
+      </div>
+    )
+  else if (tag === 'WORK')
+    return (
+      <div className="tag-icon">
+        Work <MdOutlineWork />
+      </div>
+    )
   else return null
 }

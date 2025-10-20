@@ -36,7 +36,13 @@ td:last-child {
   border: 1px solid black;
   border-radius: 50px;
   height: 40px;
-  aspect-ratio: 2/1;
+  width: 130px;
+}
+
+.tag-icon {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .tag.none {
