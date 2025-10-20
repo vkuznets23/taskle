@@ -4,6 +4,8 @@ import type { Task } from '../components/dashboard'
 import '../styles/table.css'
 import { useState } from 'react'
 
+type EditableField = 'priority' | 'tag' | 'status' | null
+
 export default function TableView({
   tasks,
   handleUpdate,
@@ -11,7 +13,10 @@ export default function TableView({
   tasks: Task[]
   handleUpdate: (id: number, updates: Partial<Task>) => Promise<void>
 }) {
-  const [editingId, setEditingId] = useState<number | null>(null)
+  const [editing, setEditing] = useState<{
+    id: number
+    field: EditableField
+  } | null>(null)
 
   return (
     <table>
@@ -21,7 +26,6 @@ export default function TableView({
           <th>Priority</th>
           <th>Tag</th>
           <th>Status</th>
-          <th></th>
         </tr>
       </thead>
 
@@ -30,15 +34,19 @@ export default function TableView({
           <tr key={id}>
             <td>{task}</td>
 
+            {/* PRIORITY */}
             <td className="priority">
-              {editingId === id ? (
+              {editing?.id === id && editing?.field === 'priority' ? (
                 <select
+                  autoFocus
                   value={priority}
-                  onChange={(e) =>
+                  onBlur={() => setEditing(null)}
+                  onChange={(e) => {
                     handleUpdate(id, {
                       priority: e.target.value as Task['priority'],
                     })
-                  }
+                    setEditing(null)
+                  }}
                 >
                   <option value="NONE">None</option>
                   <option value="LOW">Low</option>
@@ -46,17 +54,23 @@ export default function TableView({
                   <option value="HIGH">High</option>
                 </select>
               ) : (
-                generatePriorityIcon(priority)
+                <div onClick={() => setEditing({ id, field: 'priority' })}>
+                  {generatePriorityIcon(priority)}
+                </div>
               )}
             </td>
 
+            {/* TAG */}
             <td>
-              {editingId === id ? (
+              {editing?.id === id && editing?.field === 'tag' ? (
                 <select
+                  autoFocus
                   value={tag}
-                  onChange={(e) =>
+                  onBlur={() => setEditing(null)}
+                  onChange={(e) => {
                     handleUpdate(id, { tag: e.target.value as Task['tag'] })
-                  }
+                    setEditing(null)
+                  }}
                 >
                   <option value="NONE">None</option>
                   <option value="WORK">Work</option>
@@ -64,36 +78,37 @@ export default function TableView({
                   <option value="STUDYING">Studying</option>
                 </select>
               ) : (
-                <div className={`tag ${tag.toLowerCase()}`}>
+                <div
+                  className={`tag ${tag.toLowerCase()}`}
+                  onClick={() => setEditing({ id, field: 'tag' })}
+                >
                   {generateTagIcon(tag)}
                 </div>
               )}
             </td>
 
+            {/* STATUS */}
             <td>
-              {editingId === id ? (
+              {editing?.id === id && editing?.field === 'status' ? (
                 <select
+                  autoFocus
                   value={status}
-                  onChange={(e) =>
+                  onBlur={() => setEditing(null)}
+                  onChange={(e) => {
                     handleUpdate(id, {
                       status: e.target.value as Task['status'],
                     })
-                  }
+                    setEditing(null)
+                  }}
                 >
                   <option value="TODO">To Do</option>
                   <option value="IN_PROGRESS">In Progress</option>
                   <option value="DONE">Done</option>
                 </select>
               ) : (
-                status
-              )}
-            </td>
-
-            <td>
-              {editingId === id ? (
-                <button onClick={() => setEditingId(null)}>Done</button>
-              ) : (
-                <button onClick={() => setEditingId(id)}>Update</button>
+                <div onClick={() => setEditing({ id, field: 'status' })}>
+                  {status}
+                </div>
               )}
             </td>
           </tr>
