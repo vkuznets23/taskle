@@ -10,15 +10,15 @@
 }
 
 :root[data-theme="light"] {
-  --bg-color: #e7e7e7;
+  --bg-color: #eeeeee;
   --text-color: #000;
   --border-color: #000;
 }
 
 :root[data-theme="dark"] {
   --bg-color: #111;
-  --text-color: #e7e7e7;
-  --border-color: #e7e7e7;
+  --text-color: #eeeeee;
+  --border-color: #eeeeee;
 }
 
 /* autofill custom adjustments */

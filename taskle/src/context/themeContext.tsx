@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState, type ReactNode } from 'react'
 
-type Theme = 'light' | 'dark' | 'system'
+type Theme = 'system' | 'light' | 'dark'
+
 interface ThemeContextType {
   theme: Theme
   setTheme: (theme: Theme) => void
