@@ -8,7 +8,7 @@ function Home() {
   const { user, loading } = useAuth()
 
   if (loading) return <Loader />
-  return user ? <Dashboard user={user} /> : <RegistrationToggle />
+  return user ? <Dashboard /> : <RegistrationToggle />
 }
 
 function App() {

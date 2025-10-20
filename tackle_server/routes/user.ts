@@ -2,7 +2,6 @@ import { PrismaClient } from '../generated/prisma/index.js'
 import bcrypt from 'bcrypt'
 import express from 'express'
 import jwt, { JwtPayload } from 'jsonwebtoken'
-import cors from 'cors'
 
 const prisma = new PrismaClient()
 const router = express.Router()
