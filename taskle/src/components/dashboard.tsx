@@ -110,16 +110,26 @@ export function Dashboard() {
       {errors?.serverErrorMsg && (
         <p style={{ color: 'red' }}>{errors.serverErrorMsg}</p>
       )}
-      {tasks && tasks.length > 0
-        ? tasks.map(({ id, task, priority, tag, status }) => (
-            <p key={id}>
-              {task}
-              <div>{generatePriorityIcon(priority)}</div>
-              <div>{generateTagIcon(tag)}</div>
-              {status}
-            </p>
-          ))
-        : 'No tasks yet'}
+      <table>
+        <thead>
+          <tr>
+            <th>Task</th>
+            <th>Priority</th>
+            <th>Tag</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {tasks.map(({ id, task, priority, tag, status }) => (
+            <tr key={id}>
+              <td>{task}</td>
+              <td>{generatePriorityIcon(priority)}</td>
+              <td>{generateTagIcon(tag)}</td>
+              <td>{status}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   )
 }
