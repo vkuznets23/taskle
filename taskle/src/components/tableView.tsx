@@ -4,8 +4,6 @@ import type { Task } from '../components/dashboard'
 import '../styles/table.css'
 import { useState } from 'react'
 
-type Mode = 'normal' | 'edit'
-
 export default function TableView({
   tasks,
   handleUpdate,
@@ -13,7 +11,8 @@ export default function TableView({
   tasks: Task[]
   handleUpdate: (id: number, updates: Partial<Task>) => Promise<void>
 }) {
-  const [mode, setMode] = useState<Mode>('normal')
+  const [editingId, setEditingId] = useState<number | null>(null)
+
   return (
     <table>
       <thead>
@@ -22,37 +21,17 @@ export default function TableView({
           <th>Priority</th>
           <th>Tag</th>
           <th>Status</th>
+          <th></th>
         </tr>
       </thead>
-      {mode === 'normal' && (
-        <tbody>
-          {tasks.map(({ id, task, priority, tag, status }) => (
-            <tr key={id}>
-              <td>{task}</td>
-              <td className="priority">{generatePriorityIcon(priority)}</td>
-              <td>
-                <div className={`tag ${tag.toLowerCase()}`}>
-                  {generateTagIcon(tag)}
-                </div>
-              </td>
-              <td className="status">{status}</td>
-              <td>
-                <button
-                  onClick={() => setMode(mode === 'normal' ? 'edit' : 'normal')}
-                >
-                  update
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      )}
-      {mode === 'edit' && (
-        <tbody>
-          {tasks.map(({ id, task, priority, tag, status }) => (
-            <tr key={id}>
-              <td>{task}</td>
-              <td className="priority">
+
+      <tbody>
+        {tasks.map(({ id, task, priority, tag, status }) => (
+          <tr key={id}>
+            <td>{task}</td>
+
+            <td className="priority">
+              {editingId === id ? (
                 <select
                   value={priority}
                   onChange={(e) =>
@@ -66,24 +45,60 @@ export default function TableView({
                   <option value="MEDIUM">Medium</option>
                   <option value="HIGH">High</option>
                 </select>
-              </td>
-              <td>
+              ) : (
+                generatePriorityIcon(priority)
+              )}
+            </td>
+
+            <td>
+              {editingId === id ? (
+                <select
+                  value={tag}
+                  onChange={(e) =>
+                    handleUpdate(id, { tag: e.target.value as Task['tag'] })
+                  }
+                >
+                  <option value="NONE">None</option>
+                  <option value="WORK">Work</option>
+                  <option value="PERSONAL">Personal</option>
+                  <option value="STUDYING">Studying</option>
+                </select>
+              ) : (
                 <div className={`tag ${tag.toLowerCase()}`}>
                   {generateTagIcon(tag)}
                 </div>
-              </td>
-              <td className="status">{status}</td>
-              <td>
-                <button
-                  onClick={() => setMode(mode === 'edit' ? 'normal' : 'edit')}
+              )}
+            </td>
+
+            <td>
+              {editingId === id ? (
+                <select
+                  value={status}
+                  onChange={(e) =>
+                    handleUpdate(id, {
+                      status: e.target.value as Task['status'],
+                    })
+                  }
                 >
-                  update
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      )}
+                  <option value="TODO">To Do</option>
+                  <option value="IN_PROGRESS">In Progress</option>
+                  <option value="DONE">Done</option>
+                </select>
+              ) : (
+                status
+              )}
+            </td>
+
+            <td>
+              {editingId === id ? (
+                <button onClick={() => setEditingId(null)}>Done</button>
+              ) : (
+                <button onClick={() => setEditingId(id)}>Update</button>
+              )}
+            </td>
+          </tr>
+        ))}
+      </tbody>
     </table>
   )
 }
