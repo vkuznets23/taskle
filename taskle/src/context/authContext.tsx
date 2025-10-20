@@ -1,23 +1,5 @@
 import { createContext, useEffect, useState, type ReactNode } from 'react'
-
-type Priority = 'HIGH' | 'MEDIUM' | 'LOW'
-type Tag = 'WORK' | 'STUDYING' | 'PERSONAL'
-type Status = 'DONE' | 'IN_PROGRESS' | 'TODO'
-
-interface Task {
-  id: number
-  task: string
-  priority: Priority
-  tag: Tag
-  status: Status
-}
-
-export interface User {
-  id: number
-  email: string
-  createdAt: string
-  tasks: Task[]
-}
+import type { User } from '../types/registrationTypes'
 
 interface AuthContextType {
   user: User | null

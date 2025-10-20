@@ -1,0 +1,41 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1500px;
+  margin: 0 auto;
+  align-items: center;
+}
+
+.buttons-container {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.theme-button {
+  background-color: transparent;
+  border: none;
+  width: 40px;
+  aspect-ratio: 1/1;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  color: var(--text-color);
+}
+
+.logout-button {
+  background-color: #fa713c;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  padding: 10px 15px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.logout-button:hover {
+  transform: scale(1.02);
+}

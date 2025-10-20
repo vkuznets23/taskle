@@ -1,10 +1,16 @@
-type Theme = 'light' | 'dark'
+import { useTheme } from '../hooks/useTheme'
 
-export default function Logo({ theme }: { theme: Theme }) {
+interface LogoProps {
+  width?: number
+  height?: number
+}
+
+export default function Logo({ width = 150, height = 40 }: LogoProps) {
+  const { theme } = useTheme()
   return (
     <svg
-      width="150"
-      height="40"
+      width={width}
+      height={height}
       viewBox="0 0 158 48"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

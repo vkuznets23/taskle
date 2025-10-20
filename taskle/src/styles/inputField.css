@@ -13,8 +13,10 @@
   border-radius: 50px;
   font-size: 16px;
   padding: 15px 20px;
-  border: 1px solid black;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-color);
   outline: none;
+  color: var(--text-color);
   transition: border-color 0.3s ease;
 }
 
@@ -28,10 +30,10 @@
   position: absolute;
   left: 20px;
   top: 12px;
-  color: #2d2d2d;
+  color: var(--text-color);
   pointer-events: none;
   transition: all 0.3s ease;
-  background-color: white;
+  background-color: var(--bg-color);
 }
 .password-container input:focus + label,
 .input-container input:focus + label {
@@ -60,7 +62,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: #2d2d2d;
+  color: var(--text-color);
 }
 
 .has-error input {
