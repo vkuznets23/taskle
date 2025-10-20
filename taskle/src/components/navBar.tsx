@@ -2,25 +2,28 @@ import { useAuth } from '../hooks/useAuth'
 import { useTheme } from '../hooks/useTheme'
 import Logo from './logoIcon'
 import { MdWbSunny } from 'react-icons/md'
-import { IoMoon } from 'react-icons/io5'
+import { IoMoon, IoLogInOutline } from 'react-icons/io5'
+
+import '../styles/navbar.css'
 
 export default function Navbar() {
   const { logout } = useAuth()
   const { theme, toggleTheme } = useTheme()
 
-  const style = {
-    display: 'flex',
-    justifyContent: 'space-between',
-  }
-
   return (
-    <div style={style}>
+    <div className="navbar">
       <Logo width={90} height={30} />
-      <div>
-        <button onClick={toggleTheme} title="Theme manually set">
+      <div className="buttons-container">
+        <button
+          onClick={toggleTheme}
+          title="Set theme manually"
+          className="theme-button"
+        >
           {theme === 'light' ? <MdWbSunny /> : <IoMoon />}
         </button>
-        <button onClick={logout}>logout</button>
+        <button onClick={logout} className="logout-button">
+          logout <IoLogInOutline />
+        </button>
       </div>
     </div>
   )
