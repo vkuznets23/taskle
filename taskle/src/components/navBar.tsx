@@ -17,7 +17,7 @@ export default function Navbar() {
     <div style={style}>
       <Logo width={90} height={30} />
       <div>
-        <button onClick={toggleTheme}>
+        <button onClick={toggleTheme} title="Theme manually set">
           {theme === 'light' ? <MdWbSunny /> : <IoMoon />}
         </button>
         <button onClick={logout}>logout</button>
