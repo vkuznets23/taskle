@@ -54,7 +54,10 @@ export default function TableView({
                   <option value="HIGH">High</option>
                 </select>
               ) : (
-                <div onClick={() => setEditing({ id, field: 'priority' })}>
+                <div
+                  onClick={() => setEditing({ id, field: 'priority' })}
+                  title="Click to edit priority"
+                >
                   {generatePriorityIcon(priority)}
                 </div>
               )}
@@ -81,6 +84,7 @@ export default function TableView({
                 <div
                   className={`tag ${tag.toLowerCase()}`}
                   onClick={() => setEditing({ id, field: 'tag' })}
+                  title="Click to edit tag"
                 >
                   {generateTagIcon(tag)}
                 </div>
@@ -106,7 +110,10 @@ export default function TableView({
                   <option value="DONE">Done</option>
                 </select>
               ) : (
-                <div onClick={() => setEditing({ id, field: 'status' })}>
+                <div
+                  onClick={() => setEditing({ id, field: 'status' })}
+                  title="Click to edit status"
+                >
                   {status}
                 </div>
               )}
