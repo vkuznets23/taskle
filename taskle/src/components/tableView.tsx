@@ -22,7 +22,11 @@ export default function TableView({
 
   const tagLabels = ['work', 'studying', 'personal', 'none']
   const priorityLabels = ['hight', 'medium', 'low', 'none']
-  const statusLabels = ['to do', 'in progress', 'done']
+  const statusLabels: Record<Task['status'], string> = {
+    TODO: 'To do',
+    IN_PROGRESS: 'In Progress',
+    DONE: 'Done',
+  }
 
   return (
     <table>
@@ -36,104 +40,104 @@ export default function TableView({
       </thead>
 
       <tbody>
-        {tasks.map(({ id, task, priority, tag, status }) => (
-          <tr key={id}>
-            <td>{task}</td>
+        {tasks.map(({ id, task, priority, tag, status }) => {
+          return (
+            <tr key={id}>
+              <td>{task}</td>
 
-            {/* PRIORITY */}
-            <td className="priority">
-              {editing?.id === id && editing?.field === 'priority' ? (
-                <select
-                  autoFocus
-                  value={priority}
-                  onBlur={() => setEditing(null)}
-                  onChange={(e) => {
-                    handleUpdate(id, {
-                      priority: e.target.value as Task['priority'],
-                    })
-                    setEditing(null)
-                  }}
-                >
-                  {priorityLabels.map((label) => (
-                    <option value={label.toUpperCase()}>
-                      {capitalizeFirstLetter(label)}
-                    </option>
-                  ))}
-                </select>
-              ) : (
-                <div
-                  onClick={() => setEditing({ id, field: 'priority' })}
-                  title="Click to edit priority"
-                >
-                  {generatePriorityIcon(priority)}
-                </div>
-              )}
-            </td>
-
-            {/* TAG */}
-            <td>
-              {editing?.id === id && editing?.field === 'tag' ? (
-                <div className="select-wrapper">
+              {/* PRIORITY */}
+              <td className="priority">
+                {editing?.id === id && editing?.field === 'priority' ? (
                   <select
-                    className="select"
                     autoFocus
-                    value={tag}
+                    value={priority}
                     onBlur={() => setEditing(null)}
                     onChange={(e) => {
-                      handleUpdate(id, { tag: e.target.value as Task['tag'] })
+                      handleUpdate(id, {
+                        priority: e.target.value as Task['priority'],
+                      })
                       setEditing(null)
                     }}
                   >
-                    {tagLabels.map((label) => (
+                    {priorityLabels.map((label) => (
                       <option value={label.toUpperCase()}>
                         {capitalizeFirstLetter(label)}
                       </option>
                     ))}
                   </select>
-                  <IoIosArrowDown className="select-icon" />
-                </div>
-              ) : (
-                <div
-                  className={`tag ${tag.toLowerCase()}`}
-                  onClick={() => setEditing({ id, field: 'tag' })}
-                  title="Click to edit tag"
-                >
-                  {generateTagIcon(tag)}
-                </div>
-              )}
-            </td>
+                ) : (
+                  <div
+                    onClick={() => setEditing({ id, field: 'priority' })}
+                    title="Click to edit priority"
+                  >
+                    {generatePriorityIcon(priority)}
+                  </div>
+                )}
+              </td>
 
-            {/* STATUS */}
-            <td>
-              {editing?.id === id && editing?.field === 'status' ? (
-                <select
-                  autoFocus
-                  value={status}
-                  onBlur={() => setEditing(null)}
-                  onChange={(e) => {
-                    handleUpdate(id, {
-                      status: e.target.value as Task['status'],
-                    })
-                    setEditing(null)
-                  }}
-                >
-                  {statusLabels.map((label) => (
-                    <option value={label.toUpperCase()}>
-                      {capitalizeFirstLetter(label)}
-                    </option>
-                  ))}
-                </select>
-              ) : (
-                <div
-                  onClick={() => setEditing({ id, field: 'status' })}
-                  title="Click to edit status"
-                >
-                  {status}
-                </div>
-              )}
-            </td>
-          </tr>
-        ))}
+              {/* TAG */}
+              <td>
+                {editing?.id === id && editing?.field === 'tag' ? (
+                  <div className="select-wrapper">
+                    <select
+                      className="select"
+                      autoFocus
+                      value={tag}
+                      onBlur={() => setEditing(null)}
+                      onChange={(e) => {
+                        handleUpdate(id, { tag: e.target.value as Task['tag'] })
+                        setEditing(null)
+                      }}
+                    >
+                      {tagLabels.map((label) => (
+                        <option value={label.toUpperCase()}>
+                          {capitalizeFirstLetter(label)}
+                        </option>
+                      ))}
+                    </select>
+                    <IoIosArrowDown className="select-icon" />
+                  </div>
+                ) : (
+                  <div
+                    className={`tag ${tag.toLowerCase()}`}
+                    onClick={() => setEditing({ id, field: 'tag' })}
+                    title="Click to edit tag"
+                  >
+                    {generateTagIcon(tag)}
+                  </div>
+                )}
+              </td>
+
+              {/* STATUS */}
+              <td>
+                {editing?.id === id && editing?.field === 'status' ? (
+                  <select
+                    autoFocus
+                    value={status}
+                    onBlur={() => setEditing(null)}
+                    onChange={(e) => {
+                      handleUpdate(id, {
+                        status: e.target.value as Task['status'],
+                      })
+                      setEditing(null)
+                    }}
+                  >
+                    {Object.entries(statusLabels).map(([value, label]) => (
+                      <option value={value}>{label}</option>
+                    ))}
+                  </select>
+                ) : (
+                  <div
+                    onClick={() => setEditing({ id, field: 'status' })}
+                    title="Click to edit status"
+                  >
+                    {statusLabels[status].toUpperCase()}
+                  </div>
+                )}
+              </td>
+            </tr>
+          )
+        })}
       </tbody>
     </table>
   )

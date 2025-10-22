@@ -8,14 +8,17 @@ table {
 td,
 th {
   border-bottom: 1px solid var(--border-color);
-  padding: 20px;
   text-align: left;
   height: 40px;
 }
 
+td {
+  padding: 20px 0px;
+}
+
 th:first-child,
 td:first-child {
-  width: 500px;
+  width: 350px;
 }
 
 th:nth-child(2),
@@ -24,12 +27,12 @@ th:nth-child(3),
 td:nth-child(3),
 th:nth-child(4),
 td:nth-child(4) {
-  width: 150px;
+  width: 100px;
 }
 
 th:last-child,
 td:last-child {
-  width: 50px;
+  width: 100px;
 }
 
 .tag {
