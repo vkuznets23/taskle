@@ -5,7 +5,7 @@ import {
   RegistrationFormValidation,
   SignInFormValidation,
 } from '../utils/Formvalidation'
-import { type Error } from '../components/registrationForm'
+import { type Error } from '../types/registrationTypes'
 
 let newError: Error
 

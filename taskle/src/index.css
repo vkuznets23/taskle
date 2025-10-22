@@ -29,7 +29,6 @@ input:-webkit-autofill {
 
 body {
   height: 100vh;
-  overflow: hidden;
   background-color: var(--bg-color);
   color: var(--text-color);
 }

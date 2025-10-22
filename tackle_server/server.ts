@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import userRoutes from './routes/user'
+import taskRoutes from './routes/taskRoutes'
 
 const app = express()
 
@@ -24,6 +25,7 @@ app.get('/', (req, res) => {
 
 // Routes
 app.use('/api/users', userRoutes)
+app.use('/api/tasks', taskRoutes)
 
 // Start the server
 app.listen(3005, () => {

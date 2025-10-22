@@ -3,7 +3,6 @@ import { useTheme } from '../hooks/useTheme'
 import Logo from './logoIcon'
 import { MdWbSunny } from 'react-icons/md'
 import { IoMoon, IoLogInOutline } from 'react-icons/io5'
-
 import '../styles/navbar.css'
 
 export default function Navbar() {
@@ -12,7 +11,7 @@ export default function Navbar() {
 
   return (
     <div className="navbar">
-      <Logo width={90} height={30} />
+      <Logo width={100} height={40} />
       <div className="buttons-container">
         <button
           onClick={toggleTheme}

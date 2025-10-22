@@ -10,12 +10,14 @@ datasource db {
 }
 
 enum Priority {
+  NONE
   HIGH
   MEDIUM
   LOW
 }
 
 enum Tag {
+  NONE
   WORK
   STUDYING
   PERSONAL
