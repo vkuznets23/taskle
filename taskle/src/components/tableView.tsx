@@ -22,6 +22,7 @@ export default function TableView({
 
   const tagLabels = ['work', 'studying', 'personal', 'none']
   const priorityLabels = ['hight', 'medium', 'low', 'none']
+  const statusLabels = ['to do', 'in progress', 'done']
 
   return (
     <table>
@@ -116,9 +117,11 @@ export default function TableView({
                     setEditing(null)
                   }}
                 >
-                  <option value="TODO">To Do</option>
-                  <option value="IN_PROGRESS">In Progress</option>
-                  <option value="DONE">Done</option>
+                  {statusLabels.map((label) => (
+                    <option value={label.toUpperCase()}>
+                      {capitalizeFirstLetter(label)}
+                    </option>
+                  ))}
                 </select>
               ) : (
                 <div

@@ -104,9 +104,3 @@ td:last-child {
   transform: translateY(-50%);
   pointer-events: none;
 }
-
-select option {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  padding: 0.5rem 1rem;
-}
