@@ -1,6 +1,6 @@
 table {
-  width: 100%;
   max-width: 1500px;
+  width: 100%;
   margin: 0 auto;
   border-collapse: collapse;
 }
@@ -10,15 +10,12 @@ th {
   border-bottom: 1px solid var(--border-color);
   text-align: left;
   height: 45px;
-}
-
-td {
-  padding: 20px 0px;
+  padding: 20px 10px;
 }
 
 th:first-child,
 td:first-child {
-  width: 350px;
+  width: 250px;
 }
 
 th:nth-child(2),
@@ -27,12 +24,7 @@ th:nth-child(3),
 td:nth-child(3),
 th:nth-child(4),
 td:nth-child(4) {
-  width: 130px;
-}
-
-th:last-child,
-td:last-child {
-  width: 180px;
+  width: 90px;
 }
 
 .tag {
@@ -42,8 +34,8 @@ td:last-child {
   border: 1px solid var(--border-color);
   border-radius: 50px;
   color: black;
-  height: 40px;
   width: 130px;
+  height: 40px;
   cursor: pointer;
 }
 
@@ -54,7 +46,7 @@ td:last-child {
 }
 
 .tag.none {
-  opacity: 20%;
+  opacity: 0.2;
   color: var(--text-color);
 }
 
@@ -122,16 +114,16 @@ td:last-child {
   background-color: transparent;
   border-color: var(--border-color);
   color: var(--text-color);
-  opacity: 0.2;
+  opacity: 1;
 }
 
 .select.status {
   border: none;
-  width: 180px;
+  width: 100%;
 }
 
 .select-wrapper.status {
-  width: 180px;
+  width: 100%;
 }
 
 .select-icon {
