@@ -21,6 +21,7 @@ export default function TableView({
   } | null>(null)
 
   const tagLabels = ['work', 'studying', 'personal', 'none']
+  const priorityLabels = ['hight', 'medium', 'low', 'none']
 
   return (
     <table>
@@ -52,10 +53,11 @@ export default function TableView({
                     setEditing(null)
                   }}
                 >
-                  <option value="NONE">None</option>
-                  <option value="LOW">Low</option>
-                  <option value="MEDIUM">Medium</option>
-                  <option value="HIGH">High</option>
+                  {priorityLabels.map((label) => (
+                    <option value={label.toUpperCase()}>
+                      {capitalizeFirstLetter(label)}
+                    </option>
+                  ))}
                 </select>
               ) : (
                 <div
