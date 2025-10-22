@@ -80,9 +80,10 @@ export default function TableView({
                 {editing?.id === id && editing?.field === 'tag' ? (
                   <div className="select-wrapper">
                     <select
-                      className="select"
+                      className={`select ${tag.toLowerCase()}`}
                       autoFocus
                       value={tag}
+                      onMouseLeave={() => setEditing(null)}
                       onBlur={() => setEditing(null)}
                       onChange={(e) => {
                         handleUpdate(id, { tag: e.target.value as Task['tag'] })
@@ -100,7 +101,7 @@ export default function TableView({
                 ) : (
                   <div
                     className={`tag ${tag.toLowerCase()}`}
-                    onClick={() => setEditing({ id, field: 'tag' })}
+                    onMouseEnter={() => setEditing({ id, field: 'tag' })}
                     title="Click to edit tag"
                   >
                     {generateTagIcon(tag)}
@@ -111,24 +112,29 @@ export default function TableView({
               {/* STATUS */}
               <td>
                 {editing?.id === id && editing?.field === 'status' ? (
-                  <select
-                    autoFocus
-                    value={status}
-                    onBlur={() => setEditing(null)}
-                    onChange={(e) => {
-                      handleUpdate(id, {
-                        status: e.target.value as Task['status'],
-                      })
-                      setEditing(null)
-                    }}
-                  >
-                    {Object.entries(statusLabels).map(([value, label]) => (
-                      <option value={value}>{label}</option>
-                    ))}
-                  </select>
+                  <div className="select-wrapper status">
+                    <select
+                      className="select status"
+                      autoFocus
+                      value={status}
+                      onMouseLeave={() => setEditing(null)}
+                      onBlur={() => setEditing(null)}
+                      onChange={(e) => {
+                        handleUpdate(id, {
+                          status: e.target.value as Task['status'],
+                        })
+                        setEditing(null)
+                      }}
+                    >
+                      {Object.entries(statusLabels).map(([value, label]) => (
+                        <option value={value}>{label.toUpperCase()}</option>
+                      ))}
+                    </select>
+                    <IoIosArrowDown className="select-icon" />
+                  </div>
                 ) : (
                   <div
-                    onClick={() => setEditing({ id, field: 'status' })}
+                    onMouseEnter={() => setEditing({ id, field: 'status' })}
                     title="Click to edit status"
                   >
                     {statusLabels[status].toUpperCase()}

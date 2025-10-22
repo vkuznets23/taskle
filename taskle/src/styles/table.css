@@ -9,7 +9,7 @@ td,
 th {
   border-bottom: 1px solid var(--border-color);
   text-align: left;
-  height: 40px;
+  height: 45px;
 }
 
 td {
@@ -27,12 +27,12 @@ th:nth-child(3),
 td:nth-child(3),
 th:nth-child(4),
 td:nth-child(4) {
-  width: 100px;
+  width: 130px;
 }
 
 th:last-child,
 td:last-child {
-  width: 100px;
+  width: 180px;
 }
 
 .tag {
@@ -73,6 +73,7 @@ td:last-child {
   border-color: black;
 }
 
+/* SELECT */
 .select-wrapper {
   position: relative;
   display: inline-flex;
@@ -80,7 +81,6 @@ td:last-child {
   height: 40px;
 }
 
-/* SELECT */
 .select {
   border: 1px solid var(--border-color);
   border-radius: 50px;
@@ -98,6 +98,40 @@ td:last-child {
   text-align: center;
   line-height: normal;
   padding-right: 35px;
+}
+
+.select.work {
+  background-color: #ef89e7;
+  border-color: black;
+  color: black;
+}
+
+.select.personal {
+  background-color: #fa713c;
+  border-color: black;
+  color: black;
+}
+
+.select.studying {
+  background-color: #948af5;
+  border-color: black;
+  color: black;
+}
+
+.select.none {
+  background-color: transparent;
+  border-color: var(--border-color);
+  color: var(--text-color);
+  opacity: 0.2;
+}
+
+.select.status {
+  border: none;
+  width: 180px;
+}
+
+.select-wrapper.status {
+  width: 180px;
 }
 
 .select-icon {
