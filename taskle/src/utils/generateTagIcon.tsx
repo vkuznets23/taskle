@@ -22,5 +22,5 @@ export default function generateTagIcon(tag: Tag) {
         Work <MdOutlineWork />
       </div>
     )
-  else return null
+  else return <div className="tag-icon">None</div>
 }

@@ -50,7 +50,7 @@ td:last-child {
 }
 
 .tag.none {
-  border: none;
+  opacity: 20%;
 }
 
 .tag.work {
@@ -63,4 +63,37 @@ td:last-child {
 
 .tag.studying {
   background-color: #948af5;
+}
+
+.select-wrapper {
+  position: relative;
+  display: inline-flex;
+  width: 130px;
+  height: 40px;
+}
+
+.select {
+  border: 1px solid black;
+  border-radius: 50px;
+  background-color: transparent;
+  height: 40px;
+  width: 130px;
+  font-size: 16px;
+  cursor: pointer;
+
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  text-align: center;
+  line-height: normal;
+  padding-right: 35px;
+}
+
+.select-icon {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
 }

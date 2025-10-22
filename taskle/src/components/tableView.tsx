@@ -3,6 +3,8 @@ import generateTagIcon from '../utils/generateTagIcon'
 import type { Task } from '../components/dashboard'
 import '../styles/table.css'
 import { useState } from 'react'
+import { IoIosArrowDown } from 'react-icons/io'
+import { capitalizeFirstLetter } from '../utils/Capitalizer'
 
 type EditableField = 'priority' | 'tag' | 'status' | null
 
@@ -17,6 +19,8 @@ export default function TableView({
     id: number
     field: EditableField
   } | null>(null)
+
+  const tagLabels = ['work', 'studying', 'personal', 'none']
 
   return (
     <table>
@@ -66,20 +70,25 @@ export default function TableView({
             {/* TAG */}
             <td>
               {editing?.id === id && editing?.field === 'tag' ? (
-                <select
-                  autoFocus
-                  value={tag}
-                  onBlur={() => setEditing(null)}
-                  onChange={(e) => {
-                    handleUpdate(id, { tag: e.target.value as Task['tag'] })
-                    setEditing(null)
-                  }}
-                >
-                  <option value="NONE">None</option>
-                  <option value="WORK">Work</option>
-                  <option value="PERSONAL">Personal</option>
-                  <option value="STUDYING">Studying</option>
-                </select>
+                <div className="select-wrapper">
+                  <select
+                    className="select"
+                    autoFocus
+                    value={tag}
+                    onBlur={() => setEditing(null)}
+                    onChange={(e) => {
+                      handleUpdate(id, { tag: e.target.value as Task['tag'] })
+                      setEditing(null)
+                    }}
+                  >
+                    {tagLabels.map((label) => (
+                      <option value={label.toUpperCase()}>
+                        {capitalizeFirstLetter(label)}
+                      </option>
+                    ))}
+                  </select>
+                  <IoIosArrowDown className="select-icon" />
+                </div>
               ) : (
                 <div
                   className={`tag ${tag.toLowerCase()}`}
