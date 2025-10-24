@@ -57,9 +57,11 @@ export function Dashboard() {
         )
       } else {
         console.error(data.error)
+        throw new Error(data.error || 'Failed to update task')
       }
     } catch (err) {
       console.error('Error updating task:', err)
+      throw err // Re-throw the error so optimistic updates can revert
     }
   }
 

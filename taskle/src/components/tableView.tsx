@@ -2,7 +2,7 @@ import generatePriorityIcon from '../utils/generatePriorityIcon'
 import generateTagIcon from '../utils/generateTagIcon'
 import type { Task } from '../components/dashboard'
 import '../styles/table.css'
-import { useState } from 'react'
+import { useOptimistic, useState, useTransition } from 'react'
 import { IoIosArrowDown } from 'react-icons/io'
 import { capitalizeFirstLetter } from '../utils/Capitalizer'
 
@@ -20,17 +20,43 @@ export default function TableView({
     field: EditableField
   } | null>(null)
 
+  const [isPending, startTransition] = useTransition()
+
   const tableThs = ['task', 'priority', 'tag', 'status']
   const tagLabels = ['work', 'studying', 'personal', 'none']
-  const priorityLabels = ['hight', 'medium', 'low', 'none']
+  const priorityLabels = ['high', 'medium', 'low', 'none']
   const statusLabels: Record<Task['status'], string> = {
     TODO: 'To do',
     IN_PROGRESS: 'In Progress',
     DONE: 'Done',
   }
 
+  // Optimistic state for immediate UI updates
+  const [optimisticTasks, applyOptimisticUpdate] = useOptimistic(
+    tasks,
+    (state, action: { id: number; updates: Partial<Task> }) =>
+      state.map((task) =>
+        task.id === action.id ? { ...task, ...action.updates } : task
+      )
+  )
+
+  // Handle field changes with optimistic updates
+  const handleFieldChange = (id: number, field: keyof Task, value: string) => {
+    startTransition(async () => {
+      // Apply optimistic update immediately
+      applyOptimisticUpdate({ id, updates: { [field]: value } })
+
+      try {
+        // Make the actual API call
+        await handleUpdate(id, { [field]: value })
+      } catch (error) {
+        console.error('Failed to update task:', error)
+      }
+    })
+  }
+
   return (
-    <table>
+    <table className={isPending ? 'updating' : ''}>
       <thead>
         <tr>
           {tableThs.map((th, index) => (
@@ -40,7 +66,7 @@ export default function TableView({
       </thead>
 
       <tbody>
-        {tasks.map(({ id, task, priority, tag, status }) => {
+        {optimisticTasks.map(({ id, task, priority, tag, status }) => {
           return (
             <tr key={id}>
               <td>{task}</td>
@@ -53,9 +79,11 @@ export default function TableView({
                     value={priority}
                     onBlur={() => setEditing(null)}
                     onChange={(e) => {
-                      handleUpdate(id, {
-                        priority: e.target.value as Task['priority'],
-                      })
+                      handleFieldChange(
+                        id,
+                        'priority',
+                        e.target.value as Task['priority']
+                      )
                       setEditing(null)
                     }}
                   >
@@ -86,7 +114,11 @@ export default function TableView({
                       onMouseLeave={() => setEditing(null)}
                       onBlur={() => setEditing(null)}
                       onChange={(e) => {
-                        handleUpdate(id, { tag: e.target.value as Task['tag'] })
+                        handleFieldChange(
+                          id,
+                          'tag',
+                          e.target.value as Task['tag']
+                        )
                         setEditing(null)
                       }}
                     >
@@ -120,9 +152,11 @@ export default function TableView({
                       onMouseLeave={() => setEditing(null)}
                       onBlur={() => setEditing(null)}
                       onChange={(e) => {
-                        handleUpdate(id, {
-                          status: e.target.value as Task['status'],
-                        })
+                        handleFieldChange(
+                          id,
+                          'status',
+                          e.target.value as Task['status']
+                        )
                         setEditing(null)
                       }}
                     >
