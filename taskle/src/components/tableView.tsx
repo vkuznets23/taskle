@@ -1,12 +1,11 @@
 import generatePriorityIcon from '../utils/generatePriorityIcon'
 import generateTagIcon from '../utils/generateTagIcon'
-import type { Task } from '../components/dashboard'
 import '../styles/table.css'
 import { useOptimistic, useState, useTransition } from 'react'
 import { IoIosArrowDown } from 'react-icons/io'
 import { capitalizeFirstLetter } from '../utils/Capitalizer'
-
-// type EditableField = 'task' | 'priority' | 'tag' | 'status' | null
+import { priorityLabels, tagLabels } from '../constants'
+import type { Task } from '../types/taskTypes'
 
 export default function TableView({
   tasks,
@@ -23,8 +22,6 @@ export default function TableView({
   const [isPending, startTransition] = useTransition()
 
   const tableThs = ['task', 'priority', 'tag', 'status']
-  const tagLabels = ['work', 'studying', 'personal', 'none']
-  const priorityLabels = ['high', 'medium', 'low']
   const statusLabels: Record<Task['status'], string> = {
     TODO: 'To do',
     IN_PROGRESS: 'In Progress',

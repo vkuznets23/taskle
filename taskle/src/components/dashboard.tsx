@@ -1,18 +1,9 @@
 import { useEffect, useState } from 'react'
 import Navbar from './navBar'
 import TableView from './tableView'
-
-export type Priority = 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH'
-export type Tag = 'NONE' | 'WORK' | 'PERSONAL' | 'STUDYING'
-export type Status = 'TODO' | 'IN_PROGRESS' | 'DONE'
-
-export interface Task {
-  id: number
-  task: string
-  priority: Priority
-  tag: Tag
-  status: Status
-}
+import { capitalizeFirstLetter } from '../utils/Capitalizer'
+import { priorityLabels, tagLabels } from '../constants'
+import type { Priority, Tag, Task } from '../types/taskTypes'
 
 interface Errors {
   tasksErrorMsg: string
@@ -22,7 +13,7 @@ interface Errors {
 export function Dashboard() {
   const [tasks, setTasks] = useState<Task[]>([])
   const [task, setTask] = useState('')
-  const [priority, setPriority] = useState<Priority>('NONE')
+  const [priority, setPriority] = useState<Priority>('LOW')
   const [tag, setTag] = useState<Tag>('NONE')
   const [errors, setErrors] = useState<Partial<Errors>>({})
 
@@ -88,7 +79,7 @@ export function Dashboard() {
 
       if (res.ok) {
         setTasks((prev) => [...prev, data])
-        setPriority('NONE')
+        setPriority('LOW')
         setTag('NONE')
         setTask('')
         setErrors({})
@@ -117,15 +108,18 @@ export function Dashboard() {
           value={priority}
           onChange={(e) => setPriority(e.target.value as Priority)}
         >
-          <option value="LOW">Low</option>
-          <option value="MEDIUM">Medium</option>
-          <option value="HIGH">High</option>
+          {priorityLabels.map((priority, index) => (
+            <option key={index} value={priority.toUpperCase()}>
+              {capitalizeFirstLetter(priority)}
+            </option>
+          ))}
         </select>
         <select value={tag} onChange={(e) => setTag(e.target.value as Tag)}>
-          <option value="NONE">None</option>
-          <option value="WORK">Work</option>
-          <option value="PERSONAL">Personal</option>
-          <option value="STUDYING">Studying</option>
+          {tagLabels.map((tag, index) => (
+            <option key={index} value={tag.toUpperCase()}>
+              {capitalizeFirstLetter(tag)}
+            </option>
+          ))}
         </select>
         <button type="submit">submit</button>
       </form>
