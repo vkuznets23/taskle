@@ -79,12 +79,12 @@ export default function TableView({
                     value={priority}
                     onBlur={() => setEditing(null)}
                     onChange={(e) => {
+                      setEditing(null)
                       handleFieldChange(
                         id,
                         'priority',
                         e.target.value as Task['priority']
                       )
-                      setEditing(null)
                     }}
                   >
                     {priorityLabels.map((label, index) => (
@@ -111,8 +111,8 @@ export default function TableView({
                       className={`select ${tag.toLowerCase()}`}
                       autoFocus
                       value={tag}
-                      onMouseLeave={() => setEditing(null)}
                       onBlur={() => setEditing(null)}
+                      onMouseLeave={() => setEditing(null)}
                       onChange={(e) => {
                         handleFieldChange(
                           id,
@@ -149,8 +149,8 @@ export default function TableView({
                       className="select status"
                       autoFocus
                       value={status}
-                      onMouseLeave={() => setEditing(null)}
                       onBlur={() => setEditing(null)}
+                      onMouseLeave={() => setEditing(null)}
                       onChange={(e) => {
                         handleFieldChange(
                           id,
