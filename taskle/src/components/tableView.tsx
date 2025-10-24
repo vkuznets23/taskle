@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { IoIosArrowDown } from 'react-icons/io'
 import { capitalizeFirstLetter } from '../utils/Capitalizer'
 
-type EditableField = 'priority' | 'tag' | 'status' | null
+type EditableField = 'task' | 'priority' | 'tag' | 'status' | null
 
 export default function TableView({
   tasks,
@@ -20,6 +20,7 @@ export default function TableView({
     field: EditableField
   } | null>(null)
 
+  const tableThs = ['task', 'priority', 'tag', 'status']
   const tagLabels = ['work', 'studying', 'personal', 'none']
   const priorityLabels = ['hight', 'medium', 'low', 'none']
   const statusLabels: Record<Task['status'], string> = {
@@ -32,10 +33,9 @@ export default function TableView({
     <table>
       <thead>
         <tr>
-          <th>Task</th>
-          <th>Priority</th>
-          <th>Tag</th>
-          <th>Status</th>
+          {tableThs.map((th, index) => (
+            <th key={index}>{th.toUpperCase()}</th>
+          ))}
         </tr>
       </thead>
 
