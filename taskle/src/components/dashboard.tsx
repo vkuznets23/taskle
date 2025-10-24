@@ -15,15 +15,18 @@ export function Dashboard() {
   const [priority, setPriority] = useState<Priority>('LOW')
   const [tag, setTag] = useState<Tag>('NONE')
   const [errors, setErrors] = useState<Partial<Errors>>({})
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true)
       const res = await fetch('http://localhost:3005/api/tasks/tasks', {
         method: 'GET',
         credentials: 'include',
       })
       if (res.ok) {
         const data = await res.json()
+        setLoading(false)
         setTasks(data)
       }
     }
@@ -90,6 +93,7 @@ export function Dashboard() {
       setErrors({ serverErrorMsg: 'Network error' })
     }
   }
+
   return (
     <div>
       <Navbar />
@@ -106,7 +110,11 @@ export function Dashboard() {
       {errors?.serverErrorMsg && (
         <p style={{ color: 'red' }}>{errors.serverErrorMsg}</p>
       )}
-      <TableView tasks={tasks} handleUpdate={handleUpdate} />
+      {loading ? (
+        <p>loading...</p>
+      ) : (
+        <TableView tasks={tasks} handleUpdate={handleUpdate} />
+      )}
     </div>
   )
 }
