@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import Navbar from './navBar'
 import TableView from './tableView'
-import type { Priority, Tag, Task } from '../types/taskTypes'
+import type { Task } from '../types/taskTypes'
 import FormTasks from './form'
 
 export interface Errors {
@@ -11,10 +11,6 @@ export interface Errors {
 
 export function Dashboard() {
   const [tasks, setTasks] = useState<Task[]>([])
-  const [task, setTask] = useState('')
-  const [priority, setPriority] = useState<Priority>('LOW')
-  const [tag, setTag] = useState<Tag>('NONE')
-  const [errors, setErrors] = useState<Partial<Errors>>({})
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -58,58 +54,10 @@ export function Dashboard() {
     }
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    const newErrors: Partial<Errors> = {}
-
-    if (!task || !task.trim()) {
-      newErrors.tasksErrorMsg = 'Task is required'
-      setErrors(newErrors)
-      return
-    }
-
-    try {
-      const res = await fetch('http://localhost:3005/api/tasks/tasks', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ task, priority, tag }),
-      })
-      const data = await res.json()
-      console.log(data)
-
-      if (res.ok) {
-        setTasks((prev) => [...prev, data])
-        setPriority('LOW')
-        setTag('NONE')
-        setTask('')
-        setErrors({})
-      } else {
-        setErrors({ serverErrorMsg: data.error || 'Something went wrong' })
-      }
-    } catch (err) {
-      console.log(err)
-      setErrors({ serverErrorMsg: 'Network error' })
-    }
-  }
-
   return (
     <div>
       <Navbar />
-      <FormTasks
-        task={task}
-        setTask={setTask}
-        tag={tag}
-        setTag={setTag}
-        priority={priority}
-        setPriority={setPriority}
-        errors={errors}
-        handleSubmit={handleSubmit}
-      />
-      {errors?.serverErrorMsg && (
-        <p style={{ color: 'red' }}>{errors.serverErrorMsg}</p>
-      )}
+      <FormTasks setTasks={setTasks} />
       {loading ? (
         <p>loading...</p>
       ) : (
