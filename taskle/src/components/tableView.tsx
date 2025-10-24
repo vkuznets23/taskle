@@ -59,8 +59,8 @@ export default function TableView({
                       setEditing(null)
                     }}
                   >
-                    {priorityLabels.map((label) => (
-                      <option value={label.toUpperCase()}>
+                    {priorityLabels.map((label, index) => (
+                      <option key={index} value={label.toUpperCase()}>
                         {capitalizeFirstLetter(label)}
                       </option>
                     ))}
@@ -90,8 +90,8 @@ export default function TableView({
                         setEditing(null)
                       }}
                     >
-                      {tagLabels.map((label) => (
-                        <option value={label.toUpperCase()}>
+                      {tagLabels.map((label, index) => (
+                        <option key={index} value={label.toUpperCase()}>
                           {capitalizeFirstLetter(label)}
                         </option>
                       ))}
@@ -126,9 +126,13 @@ export default function TableView({
                         setEditing(null)
                       }}
                     >
-                      {Object.entries(statusLabels).map(([value, label]) => (
-                        <option value={value}>{label.toUpperCase()}</option>
-                      ))}
+                      {Object.entries(statusLabels).map(
+                        ([value, label], index) => (
+                          <option key={index} value={value}>
+                            {label.toUpperCase()}
+                          </option>
+                        )
+                      )}
                     </select>
                     <IoIosArrowDown className="select-icon" />
                   </div>
