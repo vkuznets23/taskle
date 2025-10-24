@@ -21,14 +21,14 @@ router.post('/tasks', authenticateToken, async (req, res) => {
       return res.status(401).json({ error: 'User ID not found' })
     }
 
-    const validPriorities = ['NONE', 'HIGH', 'MEDIUM', 'LOW']
+    const validPriorities = ['HIGH', 'MEDIUM', 'LOW']
     const validTags = ['NONE', 'WORK', 'STUDYING', 'PERSONAL']
     const validStatuses = ['TODO', 'IN_PROGRESS', 'DONE']
 
     const validatedPriority = validPriorities.includes(priority)
       ? priority
       : 'NONE'
-    const validatedTag = validTags.includes(tag) ? tag : 'NONE'
+    const validatedTag = validTags.includes(tag) ? tag : 'LOW'
     const validatedStatus = validStatuses.includes(status) ? status : 'TODO'
 
     const newTask = await prisma.task.create({

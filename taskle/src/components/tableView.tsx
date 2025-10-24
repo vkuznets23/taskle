@@ -6,7 +6,7 @@ import { useOptimistic, useState, useTransition } from 'react'
 import { IoIosArrowDown } from 'react-icons/io'
 import { capitalizeFirstLetter } from '../utils/Capitalizer'
 
-type EditableField = 'task' | 'priority' | 'tag' | 'status' | null
+// type EditableField = 'task' | 'priority' | 'tag' | 'status' | null
 
 export default function TableView({
   tasks,
@@ -17,14 +17,14 @@ export default function TableView({
 }) {
   const [editing, setEditing] = useState<{
     id: number
-    field: EditableField
+    field: keyof Task | null
   } | null>(null)
 
   const [isPending, startTransition] = useTransition()
 
   const tableThs = ['task', 'priority', 'tag', 'status']
   const tagLabels = ['work', 'studying', 'personal', 'none']
-  const priorityLabels = ['high', 'medium', 'low', 'none']
+  const priorityLabels = ['high', 'medium', 'low']
   const statusLabels: Record<Task['status'], string> = {
     TODO: 'To do',
     IN_PROGRESS: 'In Progress',

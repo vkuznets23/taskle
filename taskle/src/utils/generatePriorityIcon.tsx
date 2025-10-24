@@ -16,5 +16,6 @@ export default function generatePriorityIcon(priority: Priority) {
     default:
       count = 0
   }
+
   return Array.from({ length: count }, (_, i) => <FaCircle key={i} />)
 }

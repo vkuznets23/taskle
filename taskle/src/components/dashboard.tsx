@@ -117,7 +117,6 @@ export function Dashboard() {
           value={priority}
           onChange={(e) => setPriority(e.target.value as Priority)}
         >
-          <option value="NONE">None</option>
           <option value="LOW">Low</option>
           <option value="MEDIUM">Medium</option>
           <option value="HIGH">High</option>

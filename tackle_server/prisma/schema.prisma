@@ -10,7 +10,6 @@ datasource db {
 }
 
 enum Priority {
-  NONE
   HIGH
   MEDIUM
   LOW
@@ -40,7 +39,7 @@ model User {
 model Task {
   id        Int      @id @default(autoincrement())
   task      String
-  priority  Priority
+  priority  Priority @default(LOW)
   tag       Tag
   status    Status   @default(TODO)
   userId    Int
