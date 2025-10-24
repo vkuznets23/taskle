@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react'
 import Navbar from './navBar'
 import TableView from './tableView'
-import { capitalizeFirstLetter } from '../utils/Capitalizer'
-import { priorityLabels, tagLabels } from '../constants'
 import type { Priority, Tag, Task } from '../types/taskTypes'
+import FormTasks from './form'
 
-interface Errors {
+export interface Errors {
   tasksErrorMsg: string
   serverErrorMsg: string
 }
@@ -94,35 +93,16 @@ export function Dashboard() {
   return (
     <div>
       <Navbar />
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="new task"
-          value={task}
-          onChange={(e) => setTask(e.target.value)}
-        />
-        {errors?.tasksErrorMsg && (
-          <p style={{ color: 'red' }}>{errors.tasksErrorMsg}</p>
-        )}
-        <select
-          value={priority}
-          onChange={(e) => setPriority(e.target.value as Priority)}
-        >
-          {priorityLabels.map((priority, index) => (
-            <option key={index} value={priority.toUpperCase()}>
-              {capitalizeFirstLetter(priority)}
-            </option>
-          ))}
-        </select>
-        <select value={tag} onChange={(e) => setTag(e.target.value as Tag)}>
-          {tagLabels.map((tag, index) => (
-            <option key={index} value={tag.toUpperCase()}>
-              {capitalizeFirstLetter(tag)}
-            </option>
-          ))}
-        </select>
-        <button type="submit">submit</button>
-      </form>
+      <FormTasks
+        task={task}
+        setTask={setTask}
+        tag={tag}
+        setTag={setTag}
+        priority={priority}
+        setPriority={setPriority}
+        errors={errors}
+        handleSubmit={handleSubmit}
+      />
       {errors?.serverErrorMsg && (
         <p style={{ color: 'red' }}>{errors.serverErrorMsg}</p>
       )}
