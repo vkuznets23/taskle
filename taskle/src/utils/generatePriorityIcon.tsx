@@ -1,5 +1,5 @@
 import { FaCircle } from 'react-icons/fa6'
-import type { Priority } from '../components/dashboard'
+import type { Priority } from '../types/taskTypes'
 
 export default function generatePriorityIcon(priority: Priority) {
   let count = 0
@@ -16,5 +16,6 @@ export default function generatePriorityIcon(priority: Priority) {
     default:
       count = 0
   }
+
   return Array.from({ length: count }, (_, i) => <FaCircle key={i} />)
 }

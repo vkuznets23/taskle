@@ -1,12 +1,11 @@
 import generatePriorityIcon from '../utils/generatePriorityIcon'
 import generateTagIcon from '../utils/generateTagIcon'
-import type { Task } from '../components/dashboard'
 import '../styles/table.css'
-import { useState } from 'react'
+import { useOptimistic, useState, useTransition } from 'react'
 import { IoIosArrowDown } from 'react-icons/io'
 import { capitalizeFirstLetter } from '../utils/Capitalizer'
-
-type EditableField = 'priority' | 'tag' | 'status' | null
+import { priorityLabels, tagLabels } from '../constants'
+import type { Task } from '../types/taskTypes'
 
 export default function TableView({
   tasks,
@@ -17,33 +16,59 @@ export default function TableView({
 }) {
   const [editing, setEditing] = useState<{
     id: number
-    field: EditableField
+    field: keyof Task | null
   } | null>(null)
 
-  const tagLabels = ['work', 'studying', 'personal', 'none']
-  const priorityLabels = ['hight', 'medium', 'low', 'none']
+  const [isPending, startTransition] = useTransition()
+
+  const tableThs = ['task', 'priority', 'tag', 'status']
   const statusLabels: Record<Task['status'], string> = {
     TODO: 'To do',
-    IN_PROGRESS: 'In Progress',
+    IN_PROGRESS: 'Active',
     DONE: 'Done',
   }
 
+  // Optimistic state for immediate UI updates
+  const [optimisticTasks, applyOptimisticUpdate] = useOptimistic(
+    tasks,
+    (state, action: { id: number; updates: Partial<Task> }) =>
+      state.map((task) =>
+        task.id === action.id ? { ...task, ...action.updates } : task
+      )
+  )
+
+  // Handle field changes with optimistic updates
+  const handleFieldChange = (id: number, field: keyof Task, value: string) => {
+    startTransition(async () => {
+      // Apply optimistic update immediately
+      applyOptimisticUpdate({ id, updates: { [field]: value } })
+
+      try {
+        // Make the actual API call
+        await handleUpdate(id, { [field]: value })
+      } catch (error) {
+        console.error('Failed to update task:', error)
+      }
+    })
+  }
+
   return (
-    <table>
+    <table className={isPending ? 'updating' : ''}>
       <thead>
         <tr>
-          <th>Task</th>
-          <th>Priority</th>
-          <th>Tag</th>
-          <th>Status</th>
+          {tableThs.map((th, index) => (
+            <th key={index}>{th.toUpperCase()}</th>
+          ))}
         </tr>
       </thead>
 
       <tbody>
-        {tasks.map(({ id, task, priority, tag, status }) => {
+        {optimisticTasks.map(({ id, task, priority, tag, status }) => {
           return (
             <tr key={id}>
-              <td>{task}</td>
+              <td>
+                <p>{task}</p>
+              </td>
 
               {/* PRIORITY */}
               <td className="priority">
@@ -53,14 +78,16 @@ export default function TableView({
                     value={priority}
                     onBlur={() => setEditing(null)}
                     onChange={(e) => {
-                      handleUpdate(id, {
-                        priority: e.target.value as Task['priority'],
-                      })
                       setEditing(null)
+                      handleFieldChange(
+                        id,
+                        'priority',
+                        e.target.value as Task['priority']
+                      )
                     }}
                   >
-                    {priorityLabels.map((label) => (
-                      <option value={label.toUpperCase()}>
+                    {priorityLabels.map((label, index) => (
+                      <option key={index} value={label.toUpperCase()}>
                         {capitalizeFirstLetter(label)}
                       </option>
                     ))}
@@ -83,15 +110,19 @@ export default function TableView({
                       className={`select ${tag.toLowerCase()}`}
                       autoFocus
                       value={tag}
-                      onMouseLeave={() => setEditing(null)}
                       onBlur={() => setEditing(null)}
+                      onMouseLeave={() => setEditing(null)}
                       onChange={(e) => {
-                        handleUpdate(id, { tag: e.target.value as Task['tag'] })
+                        handleFieldChange(
+                          id,
+                          'tag',
+                          e.target.value as Task['tag']
+                        )
                         setEditing(null)
                       }}
                     >
-                      {tagLabels.map((label) => (
-                        <option value={label.toUpperCase()}>
+                      {tagLabels.map((label, index) => (
+                        <option key={index} value={label.toUpperCase()}>
                           {capitalizeFirstLetter(label)}
                         </option>
                       ))}
@@ -117,23 +148,30 @@ export default function TableView({
                       className="select status"
                       autoFocus
                       value={status}
-                      onMouseLeave={() => setEditing(null)}
                       onBlur={() => setEditing(null)}
+                      onMouseLeave={() => setEditing(null)}
                       onChange={(e) => {
-                        handleUpdate(id, {
-                          status: e.target.value as Task['status'],
-                        })
+                        handleFieldChange(
+                          id,
+                          'status',
+                          e.target.value as Task['status']
+                        )
                         setEditing(null)
                       }}
                     >
-                      {Object.entries(statusLabels).map(([value, label]) => (
-                        <option value={value}>{label.toUpperCase()}</option>
-                      ))}
+                      {Object.entries(statusLabels).map(
+                        ([value, label], index) => (
+                          <option key={index} value={value}>
+                            {label.toUpperCase()}
+                          </option>
+                        )
+                      )}
                     </select>
                     <IoIosArrowDown className="select-icon" />
                   </div>
                 ) : (
                   <div
+                    className="status-div"
                     onMouseEnter={() => setEditing({ id, field: 'status' })}
                     title="Click to edit status"
                   >
