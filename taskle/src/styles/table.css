@@ -3,6 +3,7 @@ table {
   width: 100%;
   margin: 0 auto;
   border-collapse: collapse;
+  table-layout: fixed;
 }
 
 td,
@@ -16,6 +17,10 @@ th {
 th:first-child,
 td:first-child {
   width: 250px;
+}
+
+td:first-child p {
+  padding-right: 80px;
 }
 
 th:nth-child(2),
@@ -123,7 +128,7 @@ td:nth-child(4) {
 }
 
 .select-wrapper.status {
-  width: 100%;
+  width: 120px;
 }
 
 .select-icon {

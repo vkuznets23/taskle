@@ -24,7 +24,7 @@ export default function TableView({
   const tableThs = ['task', 'priority', 'tag', 'status']
   const statusLabels: Record<Task['status'], string> = {
     TODO: 'To do',
-    IN_PROGRESS: 'In Progress',
+    IN_PROGRESS: 'Active',
     DONE: 'Done',
   }
 
@@ -66,7 +66,9 @@ export default function TableView({
         {optimisticTasks.map(({ id, task, priority, tag, status }) => {
           return (
             <tr key={id}>
-              <td>{task}</td>
+              <td>
+                <p>{task}</p>
+              </td>
 
               {/* PRIORITY */}
               <td className="priority">
