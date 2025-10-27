@@ -32,6 +32,10 @@ td:nth-child(4) {
   width: 90px;
 }
 
+thead th:last-child {
+  padding-left: 20px;
+}
+
 .tag {
   display: flex;
   align-items: center;
@@ -137,4 +141,8 @@ td:nth-child(4) {
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
+}
+
+.status-div {
+  padding-left: 20px;
 }

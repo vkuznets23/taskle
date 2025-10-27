@@ -171,6 +171,7 @@ export default function TableView({
                   </div>
                 ) : (
                   <div
+                    className="status-div"
                     onMouseEnter={() => setEditing({ id, field: 'status' })}
                     title="Click to edit status"
                   >
