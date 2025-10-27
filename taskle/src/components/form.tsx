@@ -25,6 +25,12 @@ export default function FormTasks({
       return
     }
 
+    if (task.length > 150) {
+      newErrors.tasksErrorMsg = 'Task must be under 150 characters'
+      setErrors(newErrors)
+      return
+    }
+
     try {
       const res = await fetch('http://localhost:3005/api/tasks/tasks', {
         method: 'POST',
