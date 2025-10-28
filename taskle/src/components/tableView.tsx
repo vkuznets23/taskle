@@ -4,8 +4,9 @@ import '../styles/table.css'
 import { useOptimistic, useState, useTransition } from 'react'
 import { IoIosArrowDown } from 'react-icons/io'
 import { capitalizeFirstLetter } from '../utils/Capitalizer'
-import { priorityLabels, tagLabels } from '../constants'
+import { tagLabels } from '../constants'
 import type { Task } from '../types/taskTypes'
+import PrioritySelector from './prioritySelector'
 
 export default function TableView({
   tasks,
@@ -51,6 +52,7 @@ export default function TableView({
       }
     })
   }
+  console.log('tasks', tasks)
 
   return (
     <table className={isPending ? 'updating' : ''}>
@@ -71,7 +73,7 @@ export default function TableView({
               </td>
 
               {/* PRIORITY */}
-              <td className="priority">
+              {/* <td className="priority">
                 {editing?.id === id && editing?.field === 'priority' ? (
                   <select
                     autoFocus
@@ -96,6 +98,28 @@ export default function TableView({
                   <div
                     onClick={() => setEditing({ id, field: 'priority' })}
                     title="Click to edit priority"
+                  >
+                    {generatePriorityIcon(priority)}
+                  </div>
+                )}
+              </td> */}
+              <td
+                className="priority"
+                onMouseEnter={() => setEditing({ id, field: 'priority' })}
+                onMouseLeave={() => setEditing(null)}
+              >
+                {editing?.id === id && editing?.field === 'priority' ? (
+                  <PrioritySelector
+                    id={id}
+                    currentPriority={priority}
+                    onChange={(newPriority) =>
+                      handleFieldChange(id, 'priority', newPriority)
+                    }
+                  />
+                ) : (
+                  <div
+                    className="priority-selector"
+                    title="Click to change priority"
                   >
                     {generatePriorityIcon(priority)}
                   </div>

@@ -71,6 +71,8 @@ router.put('/tasks/:id', authenticateToken, async (req, res) => {
   const { id } = req.params
   const { task, priority, tag, status } = req.body
 
+  console.log('BODY:', req.body)
+
   try {
     const existingTask = await prisma.task.findUnique({
       where: { id: Number(id) },
@@ -88,6 +90,8 @@ router.put('/tasks/:id', authenticateToken, async (req, res) => {
         status,
       },
     })
+
+    console.log('updates', updatedTask)
 
     res.status(200).json(updatedTask)
   } catch (err) {
