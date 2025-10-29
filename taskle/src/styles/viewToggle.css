@@ -1,0 +1,25 @@
+.toggle-wrapper {
+  width: 320px;
+  height: 45px;
+  border: 1px solid var(--border-color);
+  border-radius: 50px;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.toggle-btn {
+  background-color: transparent;
+  border: none;
+  border-radius: 50px;
+  height: 45px;
+  width: 160px;
+  color: var(--border-color);
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.toggle-btn.active {
+  background-color: #66dc7e;
+  border: 1px solid black;
+  color: black;
+}

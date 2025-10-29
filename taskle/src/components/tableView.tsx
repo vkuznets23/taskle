@@ -4,8 +4,9 @@ import '../styles/table.css'
 import { useOptimistic, useState, useTransition } from 'react'
 import { IoIosArrowDown } from 'react-icons/io'
 import { capitalizeFirstLetter } from '../utils/Capitalizer'
-import { priorityLabels, tagLabels } from '../constants'
+import { tagLabels } from '../constants'
 import type { Task } from '../types/taskTypes'
+import PrioritySelector from './prioritySelector'
 
 export default function TableView({
   tasks,
@@ -27,6 +28,11 @@ export default function TableView({
     IN_PROGRESS: 'Active',
     DONE: 'Done',
   }
+
+  const [showEditingBtn, setShowEditingBtn] = useState<{
+    id: number | null
+    show: boolean
+  }>({ id: null, show: false })
 
   // Optimistic state for immediate UI updates
   const [optimisticTasks, applyOptimisticUpdate] = useOptimistic(
@@ -66,36 +72,72 @@ export default function TableView({
         {optimisticTasks.map(({ id, task, priority, tag, status }) => {
           return (
             <tr key={id}>
-              <td>
-                <p>{task}</p>
+              <td
+                style={{ paddingRight: '80px' }}
+                onMouseEnter={() => setShowEditingBtn({ id, show: true })}
+                onMouseLeave={() =>
+                  setShowEditingBtn({ id: null, show: false })
+                }
+              >
+                {editing?.id === id && editing?.field === 'task' ? (
+                  <textarea
+                    className="task-textarea"
+                    autoFocus
+                    rows={3}
+                    defaultValue={task}
+                    onBlur={(e) => {
+                      const newValue = e.target.value.trim()
+                      if (newValue && newValue !== task) {
+                        handleFieldChange(id, 'task', newValue)
+                      }
+                      setEditing(null)
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault()
+                        const newValue = (
+                          e.target as HTMLTextAreaElement
+                        ).value.trim()
+                        if (newValue && newValue !== task) {
+                          handleFieldChange(id, 'task', newValue)
+                        }
+                        setEditing(null)
+                      }
+                    }}
+                  />
+                ) : (
+                  <div style={{ display: 'flex', gap: '20px' }}>
+                    <p>{task}</p>
+                    {showEditingBtn.show && showEditingBtn.id === id && (
+                      <button
+                        className="edit-btn"
+                        onClick={() => setEditing({ id, field: 'task' })}
+                      >
+                        edit
+                      </button>
+                    )}
+                  </div>
+                )}
               </td>
 
               {/* PRIORITY */}
-              <td className="priority">
+              <td
+                className="priority"
+                onMouseEnter={() => setEditing({ id, field: 'priority' })}
+                onMouseLeave={() => setEditing(null)}
+              >
                 {editing?.id === id && editing?.field === 'priority' ? (
-                  <select
-                    autoFocus
-                    value={priority}
-                    onBlur={() => setEditing(null)}
-                    onChange={(e) => {
-                      setEditing(null)
-                      handleFieldChange(
-                        id,
-                        'priority',
-                        e.target.value as Task['priority']
-                      )
-                    }}
-                  >
-                    {priorityLabels.map((label, index) => (
-                      <option key={index} value={label.toUpperCase()}>
-                        {capitalizeFirstLetter(label)}
-                      </option>
-                    ))}
-                  </select>
+                  <PrioritySelector
+                    id={id}
+                    currentPriority={priority}
+                    onChange={(newPriority) =>
+                      handleFieldChange(id, 'priority', newPriority)
+                    }
+                  />
                 ) : (
                   <div
-                    onClick={() => setEditing({ id, field: 'priority' })}
-                    title="Click to edit priority"
+                    className="priority-selector"
+                    title="Click to change priority"
                   >
                     {generatePriorityIcon(priority)}
                   </div>

@@ -42,7 +42,7 @@ export default function FormTasks({
       console.log(data)
 
       if (res.ok) {
-        setTasks((prev) => [...prev, data])
+        setTasks((prev) => [data, ...prev]) // to show new tasks first
         setPriority('LOW')
         setTag('NONE')
         setTask('')

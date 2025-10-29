@@ -8,7 +8,7 @@ export default function RegistrationToggle() {
   const [isSignUp, setIsSignUp] = useState(true)
   return (
     <div className="registration-toggle-container">
-      <Logo theme="light" />
+      <Logo />
       <div className="registration-toggle">
         <div className="buttons-toggle">
           <div
