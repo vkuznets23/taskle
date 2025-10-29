@@ -179,3 +179,20 @@ thead th:last-child {
 .priority-dot.highlight {
   opacity: 1;
 }
+
+.task-textarea {
+  width: 100%;
+  font-size: 16px;
+  padding: 8px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  outline: none;
+  resize: vertical;
+  line-height: 1.4;
+  box-sizing: border-box;
+}
+
+.task-textarea:focus {
+  border-color: var(--accent-color, #000000);
+  background-color: var(--bg-focus, #fafafa);
+}

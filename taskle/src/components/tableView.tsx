@@ -80,23 +80,23 @@ export default function TableView({
                 }
               >
                 {editing?.id === id && editing?.field === 'task' ? (
-                  <input
+                  <textarea
+                    className="task-textarea"
                     autoFocus
-                    type="text"
+                    rows={3}
                     defaultValue={task}
                     onBlur={(e) => {
-                      const newValue = (
-                        e.target as HTMLInputElement
-                      ).value.trim()
+                      const newValue = e.target.value.trim()
                       if (newValue && newValue !== task) {
                         handleFieldChange(id, 'task', newValue)
                       }
                       setEditing(null)
                     }}
                     onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault()
                         const newValue = (
-                          e.target as HTMLInputElement
+                          e.target as HTMLTextAreaElement
                         ).value.trim()
                         if (newValue && newValue !== task) {
                           handleFieldChange(id, 'task', newValue)
@@ -109,7 +109,10 @@ export default function TableView({
                   <div style={{ display: 'flex', gap: '20px' }}>
                     <p>{task}</p>
                     {showEditingBtn.show && showEditingBtn.id === id && (
-                      <button onClick={() => setEditing({ id, field: 'task' })}>
+                      <button
+                        className="edit-btn"
+                        onClick={() => setEditing({ id, field: 'task' })}
+                      >
                         edit
                       </button>
                     )}
