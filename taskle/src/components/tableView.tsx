@@ -73,36 +73,6 @@ export default function TableView({
               </td>
 
               {/* PRIORITY */}
-              {/* <td className="priority">
-                {editing?.id === id && editing?.field === 'priority' ? (
-                  <select
-                    autoFocus
-                    value={priority}
-                    onBlur={() => setEditing(null)}
-                    onChange={(e) => {
-                      setEditing(null)
-                      handleFieldChange(
-                        id,
-                        'priority',
-                        e.target.value as Task['priority']
-                      )
-                    }}
-                  >
-                    {priorityLabels.map((label, index) => (
-                      <option key={index} value={label.toUpperCase()}>
-                        {capitalizeFirstLetter(label)}
-                      </option>
-                    ))}
-                  </select>
-                ) : (
-                  <div
-                    onClick={() => setEditing({ id, field: 'priority' })}
-                    title="Click to edit priority"
-                  >
-                    {generatePriorityIcon(priority)}
-                  </div>
-                )}
-              </td> */}
               <td
                 className="priority"
                 onMouseEnter={() => setEditing({ id, field: 'priority' })}
