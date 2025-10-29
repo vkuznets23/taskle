@@ -100,4 +100,19 @@ router.put('/tasks/:id', authenticateToken, async (req, res) => {
   }
 })
 
+// count amount of tasks
+router.get('/tasks/count', async (req, res) => {
+  try {
+    const counts = await prisma.task.groupBy({
+      by: ['status'],
+      _count: { id: true },
+      where: { userId: req.userId },
+    })
+    res.json(counts)
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: 'Failed to get counts' })
+  }
+})
+
 export default router
