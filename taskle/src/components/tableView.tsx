@@ -12,9 +12,11 @@ import { MdEdit } from 'react-icons/md'
 export default function TableView({
   tasks,
   handleUpdate,
+  handelDeleteTask,
 }: {
   tasks: Task[]
   handleUpdate: (id: number, updates: Partial<Task>) => Promise<void>
+  handelDeleteTask: (id: number) => Promise<void>
 }) {
   const [editing, setEditing] = useState<{
     id: number
@@ -31,6 +33,11 @@ export default function TableView({
   }
 
   const [showEditingBtn, setShowEditingBtn] = useState<{
+    id: number | null
+    show: boolean
+  }>({ id: null, show: false })
+
+  const [showDeleteBtn, setShowDeleteBtn] = useState<{
     id: number | null
     show: boolean
   }>({ id: null, show: false })
@@ -66,13 +73,18 @@ export default function TableView({
           {tableThs.map((th, index) => (
             <th key={index}>{th.toUpperCase()}</th>
           ))}
+          <th></th>
         </tr>
       </thead>
 
       <tbody>
         {optimisticTasks.map(({ id, task, priority, tag, status }) => {
           return (
-            <tr key={id}>
+            <tr
+              key={id}
+              onMouseEnter={() => setShowDeleteBtn({ id, show: true })}
+              onMouseLeave={() => setShowDeleteBtn({ id: null, show: false })}
+            >
               <td
                 style={{ paddingRight: '80px' }}
                 onMouseEnter={() => setShowEditingBtn({ id, show: true })}
@@ -220,6 +232,11 @@ export default function TableView({
                   >
                     {statusLabels[status].toUpperCase()}
                   </div>
+                )}
+              </td>
+              <td className="delete-cell">
+                {showDeleteBtn.show && showDeleteBtn.id === id && (
+                  <button onClick={() => handelDeleteTask(id)}>delete</button>
                 )}
               </td>
             </tr>

@@ -35,6 +35,27 @@ export default function TasksList({
       throw err // Re-throw the error so optimistic updates can revert
     }
   }
+
+  const handelDeleteTask = async (id: number) => {
+    try {
+      const res = await fetch(`http://localhost:3005/api/tasks/tasks/${id}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+      })
+      const data = await res.json()
+      if (res.ok) {
+        setTasks((prev) => prev.filter((task) => task.id !== id))
+        console.log('Task deleted successfully')
+      } else {
+        console.error(data.error)
+        throw new Error(data.error || 'Failed to delete task')
+      }
+    } catch (err) {
+      console.error('Error deleting task:', err)
+    }
+  }
+
   return (
     <>
       <div className="toggle-wrapper">
@@ -53,7 +74,11 @@ export default function TasksList({
       </div>
 
       {tableView ? (
-        <TableView tasks={tasks} handleUpdate={handleUpdate} />
+        <TableView
+          tasks={tasks}
+          handleUpdate={handleUpdate}
+          handelDeleteTask={handelDeleteTask}
+        />
       ) : (
         <KanbanView tasks={tasks} />
       )}
