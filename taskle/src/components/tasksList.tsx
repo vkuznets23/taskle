@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { Task } from '../types/taskTypes'
 import TableView from './tableView'
+import KanbanView from './kanvanView'
 import '../styles/viewToggle.css'
 
 export default function TasksList({
@@ -54,7 +55,7 @@ export default function TasksList({
       {tableView ? (
         <TableView tasks={tasks} handleUpdate={handleUpdate} />
       ) : (
-        <p>not table view</p>
+        <KanbanView tasks={tasks} />
       )}
     </>
   )

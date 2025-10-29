@@ -3,6 +3,7 @@ import { priorityLabels, tagLabels } from '../constants'
 import type { Priority, Tag, Task } from '../types/taskTypes'
 import { capitalizeFirstLetter } from '../utils/Capitalizer'
 import type { Errors } from './dashboard'
+import InputError from './inputError'
 
 export default function FormTasks({
   setTasks,
@@ -65,9 +66,7 @@ export default function FormTasks({
           value={task}
           onChange={(e) => setTask(e.target.value)}
         />
-        {errors?.tasksErrorMsg && (
-          <p style={{ color: 'red' }}>{errors.tasksErrorMsg}</p>
-        )}
+        <InputError errorMessage={errors?.tasksErrorMsg} />
         <select
           value={priority}
           onChange={(e) => setPriority(e.target.value as Priority)}
@@ -87,9 +86,7 @@ export default function FormTasks({
         </select>
         <button type="submit">submit</button>
       </form>
-      {errors?.serverErrorMsg && (
-        <p style={{ color: 'red' }}>{errors.serverErrorMsg}</p>
-      )}
+      <InputError errorMessage={errors?.serverErrorMsg} />
     </>
   )
 }
