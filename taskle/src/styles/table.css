@@ -168,7 +168,7 @@ thead th:last-child {
   border-radius: 50%;
   cursor: pointer;
   opacity: 0.4;
-  background-color: #000;
+  background-color: var(--text-color);
   transition: all 0.2s ease;
 }
 
