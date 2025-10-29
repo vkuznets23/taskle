@@ -193,6 +193,14 @@ thead th:last-child {
 }
 
 .task-textarea:focus {
-  border-color: var(--accent-color, #000000);
-  background-color: var(--bg-focus, #fafafa);
+  border-color: var(--border-color);
+  background-color: #f7f7f7;
+}
+
+.edit-btn {
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  width: 45px;
+  aspect-ratio: 1/1;
 }

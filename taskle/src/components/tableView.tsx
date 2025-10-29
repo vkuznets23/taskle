@@ -7,6 +7,7 @@ import { capitalizeFirstLetter } from '../utils/Capitalizer'
 import { tagLabels } from '../constants'
 import type { Task } from '../types/taskTypes'
 import PrioritySelector from './prioritySelector'
+import { MdEdit } from 'react-icons/md'
 
 export default function TableView({
   tasks,
@@ -106,14 +107,14 @@ export default function TableView({
                     }}
                   />
                 ) : (
-                  <div style={{ display: 'flex', gap: '20px' }}>
+                  <div style={{ display: 'flex', gap: '10px' }}>
                     <p>{task}</p>
                     {showEditingBtn.show && showEditingBtn.id === id && (
                       <button
                         className="edit-btn"
                         onClick={() => setEditing({ id, field: 'task' })}
                       >
-                        edit
+                        <MdEdit />
                       </button>
                     )}
                   </div>
