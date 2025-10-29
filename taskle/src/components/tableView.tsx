@@ -29,6 +29,11 @@ export default function TableView({
     DONE: 'Done',
   }
 
+  const [showEditingBtn, setShowEditingBtn] = useState<{
+    id: number | null
+    show: boolean
+  }>({ id: null, show: false })
+
   // Optimistic state for immediate UI updates
   const [optimisticTasks, applyOptimisticUpdate] = useOptimistic(
     tasks,
@@ -52,7 +57,6 @@ export default function TableView({
       }
     })
   }
-  console.log('tasks', tasks)
 
   return (
     <table className={isPending ? 'updating' : ''}>
@@ -68,8 +72,48 @@ export default function TableView({
         {optimisticTasks.map(({ id, task, priority, tag, status }) => {
           return (
             <tr key={id}>
-              <td>
-                <p>{task}</p>
+              <td
+                onMouseEnter={() => setShowEditingBtn({ id, show: true })}
+                onMouseLeave={() =>
+                  setShowEditingBtn({ id: null, show: false })
+                }
+              >
+                {editing?.id === id && editing?.field === 'task' ? (
+                  <input
+                    autoFocus
+                    type="text"
+                    defaultValue={task}
+                    onBlur={(e) => {
+                      const newValue = (
+                        e.target as HTMLInputElement
+                      ).value.trim()
+                      if (newValue && newValue !== task) {
+                        handleFieldChange(id, 'task', newValue)
+                      }
+                      setEditing(null)
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        const newValue = (
+                          e.target as HTMLInputElement
+                        ).value.trim()
+                        if (newValue && newValue !== task) {
+                          handleFieldChange(id, 'task', newValue)
+                        }
+                        setEditing(null)
+                      }
+                    }}
+                  />
+                ) : (
+                  <div>
+                    <p>{task}</p>
+                    {showEditingBtn.show && showEditingBtn.id === id && (
+                      <button onClick={() => setEditing({ id, field: 'task' })}>
+                        edit
+                      </button>
+                    )}
+                  </div>
+                )}
               </td>
 
               {/* PRIORITY */}
