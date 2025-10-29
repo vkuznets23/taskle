@@ -20,7 +20,9 @@ td:first-child {
 }
 
 td:first-child p {
-  padding-right: 80px;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+  white-space: normal;
 }
 
 th:nth-child(2),

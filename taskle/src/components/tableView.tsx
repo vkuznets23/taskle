@@ -73,6 +73,7 @@ export default function TableView({
           return (
             <tr key={id}>
               <td
+                style={{ paddingRight: '80px' }}
                 onMouseEnter={() => setShowEditingBtn({ id, show: true })}
                 onMouseLeave={() =>
                   setShowEditingBtn({ id: null, show: false })
@@ -105,7 +106,7 @@ export default function TableView({
                     }}
                   />
                 ) : (
-                  <div>
+                  <div style={{ display: 'flex', gap: '20px' }}>
                     <p>{task}</p>
                     {showEditingBtn.show && showEditingBtn.id === id && (
                       <button onClick={() => setEditing({ id, field: 'task' })}>
