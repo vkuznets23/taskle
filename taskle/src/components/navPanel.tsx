@@ -32,6 +32,12 @@ export default function NavPanel({
         <FormTasks setTasks={setTasks} setModalOpen={setModalOpen} />
       )}
       <div className="toggle-wrapper">
+        <div
+          className="toggle-bg"
+          style={{
+            transform: tableView ? 'translateX(0%)' : 'translateX(100%)',
+          }}
+        />
         <button
           className={`toggle-btn ${tableView ? 'active' : ''}`}
           onClick={() => onChange(true)}
