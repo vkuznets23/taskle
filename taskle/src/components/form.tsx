@@ -73,7 +73,10 @@ export default function FormTasks({
             onChange={(e) => setTask(e.target.value)}
           />
           <label htmlFor="textarea">new task</label>
-          <InputError errorMessage={errors?.tasksErrorMsg} />
+          <div style={{ display: 'flex', justifyContent: 'space-betwee' }}>
+            <InputError errorMessage={errors?.tasksErrorMsg} />
+            <p style={{ margin: '0px', fontSize: '12px' }}>{task.length}/150</p>
+          </div>
         </div>
 
         <select
