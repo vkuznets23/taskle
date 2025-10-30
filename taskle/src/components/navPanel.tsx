@@ -27,34 +27,42 @@ export default function NavPanel({
         display: 'flex',
         marginTop: '50px',
         marginBottom: '10px',
-        gap: '20px',
+        justifyContent: 'space-between',
+        alignItems: 'center',
       }}
     >
-      <button className="add-btn" onClick={() => setModalOpen(true)}>
-        + Add
-      </button>
-      {modalOpen && (
-        <FormTasks setTasks={setTasks} setModalOpen={setModalOpen} />
-      )}
-      <div className="toggle-wrapper">
-        <div
-          className="toggle-bg"
-          style={{
-            transform: tableView ? 'translateX(0%)' : 'translateX(100%)',
-          }}
-        />
-        <button
-          className={`toggle-btn ${tableView ? 'active' : ''}`}
-          onClick={() => onChange(true)}
-        >
-          Table View
+      <div
+        style={{
+          display: 'flex',
+          gap: '20px',
+        }}
+      >
+        <button className="add-btn" onClick={() => setModalOpen(true)}>
+          + Add
         </button>
-        <button
-          className={`toggle-btn ${!tableView ? 'active' : ''}`}
-          onClick={() => onChange(false)}
-        >
-          Kanban Board
-        </button>
+        {modalOpen && (
+          <FormTasks setTasks={setTasks} setModalOpen={setModalOpen} />
+        )}
+        <div className="toggle-wrapper">
+          <div
+            className="toggle-bg"
+            style={{
+              transform: tableView ? 'translateX(0%)' : 'translateX(100%)',
+            }}
+          />
+          <button
+            className={`toggle-btn ${tableView ? 'active' : ''}`}
+            onClick={() => onChange(true)}
+          >
+            Table View
+          </button>
+          <button
+            className={`toggle-btn ${!tableView ? 'active' : ''}`}
+            onClick={() => onChange(false)}
+          >
+            Kanban Board
+          </button>
+        </div>
       </div>
       <div>
         <SearchInput query={searchQuery} onChange={onSearchChange} />

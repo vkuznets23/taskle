@@ -1,0 +1,35 @@
+.seacrh-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-input {
+  width: 0px;
+  height: 45px;
+  border: 1px solid var(--border-color);
+  border-radius: 50px;
+  background-color: transparent;
+  padding: 0 14px;
+  opacity: 0;
+  pointer-events: none;
+  transition: width 0.3s ease, opacity 0.25s ease, padding 0.3s ease;
+}
+
+.seacrh-container.open .search-input {
+  width: 420px;
+  opacity: 1;
+  pointer-events: auto;
+  padding: 0 16px 0 40px;
+}
+
+.search-btn {
+  width: 45px;
+  height: 45px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: 50%;
+  position: absolute;
+  font-size: 18px;
+}

@@ -9,6 +9,7 @@ import type { Task } from '../types/taskTypes'
 import PrioritySelector from './prioritySelector'
 import { MdEdit } from 'react-icons/md'
 import { RiDeleteBin5Line } from 'react-icons/ri'
+import NoTasks from './noTasks'
 
 export default function TableView({
   tasks,
@@ -66,6 +67,8 @@ export default function TableView({
       }
     })
   }
+
+  if (tasks.length === 0) return <NoTasks />
 
   return (
     <table className={isPending ? 'updating' : ''}>
