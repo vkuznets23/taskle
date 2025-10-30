@@ -10,6 +10,8 @@ export default function TasksList({
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>
 }) {
   const [tableView, setTableView] = useState(true)
+  const [searchQuery, setSearchQuery] = useState('')
+
   const handleUpdate = async (id: number, updates: Partial<Task>) => {
     try {
       const res = await fetch(`http://localhost:3005/api/tasks/tasks/${id}`, {
@@ -57,6 +59,10 @@ export default function TasksList({
     }
   }
 
+  const filteredTasks = tasks.filter((task) =>
+    task.task.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
   if (tasks.length === 0) {
     return (
       <>
@@ -64,6 +70,8 @@ export default function TasksList({
           tableView={tableView}
           onChange={setTableView}
           setTasks={setTasks}
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
         />
         <NoTasks />
       </>
@@ -76,16 +84,18 @@ export default function TasksList({
         tableView={tableView}
         onChange={setTableView}
         setTasks={setTasks}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
       />
 
       {tableView ? (
         <TableView
-          tasks={tasks}
+          tasks={filteredTasks}
           handleUpdate={handleUpdate}
           handelDeleteTask={handelDeleteTask}
         />
       ) : (
-        <KanbanView tasks={tasks} />
+        <KanbanView tasks={filteredTasks} />
       )}
     </>
   )

@@ -2,17 +2,22 @@ import { useState } from 'react'
 import FormTasks from './form'
 import type { Task } from '../types/taskTypes'
 import '../styles/panel.css'
+import SearchInput from './SearchInput'
 
 interface NavPanelProps {
   tableView: boolean
   onChange: (tableView: boolean) => void
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>
+  searchQuery: string
+  onSearchChange: (value: string) => void
 }
 
 export default function NavPanel({
   tableView,
   onChange,
   setTasks,
+  searchQuery,
+  onSearchChange,
 }: NavPanelProps) {
   const [modalOpen, setModalOpen] = useState(false)
 
@@ -50,6 +55,9 @@ export default function NavPanel({
         >
           Kanban Board
         </button>
+      </div>
+      <div>
+        <SearchInput query={searchQuery} onChange={onSearchChange} />
       </div>
     </div>
   )
