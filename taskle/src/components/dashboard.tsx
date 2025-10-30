@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import Navbar from './navBar'
 import type { Task } from '../types/taskTypes'
 import TasksList from './tasksList'
+import Loader from './loader'
 
 export interface Errors {
   tasksErrorMsg: string
@@ -29,14 +30,18 @@ export function Dashboard() {
     fetchData()
   }, [])
 
+  if (loading)
+    return (
+      <div>
+        <Navbar />
+        <Loader />
+      </div>
+    )
+
   return (
     <div>
       <Navbar />
-      {loading ? (
-        <p>loading...</p>
-      ) : (
-        <TasksList tasks={tasks} setTasks={setTasks} />
-      )}
+      <TasksList tasks={tasks} setTasks={setTasks} />
     </div>
   )
 }

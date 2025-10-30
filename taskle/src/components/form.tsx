@@ -5,6 +5,8 @@ import { capitalizeFirstLetter } from '../utils/Capitalizer'
 import type { Errors } from './dashboard'
 import InputError from './inputError'
 import '../styles/formModal.css'
+import { IoIosArrowDown } from 'react-icons/io'
+import { IoCloseSharp } from 'react-icons/io5'
 
 export default function FormTasks({
   setTasks,
@@ -76,9 +78,15 @@ export default function FormTasks({
   }
 
   return (
-    <div className="modal">
-      <form onSubmit={handleSubmit} className="form">
-        <button onClick={() => setModalOpen(false)}>х</button>
+    <div className="modal" onClick={() => setModalOpen(false)}>
+      <form
+        onSubmit={handleSubmit}
+        onClick={(e) => e.stopPropagation()}
+        className="form"
+      >
+        <button className="close-btn" onClick={() => setModalOpen(false)}>
+          <IoCloseSharp />
+        </button>
         <div className="form-textarea">
           <textarea
             id="textarea"
@@ -86,6 +94,7 @@ export default function FormTasks({
             value={task}
             ref={textareaRef}
             onChange={handleChangeTextarea}
+            className={errors?.tasksErrorMsg ? 'textarea-error' : ''}
             style={{ overflow: 'hidden', resize: 'none' }}
           />
           <label htmlFor="textarea">new task</label>
@@ -104,27 +113,39 @@ export default function FormTasks({
           </div>
         </div>
 
-        <select
-          value={priority}
-          onChange={(e) => setPriority(e.target.value as Priority)}
-        >
-          {priorityLabels.map((priority, index) => (
-            <option key={index} value={priority.toUpperCase()}>
-              {capitalizeFirstLetter(priority)}
-            </option>
-          ))}
-        </select>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <select
+            value={priority}
+            onChange={(e) => setPriority(e.target.value as Priority)}
+          >
+            {priorityLabels.map((priority, index) => (
+              <option key={index} value={priority.toUpperCase()}>
+                {capitalizeFirstLetter(priority)}
+              </option>
+            ))}
+          </select>
 
-        <select value={tag} onChange={(e) => setTag(e.target.value as Tag)}>
-          {tagLabels.map((tag, index) => (
-            <option key={index} value={tag.toUpperCase()}>
-              {capitalizeFirstLetter(tag)}
-            </option>
-          ))}
-        </select>
-        <button type="submit">submit</button>
+          <div className="select-wrapper">
+            <select
+              className={`select ${tag.toLowerCase()}`}
+              autoFocus
+              value={tag}
+              onChange={(e) => setTag(e.target.value as Tag)}
+            >
+              {tagLabels.map((label, index) => (
+                <option key={index} value={label.toUpperCase()}>
+                  {capitalizeFirstLetter(label)}
+                </option>
+              ))}
+            </select>
+            <IoIosArrowDown className="select-icon" />
+          </div>
+        </div>
+        <InputError errorMessage={errors?.serverErrorMsg} />
+        <button className="form-submit-btn" type="submit">
+          submit
+        </button>
       </form>
-      <InputError errorMessage={errors?.serverErrorMsg} />
     </div>
   )
 }
