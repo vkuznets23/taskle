@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { priorityLabels, tagLabels } from '../constants'
 import type { Priority, Tag, Task } from '../types/taskTypes'
 import { capitalizeFirstLetter } from '../utils/Capitalizer'
@@ -61,6 +61,20 @@ export default function FormTasks({
     }
   }
 
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const resizeTextarea = () => {
+    const textarea = textareaRef.current
+    if (textarea) {
+      textarea.style.height = 'auto'
+      textarea.style.height = textarea.scrollHeight + 'px'
+    }
+  }
+
+  const handleChangeTextarea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setTask(e.target.value)
+    resizeTextarea()
+  }
+
   return (
     <div className="modal">
       <form onSubmit={handleSubmit} className="form">
@@ -70,12 +84,23 @@ export default function FormTasks({
             id="textarea"
             placeholder=" "
             value={task}
-            onChange={(e) => setTask(e.target.value)}
+            ref={textareaRef}
+            onChange={handleChangeTextarea}
+            style={{ overflow: 'hidden', resize: 'none' }}
           />
           <label htmlFor="textarea">new task</label>
-          <div style={{ display: 'flex', justifyContent: 'space-betwee' }}>
-            <InputError errorMessage={errors?.tasksErrorMsg} />
-            <p style={{ margin: '0px', fontSize: '12px' }}>{task.length}/150</p>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div style={{ minWidth: '120px' }}>
+              <InputError errorMessage={errors?.tasksErrorMsg} />
+            </div>
+            <p
+              style={{
+                margin: '0px',
+                fontSize: '12px',
+              }}
+            >
+              {task.length}/150
+            </p>
           </div>
         </div>
 

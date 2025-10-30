@@ -2,7 +2,6 @@ import { useState } from 'react'
 import type { Task } from '../types/taskTypes'
 import TableView from './tableView'
 import KanbanView from './kanvanView'
-import '../styles/viewToggle.css'
 import NoTasks from './noTasks'
 import NavPanel from './navPanel'
 
