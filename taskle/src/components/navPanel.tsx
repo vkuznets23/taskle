@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import FormTasks from './form'
 import type { Task } from '../types/taskTypes'
+import '../styles/panel.css'
 
 interface NavPanelProps {
   tableView: boolean
@@ -16,8 +17,17 @@ export default function NavPanel({
   const [modalOpen, setModalOpen] = useState(false)
 
   return (
-    <div style={{ display: 'flex' }}>
-      <button onClick={() => setModalOpen(true)}>Add</button>
+    <div
+      style={{
+        display: 'flex',
+        marginTop: '50px',
+        marginBottom: '10px',
+        gap: '20px',
+      }}
+    >
+      <button className="add-btn" onClick={() => setModalOpen(true)}>
+        + Add
+      </button>
       {modalOpen && (
         <FormTasks setTasks={setTasks} setModalOpen={setModalOpen} />
       )}

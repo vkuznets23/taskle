@@ -1,3 +1,11 @@
+.add-btn {
+  width: 120px;
+  border: 1px solid black;
+  border-radius: 50px;
+  font-size: 16px;
+  background-color: #66dc7e;
+}
+
 .toggle-wrapper {
   width: 320px;
   height: 45px;
