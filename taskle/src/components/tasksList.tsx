@@ -3,6 +3,7 @@ import type { Task } from '../types/taskTypes'
 import TableView from './tableView'
 import KanbanView from './kanvanView'
 import '../styles/viewToggle.css'
+import NoTasks from './noTasks'
 
 export default function TasksList({
   tasks,
@@ -37,6 +38,9 @@ export default function TasksList({
   }
 
   const handelDeleteTask = async (id: number) => {
+    const confirmDelete = window.confirm('Are you sure you wanna delete task?')
+    if (!confirmDelete) return
+
     try {
       const res = await fetch(`http://localhost:3005/api/tasks/tasks/${id}`, {
         method: 'DELETE',
@@ -54,6 +58,28 @@ export default function TasksList({
     } catch (err) {
       console.error('Error deleting task:', err)
     }
+  }
+
+  if (tasks.length === 0) {
+    return (
+      <>
+        <div className="toggle-wrapper">
+          <button
+            className={`toggle-btn ${tableView ? 'active' : ''}`}
+            onClick={() => setTableView(true)}
+          >
+            Table View
+          </button>
+          <button
+            className={`toggle-btn ${!tableView ? 'active' : ''}`}
+            onClick={() => setTableView(false)}
+          >
+            Kanban Board
+          </button>
+        </div>
+        <NoTasks />
+      </>
+    )
   }
 
   return (
