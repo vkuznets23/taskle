@@ -8,6 +8,7 @@ import { tagLabels } from '../constants'
 import type { Task } from '../types/taskTypes'
 import PrioritySelector from './prioritySelector'
 import { MdEdit } from 'react-icons/md'
+import { RiDeleteBin5Line } from 'react-icons/ri'
 
 export default function TableView({
   tasks,
@@ -236,7 +237,12 @@ export default function TableView({
               </td>
               <td className="delete-cell">
                 {showDeleteBtn.show && showDeleteBtn.id === id && (
-                  <button onClick={() => handelDeleteTask(id)}>delete</button>
+                  <button
+                    className="delete-btn"
+                    onClick={() => handelDeleteTask(id)}
+                  >
+                    <RiDeleteBin5Line />
+                  </button>
                 )}
               </td>
             </tr>

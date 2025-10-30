@@ -1,9 +1,6 @@
 import { useState } from 'react'
 import type { Task } from '../types/taskTypes'
-import TableView from './tableView'
-import KanbanView from './kanvanView'
-import NoTasks from './noTasks'
-import NavPanel from './navPanel'
+import { TableView, KanbanView, NoTasks, NavPanel } from '../components'
 
 export default function TasksList({
   tasks,

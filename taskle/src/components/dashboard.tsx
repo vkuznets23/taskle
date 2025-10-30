@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react'
-import Navbar from './navBar'
+import { Navbar, TasksList, Loader } from '../components'
 import type { Task } from '../types/taskTypes'
-import TasksList from './tasksList'
-import Loader from './loader'
 
 export interface Errors {
   tasksErrorMsg: string

@@ -20,8 +20,8 @@ td:first-child {
 
 td:first-child p {
   word-wrap: break-word;
+  white-space: pre-line;
   overflow-wrap: anywhere;
-  white-space: normal;
 }
 
 th:nth-child(2),
@@ -171,6 +171,7 @@ thead th:nth-child(4) {
   display: flex;
   align-items: center;
   justify-content: left;
+  color: var(--border-color);
   gap: 10px;
 }
 
@@ -214,7 +215,13 @@ thead th:nth-child(4) {
   cursor: pointer;
   font-size: 18px;
   width: 45px;
+  color: var(--text-color);
+  background: transparent;
   aspect-ratio: 1/1;
+}
+
+.edit-btn:hover {
+  transform: scale(105%);
 }
 
 /* delete */
@@ -227,13 +234,14 @@ thead th:nth-child(4) {
 .delete-btn {
   background: none;
   border: none;
-  color: #e63946;
-  font-weight: 500;
   cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.2s ease-in-out;
+  width: 45px;
+  aspect-ratio: 1/1;
+  font-size: 18px;
+  color: var(--text-color);
+  background: transparent;
 }
 
 .delete-btn:hover {
-  text-decoration: underline;
+  transform: scale(105%);
 }
