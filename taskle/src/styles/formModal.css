@@ -1,0 +1,73 @@
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.form {
+  background-color: white;
+  width: 300px;
+  aspect-ratio: 1/1;
+  border-radius: 30px;
+  border: 1px solid black;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-textarea {
+  position: relative;
+}
+
+.form textarea {
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  outline: none;
+  resize: vertical;
+  line-height: 1.4;
+  box-sizing: border-box;
+  position: relative;
+  outline: none;
+  color: var(--text-color);
+  transition: border-color 0.3s ease;
+}
+
+.form textarea:focus {
+  border-color: #52c86a;
+}
+
+.form label {
+  position: absolute;
+  left: 20px;
+  top: 12px;
+  color: var(--text-color);
+  pointer-events: none;
+  transition: all 0.3s ease;
+  background-color: white;
+}
+
+.form textarea:focus + label {
+  top: -8px;
+  left: 15px;
+  font-size: 12px;
+  padding: 0 6px;
+  color: #52c86a;
+}
+
+.form textarea:not(:placeholder-shown) + label {
+  top: -8px;
+  left: 15px;
+  font-size: 12px;
+  padding: 0 6px;
+}

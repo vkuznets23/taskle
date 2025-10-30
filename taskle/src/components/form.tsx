@@ -4,6 +4,7 @@ import type { Priority, Tag, Task } from '../types/taskTypes'
 import { capitalizeFirstLetter } from '../utils/Capitalizer'
 import type { Errors } from './dashboard'
 import InputError from './inputError'
+import '../styles/formModal.css'
 
 export default function FormTasks({
   setTasks,
@@ -61,15 +62,20 @@ export default function FormTasks({
   }
 
   return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="new task"
-          value={task}
-          onChange={(e) => setTask(e.target.value)}
-        />
-        <InputError errorMessage={errors?.tasksErrorMsg} />
+    <div className="modal">
+      <form onSubmit={handleSubmit} className="form">
+        <button onClick={() => setModalOpen(false)}>х</button>
+        <div className="form-textarea">
+          <textarea
+            id="textarea"
+            placeholder=" "
+            value={task}
+            onChange={(e) => setTask(e.target.value)}
+          />
+          <label htmlFor="textarea">new task</label>
+          <InputError errorMessage={errors?.tasksErrorMsg} />
+        </div>
+
         <select
           value={priority}
           onChange={(e) => setPriority(e.target.value as Priority)}
@@ -80,6 +86,7 @@ export default function FormTasks({
             </option>
           ))}
         </select>
+
         <select value={tag} onChange={(e) => setTag(e.target.value as Tag)}>
           {tagLabels.map((tag, index) => (
             <option key={index} value={tag.toUpperCase()}>
@@ -90,6 +97,6 @@ export default function FormTasks({
         <button type="submit">submit</button>
       </form>
       <InputError errorMessage={errors?.serverErrorMsg} />
-    </>
+    </div>
   )
 }
