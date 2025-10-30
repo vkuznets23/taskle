@@ -7,8 +7,10 @@ import InputError from './inputError'
 
 export default function FormTasks({
   setTasks,
+  setModalOpen,
 }: {
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>
+  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 }) {
   const [task, setTask] = useState('')
   const [priority, setPriority] = useState<Priority>('LOW')
@@ -48,6 +50,7 @@ export default function FormTasks({
         setTag('NONE')
         setTask('')
         setErrors({})
+        setModalOpen(false)
       } else {
         setErrors({ serverErrorMsg: data.error || 'Something went wrong' })
       }

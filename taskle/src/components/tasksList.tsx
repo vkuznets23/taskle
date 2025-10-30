@@ -64,7 +64,11 @@ export default function TasksList({
   if (tasks.length === 0) {
     return (
       <>
-        <NavPanel tableView={tableView} onChange={setTableView} />
+        <NavPanel
+          tableView={tableView}
+          onChange={setTableView}
+          setTasks={setTasks}
+        />
         <NoTasks />
       </>
     )
@@ -72,7 +76,11 @@ export default function TasksList({
 
   return (
     <>
-      <NavPanel tableView={tableView} onChange={setTableView} />
+      <NavPanel
+        tableView={tableView}
+        onChange={setTableView}
+        setTasks={setTasks}
+      />
 
       {tableView ? (
         <TableView

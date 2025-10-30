@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import Navbar from './navBar'
 import type { Task } from '../types/taskTypes'
-import FormTasks from './form'
 import TasksList from './tasksList'
 
 export interface Errors {
@@ -33,7 +32,6 @@ export function Dashboard() {
   return (
     <div>
       <Navbar />
-      <FormTasks setTasks={setTasks} />
       {loading ? (
         <p>loading...</p>
       ) : (
