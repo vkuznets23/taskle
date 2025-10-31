@@ -78,7 +78,7 @@ export default function NavPanel({
           </button>
         </div>
       </div>
-      <div style={{ display: 'flex' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
         <SearchInput query={searchQuery} onChange={onSearchChange} />
         <Filter sortOrder={sortOrder} setSortOrder={setSortOrder} />
         <MultiFilter
