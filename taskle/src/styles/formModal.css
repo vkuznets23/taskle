@@ -1,0 +1,95 @@
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.839);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.form {
+  background-color: var(--bg-color);
+  width: 300px;
+  border-radius: 30px;
+  border: 1px solid black;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-textarea {
+  position: relative;
+}
+
+.form textarea {
+  width: 100%;
+  font-size: 14px;
+  padding: 12px 10px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-color);
+  border-radius: 8px;
+  outline: none;
+  line-height: 1.4;
+  box-sizing: border-box;
+  position: relative;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.form textarea:focus {
+  border-color: #52c86a;
+  color: var(--text-color);
+}
+
+.form label {
+  position: absolute;
+  left: 20px;
+  top: 12px;
+  color: var(--text-color);
+  pointer-events: none;
+  transition: all 0.3s ease;
+  background-color: var(--bg-color);
+}
+
+.form textarea:focus + label {
+  top: -8px;
+  left: 15px;
+  font-size: 12px;
+  padding: 0 6px;
+  color: #52c86a;
+}
+
+.form textarea.textarea-error {
+  border-color: #fa713c;
+}
+
+.form textarea.textarea-error + label {
+  color: #fa713c;
+}
+
+.form textarea:not(:placeholder-shown) + label {
+  top: -8px;
+  left: 15px;
+  font-size: 12px;
+  padding: 0 6px;
+}
+
+.close-btn {
+  width: 45px;
+  aspect-ratio: 1/1;
+  margin-left: auto;
+  background-color: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  position: absolute;
+  color: white;
+  top: 20px;
+  right: 20px;
+}

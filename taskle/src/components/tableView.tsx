@@ -7,13 +7,18 @@ import { capitalizeFirstLetter } from '../utils/Capitalizer'
 import { tagLabels } from '../constants'
 import type { Task } from '../types/taskTypes'
 import PrioritySelector from './prioritySelector'
+import { MdEdit } from 'react-icons/md'
+import { RiDeleteBin5Line } from 'react-icons/ri'
+import NoTasks from './noTasks'
 
 export default function TableView({
   tasks,
   handleUpdate,
+  handelDeleteTask,
 }: {
   tasks: Task[]
   handleUpdate: (id: number, updates: Partial<Task>) => Promise<void>
+  handelDeleteTask: (id: number) => Promise<void>
 }) {
   const [editing, setEditing] = useState<{
     id: number
@@ -30,6 +35,11 @@ export default function TableView({
   }
 
   const [showEditingBtn, setShowEditingBtn] = useState<{
+    id: number | null
+    show: boolean
+  }>({ id: null, show: false })
+
+  const [showDeleteBtn, setShowDeleteBtn] = useState<{
     id: number | null
     show: boolean
   }>({ id: null, show: false })
@@ -58,6 +68,8 @@ export default function TableView({
     })
   }
 
+  if (tasks.length === 0) return <NoTasks />
+
   return (
     <table className={isPending ? 'updating' : ''}>
       <thead>
@@ -65,13 +77,18 @@ export default function TableView({
           {tableThs.map((th, index) => (
             <th key={index}>{th.toUpperCase()}</th>
           ))}
+          <th></th>
         </tr>
       </thead>
 
       <tbody>
         {optimisticTasks.map(({ id, task, priority, tag, status }) => {
           return (
-            <tr key={id}>
+            <tr
+              key={id}
+              onMouseEnter={() => setShowDeleteBtn({ id, show: true })}
+              onMouseLeave={() => setShowDeleteBtn({ id: null, show: false })}
+            >
               <td
                 style={{ paddingRight: '80px' }}
                 onMouseEnter={() => setShowEditingBtn({ id, show: true })}
@@ -106,14 +123,14 @@ export default function TableView({
                     }}
                   />
                 ) : (
-                  <div style={{ display: 'flex', gap: '20px' }}>
+                  <div style={{ display: 'flex', gap: '10px' }}>
                     <p>{task}</p>
                     {showEditingBtn.show && showEditingBtn.id === id && (
                       <button
                         className="edit-btn"
                         onClick={() => setEditing({ id, field: 'task' })}
                       >
-                        edit
+                        <MdEdit />
                       </button>
                     )}
                   </div>
@@ -219,6 +236,16 @@ export default function TableView({
                   >
                     {statusLabels[status].toUpperCase()}
                   </div>
+                )}
+              </td>
+              <td className="delete-cell">
+                {showDeleteBtn.show && showDeleteBtn.id === id && (
+                  <button
+                    className="delete-btn"
+                    onClick={() => handelDeleteTask(id)}
+                  >
+                    <RiDeleteBin5Line />
+                  </button>
                 )}
               </td>
             </tr>

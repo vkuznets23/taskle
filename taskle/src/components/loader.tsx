@@ -1,6 +1,6 @@
 import '../styles/loader.css'
 
-function Circle() {
+export function Circle() {
   return (
     <div className="circle-container">
       <div className="circle"></div>
@@ -11,7 +11,7 @@ function Circle() {
   )
 }
 
-function HalfCircles() {
+export function HalfCircles() {
   return (
     <>
       <div className="half-circle bottom"></div>
@@ -20,7 +20,7 @@ function HalfCircles() {
   )
 }
 
-function Lines() {
+export function Lines() {
   return (
     <div className="rectangle-container">
       <div className="rectangle"></div>
@@ -30,7 +30,7 @@ function Lines() {
   )
 }
 
-function Arrow() {
+export function Arrow() {
   return (
     <div className="arrow-container">
       <div className="rectangle-arrow vertical"></div>

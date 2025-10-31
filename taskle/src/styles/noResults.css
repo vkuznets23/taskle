@@ -1,0 +1,13 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  margin: 0px;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+}
+
+.figuresContainer {
+  display: flex;
+  gap: 10px;
+}

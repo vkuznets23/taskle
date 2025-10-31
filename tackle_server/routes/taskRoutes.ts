@@ -71,8 +71,6 @@ router.put('/tasks/:id', authenticateToken, async (req, res) => {
   const { id } = req.params
   const { task, priority, tag, status } = req.body
 
-  console.log('BODY:', req.body)
-
   try {
     const existingTask = await prisma.task.findUnique({
       where: { id: Number(id) },
@@ -97,6 +95,49 @@ router.put('/tasks/:id', authenticateToken, async (req, res) => {
   } catch (err) {
     console.error(err)
     res.status(500).json({ error: 'Unable to update task' })
+  }
+})
+
+// count amount of tasks
+router.get('/tasks/count', async (req, res) => {
+  try {
+    const counts = await prisma.task.groupBy({
+      by: ['status'],
+      _count: { id: true },
+      where: { userId: req.userId },
+    })
+    res.json(counts)
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: 'Failed to get counts' })
+  }
+})
+
+// delete task
+router.delete('/tasks/:id', async (req, res) => {
+  const { id } = req.params
+  const taskId = Number(id)
+
+  if (isNaN(taskId)) {
+    return res.status(400).json({ error: 'Invalid task ID' })
+  }
+
+  try {
+    const existingTask = await prisma.task.findUnique({
+      where: { id: taskId },
+    })
+    if (!existingTask) {
+      return res.status(400).json({ error: 'Task doesnt exist' })
+    }
+
+    await prisma.task.delete({
+      where: { id: taskId },
+    })
+
+    return res.status(200).json({ message: 'Task deleted successfully' })
+  } catch (err) {
+    console.error(err)
+    return res.status(500).json({ error: 'Failed to delete task' })
   }
 })
 

@@ -1,9 +1,8 @@
 table {
-  max-width: 1500px;
   width: 100%;
   margin: 0 auto;
   border-collapse: collapse;
-  table-layout: fixed;
+  table-layout: auto;
 }
 
 td,
@@ -16,26 +15,39 @@ th {
 
 th:first-child,
 td:first-child {
-  width: 250px;
+  width: auto;
 }
 
 td:first-child p {
   word-wrap: break-word;
+  white-space: pre-line;
   overflow-wrap: anywhere;
-  white-space: normal;
 }
 
 th:nth-child(2),
-td:nth-child(2),
-th:nth-child(3),
-td:nth-child(3),
-th:nth-child(4),
-td:nth-child(4) {
-  width: 90px;
+td:nth-child(2) {
+  width: 100px;
 }
 
-thead th:last-child {
-  padding-left: 20px;
+th:nth-child(3),
+td:nth-child(3) {
+  width: 140px;
+  padding-left: 60px;
+}
+
+th:nth-child(4),
+td:nth-child(4) {
+  width: 120px;
+  padding-left: 60px;
+}
+
+th:nth-child(5),
+td:nth-child(5) {
+  width: 60px;
+}
+
+thead th:nth-child(4) {
+  padding-left: 80px;
 }
 
 .tag {
@@ -57,8 +69,7 @@ thead th:last-child {
 }
 
 .tag.none {
-  opacity: 0.2;
-  color: var(--text-color);
+  opacity: 0;
 }
 
 .tag.work {
@@ -159,6 +170,7 @@ thead th:last-child {
   display: flex;
   align-items: center;
   justify-content: left;
+  color: var(--border-color);
   gap: 10px;
 }
 
@@ -193,6 +205,42 @@ thead th:last-child {
 }
 
 .task-textarea:focus {
-  border-color: var(--accent-color, #000000);
-  background-color: var(--bg-focus, #fafafa);
+  border-color: var(--border-color);
+  background-color: #f7f7f7;
+}
+
+.edit-btn {
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  width: 45px;
+  color: var(--text-color);
+  background: transparent;
+  aspect-ratio: 1/1;
+}
+
+.edit-btn:hover {
+  transform: scale(105%);
+}
+
+/* delete */
+.delete-cell {
+  width: 80px;
+  text-align: right;
+  padding-right: 10px;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 45px;
+  aspect-ratio: 1/1;
+  font-size: 18px;
+  color: var(--text-color);
+  background: transparent;
+}
+
+.delete-btn:hover {
+  transform: scale(105%);
 }

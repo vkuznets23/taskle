@@ -1,0 +1,53 @@
+.kanban {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  overflow-x: auto;
+}
+
+.kanban-column {
+  flex: 1;
+  padding: 15px;
+  min-width: 250px;
+}
+
+.kanban-tasks {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.kanban-card {
+  background: white;
+  border-radius: 30px;
+  border: 1px solid black;
+  padding: 30px;
+}
+
+.kanban-card p {
+  font-size: 18px;
+  margin: 0px;
+}
+
+.kanban-card.work {
+  background: #fa713c;
+}
+
+.kanban-card.studying {
+  background: #948af5;
+}
+
+.kanban-card.personal {
+  background: #ef89e7;
+}
+
+.kanban-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.priority {
+  color: black;
+}
