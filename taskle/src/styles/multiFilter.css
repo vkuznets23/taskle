@@ -1,0 +1,77 @@
+.multi-filter {
+  position: relative;
+  display: inline-block;
+  font-family: inherit;
+}
+
+.multi-filter__button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 120px;
+  height: 45px;
+  padding: 6px 15px 6px 20px;
+  background-color: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--text-color);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.multi-filter__button:hover {
+  border-color: #aaa;
+}
+
+.arrow {
+  transition: transform 0.2s ease;
+}
+
+.arrow.open {
+  transform: rotate(180deg);
+}
+
+.multi-filter__menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  width: 120px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  padding: 6px;
+  max-height: 180px;
+  overflow-y: auto;
+  z-index: 10;
+  animation: fadeIn 0.15s ease;
+}
+
+.multi-filter__option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #333;
+  transition: background-color 0.2s ease;
+}
+
+.multi-filter__option:hover {
+  background-color: #f1f1f1;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

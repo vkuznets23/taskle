@@ -1,5 +1,7 @@
-import { FaSortAmountDown } from 'react-icons/fa'
-import { FaSortAmountUpAlt } from 'react-icons/fa'
+import { BiSortUp } from 'react-icons/bi'
+import { BiSortDown } from 'react-icons/bi'
+
+import '../styles/sortingBtns.css'
 
 interface FilterProps {
   sortOrder: 'asc' | 'desc'
@@ -8,7 +10,7 @@ interface FilterProps {
 
 export default function Filter({ sortOrder, setSortOrder }: FilterProps) {
   const getArrow = () => {
-    return sortOrder === 'asc' ? <FaSortAmountUpAlt /> : <FaSortAmountDown />
+    return sortOrder === 'asc' ? <BiSortUp /> : <BiSortDown />
   }
 
   return (
@@ -19,6 +21,7 @@ export default function Filter({ sortOrder, setSortOrder }: FilterProps) {
             ? 'set priority from high to low'
             : 'set priority from low to high'
         }
+        className="priority-sort-btn"
         onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
       >
         {getArrow()}

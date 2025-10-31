@@ -82,16 +82,16 @@ export default function NavPanel({
         <SearchInput query={searchQuery} onChange={onSearchChange} />
         <Filter sortOrder={sortOrder} setSortOrder={setSortOrder} />
         <MultiFilter
-          title="Status"
-          options={['in_progress', 'done', 'todo']}
-          selected={statusFilter}
-          onChange={setStatusFilter}
-        />
-        <MultiFilter
           title="Tags"
           options={['work', 'studying', 'personal']}
           selected={tagFilter}
           onChange={setTagFilter}
+        />
+        <MultiFilter
+          title="Status"
+          options={['in_progress', 'done', 'todo']}
+          selected={statusFilter}
+          onChange={setStatusFilter}
         />
       </div>
     </div>

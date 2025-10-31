@@ -1,0 +1,12 @@
+.priority-sort-btn {
+  background-color: #66dc7e;
+  font-size: 20px;
+  height: 45px;
+  aspect-ratio: 1/1;
+  border: 1px solid var(--border-color);
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
