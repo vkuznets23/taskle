@@ -3,6 +3,9 @@ import FormTasks from './form'
 import type { Task } from '../types/taskTypes'
 import '../styles/panel.css'
 import SearchInput from './SearchInput'
+import Filter from './filterButton'
+import type { SortKey } from './tasksList'
+import { MultiFilter } from './sortButton'
 
 interface NavPanelProps {
   tableView: boolean
@@ -10,6 +13,14 @@ interface NavPanelProps {
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>
   searchQuery: string
   onSearchChange: (value: string) => void
+  sortKey: SortKey
+  setSortKey: React.Dispatch<React.SetStateAction<SortKey>>
+  sortOrder: 'asc' | 'desc'
+  setSortOrder: React.Dispatch<React.SetStateAction<'asc' | 'desc'>>
+  statusFilter: string[]
+  setStatusFilter: React.Dispatch<React.SetStateAction<string[]>>
+  tagFilter: string[]
+  setTagFilter: React.Dispatch<React.SetStateAction<string[]>>
 }
 
 export default function NavPanel({
@@ -18,6 +29,14 @@ export default function NavPanel({
   setTasks,
   searchQuery,
   onSearchChange,
+  sortKey,
+  setSortKey,
+  sortOrder,
+  setSortOrder,
+  statusFilter,
+  setStatusFilter,
+  tagFilter,
+  setTagFilter,
 }: NavPanelProps) {
   const [modalOpen, setModalOpen] = useState(false)
 
@@ -67,6 +86,25 @@ export default function NavPanel({
       <div>
         <SearchInput query={searchQuery} onChange={onSearchChange} />
       </div>
+      <Filter
+        sortKey={sortKey}
+        setSortKey={setSortKey}
+        sortOrder={sortOrder}
+        setSortOrder={setSortOrder}
+      />
+      <MultiFilter
+        title="Status"
+        options={['in_progress', 'done', 'todo']}
+        selected={statusFilter}
+        onChange={setStatusFilter}
+      />
+
+      <MultiFilter
+        title="Tags"
+        options={['work', 'studying', 'personal']}
+        selected={tagFilter}
+        onChange={setTagFilter}
+      />
     </div>
   )
 }

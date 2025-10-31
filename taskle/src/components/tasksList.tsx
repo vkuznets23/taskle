@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import type { Task } from '../types/taskTypes'
 import { TableView, KanbanView, NoTasks, NavPanel } from '../components'
-
+export type SortKey = 'priority' | 'tag' | 'status' | 'task'
 export default function TasksList({
   tasks,
   setTasks,
@@ -61,10 +61,8 @@ export default function TasksList({
   }
 
   const [statusFilter, setStatusFilter] = useState<string[]>([])
+  const [tagFilter, setTagFilter] = useState<string[]>([])
 
-  // const filteredTasks = tasks.filter((task) =>
-  //   task.task.toLowerCase().includes(searchQuery.toLowerCase())
-  // )
   const filteredTasks = tasks
     .filter((task) =>
       task.task.toLowerCase().includes(searchQuery.toLowerCase())
@@ -74,8 +72,11 @@ export default function TasksList({
         statusFilter.length === 0 ||
         statusFilter.includes(task.status.toLowerCase())
     )
+    .filter(
+      (task) =>
+        tagFilter.length === 0 || tagFilter.includes(task.tag.toLowerCase())
+    )
 
-  type SortKey = 'priority' | 'tag' | 'status' | 'task'
   const [sortKey, setSortKey] = useState<SortKey>('priority')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc')
 
@@ -113,6 +114,14 @@ export default function TasksList({
           setTasks={setTasks}
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
+          sortKey={sortKey}
+          setSortKey={setSortKey}
+          sortOrder={sortOrder}
+          setSortOrder={setSortOrder}
+          statusFilter={statusFilter}
+          setStatusFilter={setStatusFilter}
+          tagFilter={tagFilter}
+          setTagFilter={setTagFilter}
         />
         <NoTasks />
       </>
@@ -127,37 +136,15 @@ export default function TasksList({
         setTasks={setTasks}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
+        sortKey={sortKey}
+        setSortKey={setSortKey}
+        sortOrder={sortOrder}
+        setSortOrder={setSortOrder}
+        statusFilter={statusFilter}
+        setStatusFilter={setStatusFilter}
+        tagFilter={tagFilter}
+        setTagFilter={setTagFilter}
       />
-      <select
-        value={sortKey}
-        onChange={(e) => setSortKey(e.target.value as SortKey)}
-      >
-        <option value="priority">Priority</option>
-        <option value="task">Alphabetical</option>
-      </select>
-
-      <button
-        onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-      >
-        {sortOrder === 'asc' ? '⬆️' : '⬇️'}
-      </button>
-
-      {['in_progress', 'done', 'todo'].map((status) => (
-        <label key={status}>
-          <input
-            type="checkbox"
-            checked={statusFilter.includes(status)}
-            onChange={() => {
-              if (statusFilter.includes(status)) {
-                setStatusFilter(statusFilter.filter((s) => s !== status))
-              } else {
-                setStatusFilter([...statusFilter, status])
-              }
-            }}
-          />
-          {status}
-        </label>
-      ))}
 
       {tableView ? (
         <TableView
