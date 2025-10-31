@@ -1,8 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react'
 import type { Task } from '../types/taskTypes'
 import { TableView, KanbanView, NoTasks, NavPanel } from '../components'
-export type SortKey = 'priority' | 'tag' | 'status' | 'task'
 export default function TasksList({
   tasks,
   setTasks,
@@ -77,7 +75,6 @@ export default function TasksList({
         tagFilter.length === 0 || tagFilter.includes(task.tag.toLowerCase())
     )
 
-  const [sortKey, setSortKey] = useState<SortKey>('priority')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc')
 
   const priorityOrder: Record<string, number> = {
@@ -87,22 +84,10 @@ export default function TasksList({
   }
 
   const sortedTasks = [...filteredTasks].sort((a, b) => {
-    let aValue: any = a[sortKey]
-    let bValue: any = b[sortKey]
+    const aValue = priorityOrder[a.priority] || 0
+    const bValue = priorityOrder[b.priority] || 0
 
-    if (sortKey === 'priority') {
-      aValue = priorityOrder[aValue] || 0
-      bValue = priorityOrder[bValue] || 0
-    }
-
-    if (typeof aValue === 'string' && typeof bValue === 'string') {
-      aValue = aValue.toLowerCase()
-      bValue = bValue.toLowerCase()
-    }
-
-    if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1
-    if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1
-    return 0
+    return sortOrder === 'asc' ? aValue - bValue : bValue - aValue
   })
 
   if (tasks.length === 0) {
@@ -114,8 +99,6 @@ export default function TasksList({
           setTasks={setTasks}
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
-          sortKey={sortKey}
-          setSortKey={setSortKey}
           sortOrder={sortOrder}
           setSortOrder={setSortOrder}
           statusFilter={statusFilter}
@@ -136,8 +119,6 @@ export default function TasksList({
         setTasks={setTasks}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
-        sortKey={sortKey}
-        setSortKey={setSortKey}
         sortOrder={sortOrder}
         setSortOrder={setSortOrder}
         statusFilter={statusFilter}

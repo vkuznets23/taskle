@@ -4,7 +4,6 @@ import type { Task } from '../types/taskTypes'
 import '../styles/panel.css'
 import SearchInput from './SearchInput'
 import Filter from './filterButton'
-import type { SortKey } from './tasksList'
 import { MultiFilter } from './sortButton'
 
 interface NavPanelProps {
@@ -13,8 +12,6 @@ interface NavPanelProps {
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>
   searchQuery: string
   onSearchChange: (value: string) => void
-  sortKey: SortKey
-  setSortKey: React.Dispatch<React.SetStateAction<SortKey>>
   sortOrder: 'asc' | 'desc'
   setSortOrder: React.Dispatch<React.SetStateAction<'asc' | 'desc'>>
   statusFilter: string[]
@@ -29,8 +26,6 @@ export default function NavPanel({
   setTasks,
   searchQuery,
   onSearchChange,
-  sortKey,
-  setSortKey,
   sortOrder,
   setSortOrder,
   statusFilter,
@@ -83,28 +78,22 @@ export default function NavPanel({
           </button>
         </div>
       </div>
-      <div>
+      <div style={{ display: 'flex' }}>
         <SearchInput query={searchQuery} onChange={onSearchChange} />
+        <Filter sortOrder={sortOrder} setSortOrder={setSortOrder} />
+        <MultiFilter
+          title="Status"
+          options={['in_progress', 'done', 'todo']}
+          selected={statusFilter}
+          onChange={setStatusFilter}
+        />
+        <MultiFilter
+          title="Tags"
+          options={['work', 'studying', 'personal']}
+          selected={tagFilter}
+          onChange={setTagFilter}
+        />
       </div>
-      <Filter
-        sortKey={sortKey}
-        setSortKey={setSortKey}
-        sortOrder={sortOrder}
-        setSortOrder={setSortOrder}
-      />
-      <MultiFilter
-        title="Status"
-        options={['in_progress', 'done', 'todo']}
-        selected={statusFilter}
-        onChange={setStatusFilter}
-      />
-
-      <MultiFilter
-        title="Tags"
-        options={['work', 'studying', 'personal']}
-        selected={tagFilter}
-        onChange={setTagFilter}
-      />
     </div>
   )
 }
