@@ -1,7 +1,7 @@
 import generatePriorityIcon from '../utils/generatePriorityIcon'
 import generateTagIcon from '../utils/generateTagIcon'
 import '../styles/table.css'
-import { useOptimistic, useState, useTransition } from 'react'
+import { useState } from 'react'
 import { IoIosArrowDown } from 'react-icons/io'
 import { capitalizeFirstLetter } from '../utils/Capitalizer'
 import { tagLabels } from '../constants'
@@ -25,8 +25,6 @@ export default function TableView({
     field: keyof Task | null
   } | null>(null)
 
-  const [isPending, startTransition] = useTransition()
-
   const tableThs = ['task', 'priority', 'tag', 'status']
   const statusLabels: Record<Task['status'], string> = {
     TODO: 'To do',
@@ -44,34 +42,16 @@ export default function TableView({
     show: boolean
   }>({ id: null, show: false })
 
-  // Optimistic state for immediate UI updates
-  const [optimisticTasks, applyOptimisticUpdate] = useOptimistic(
-    tasks,
-    (state, action: { id: number; updates: Partial<Task> }) =>
-      state.map((task) =>
-        task.id === action.id ? { ...task, ...action.updates } : task
-      )
-  )
-
-  // Handle field changes with optimistic updates
   const handleFieldChange = (id: number, field: keyof Task, value: string) => {
-    startTransition(async () => {
-      // Apply optimistic update immediately
-      applyOptimisticUpdate({ id, updates: { [field]: value } })
-
-      try {
-        // Make the actual API call
-        await handleUpdate(id, { [field]: value })
-      } catch (error) {
-        console.error('Failed to update task:', error)
-      }
+    handleUpdate(id, { [field]: value }).catch((error) => {
+      console.error('Failed to update task:', error)
     })
   }
 
   if (tasks.length === 0) return <NoTasks />
 
   return (
-    <table className={isPending ? 'updating' : ''}>
+    <table>
       <thead>
         <tr>
           {tableThs.map((th, index) => (
@@ -82,7 +62,7 @@ export default function TableView({
       </thead>
 
       <tbody>
-        {optimisticTasks.map(({ id, task, priority, tag, status }) => {
+        {tasks.map(({ id, task, priority, tag, status }) => {
           return (
             <tr
               key={id}
