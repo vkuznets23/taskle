@@ -1,21 +1,16 @@
-import generateTagIcon from '../utils/generateTagIcon'
 import '../styles/table.css'
 import { useState } from 'react'
-import { IoIosArrowDown } from 'react-icons/io'
-import { capitalizeFirstLetter } from '../utils/Capitalizer'
-import { tagLabels } from '../constants'
-import type { Task } from '../types/taskTypes'
 import { RiDeleteBin5Line } from 'react-icons/ri'
-import NoTasks from './noTasks'
-import EditableTaskCell from './editableTaskCell'
-import EditablePriorityCell from './editablePriorityCell'
+import type { Task } from '../types/taskTypes'
+import {
+  EditableTaskCell,
+  EditablePriorityCell,
+  EditableTagCell,
+  NoTasks,
+} from '../components'
+import EditableStatusCell from './editableStatusCell'
 
 const tableThs = ['task', 'priority', 'tag', 'status']
-const statusLabels: Record<Task['status'], string> = {
-  TODO: 'To do',
-  IN_PROGRESS: 'Active',
-  DONE: 'Done',
-}
 
 export default function TableView({
   tasks,
@@ -78,83 +73,22 @@ export default function TableView({
                 handleFieldChange={handleFieldChange}
               />
 
-              {/* TAG */}
-              <td>
-                {editing?.id === id && editing?.field === 'tag' ? (
-                  <div className="select-wrapper">
-                    <select
-                      className={`select ${tag.toLowerCase()}`}
-                      autoFocus
-                      value={tag}
-                      onBlur={() => setEditing(null)}
-                      onMouseLeave={() => setEditing(null)}
-                      onChange={(e) => {
-                        handleFieldChange(
-                          id,
-                          'tag',
-                          e.target.value as Task['tag']
-                        )
-                        setEditing(null)
-                      }}
-                    >
-                      {tagLabels.map((label, index) => (
-                        <option key={index} value={label.toUpperCase()}>
-                          {capitalizeFirstLetter(label)}
-                        </option>
-                      ))}
-                    </select>
-                    <IoIosArrowDown className="select-icon" />
-                  </div>
-                ) : (
-                  <div
-                    className={`tag ${tag.toLowerCase()}`}
-                    onMouseEnter={() => setEditing({ id, field: 'tag' })}
-                    title="Click to edit tag"
-                  >
-                    {generateTagIcon(tag)}
-                  </div>
-                )}
-              </td>
+              <EditableTagCell
+                id={id}
+                tag={tag}
+                editing={editing}
+                setEditing={setEditing}
+                handleFieldChange={handleFieldChange}
+              />
 
-              {/* STATUS */}
-              <td>
-                {editing?.id === id && editing?.field === 'status' ? (
-                  <div className="select-wrapper status">
-                    <select
-                      className="select status"
-                      autoFocus
-                      value={status}
-                      onBlur={() => setEditing(null)}
-                      onMouseLeave={() => setEditing(null)}
-                      onChange={(e) => {
-                        handleFieldChange(
-                          id,
-                          'status',
-                          e.target.value as Task['status']
-                        )
-                        setEditing(null)
-                      }}
-                    >
-                      {Object.entries(statusLabels).map(
-                        ([value, label], index) => (
-                          <option key={index} value={value}>
-                            {label.toUpperCase()}
-                          </option>
-                        )
-                      )}
-                    </select>
-                    <IoIosArrowDown className="select-icon" />
-                  </div>
-                ) : (
-                  <div
-                    className="status-div"
-                    onMouseEnter={() => setEditing({ id, field: 'status' })}
-                    title="Click to edit status"
-                  >
-                    {statusLabels[status].toUpperCase()}
-                  </div>
-                )}
-              </td>
+              <EditableStatusCell
+                id={id}
+                status={status}
+                editing={editing}
+                setEditing={setEditing}
+                handleFieldChange={handleFieldChange}
+              />
+
               <td className="delete-cell">
                 {hoveredId === id && (
                   <button
