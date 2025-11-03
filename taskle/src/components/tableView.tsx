@@ -11,6 +11,13 @@ import { MdEdit } from 'react-icons/md'
 import { RiDeleteBin5Line } from 'react-icons/ri'
 import NoTasks from './noTasks'
 
+const tableThs = ['task', 'priority', 'tag', 'status']
+const statusLabels: Record<Task['status'], string> = {
+  TODO: 'To do',
+  IN_PROGRESS: 'Active',
+  DONE: 'Done',
+}
+
 export default function TableView({
   tasks,
   handleUpdate,
@@ -25,22 +32,7 @@ export default function TableView({
     field: keyof Task | null
   } | null>(null)
 
-  const tableThs = ['task', 'priority', 'tag', 'status']
-  const statusLabels: Record<Task['status'], string> = {
-    TODO: 'To do',
-    IN_PROGRESS: 'Active',
-    DONE: 'Done',
-  }
-
-  const [showEditingBtn, setShowEditingBtn] = useState<{
-    id: number | null
-    show: boolean
-  }>({ id: null, show: false })
-
-  const [showDeleteBtn, setShowDeleteBtn] = useState<{
-    id: number | null
-    show: boolean
-  }>({ id: null, show: false })
+  const [hoveredId, setHoveredId] = useState<number | null>(null)
 
   const handleFieldChange = (id: number, field: keyof Task, value: string) => {
     handleUpdate(id, { [field]: value }).catch((error) => {
@@ -66,15 +58,13 @@ export default function TableView({
           return (
             <tr
               key={id}
-              onMouseEnter={() => setShowDeleteBtn({ id, show: true })}
-              onMouseLeave={() => setShowDeleteBtn({ id: null, show: false })}
+              onMouseEnter={() => setHoveredId(id)}
+              onMouseLeave={() => setHoveredId(null)}
             >
               <td
-                style={{ paddingRight: '80px' }}
-                onMouseEnter={() => setShowEditingBtn({ id, show: true })}
-                onMouseLeave={() =>
-                  setShowEditingBtn({ id: null, show: false })
-                }
+                className="task-cell"
+                onMouseEnter={() => setHoveredId(id)}
+                onMouseLeave={() => setHoveredId(null)}
               >
                 {editing?.id === id && editing?.field === 'task' ? (
                   <textarea
@@ -103,9 +93,9 @@ export default function TableView({
                     }}
                   />
                 ) : (
-                  <div style={{ display: 'flex', gap: '10px' }}>
+                  <div className="task-cell-content">
                     <p>{task}</p>
-                    {showEditingBtn.show && showEditingBtn.id === id && (
+                    {hoveredId === id && (
                       <button
                         className="edit-btn"
                         onClick={() => setEditing({ id, field: 'task' })}
@@ -219,7 +209,7 @@ export default function TableView({
                 )}
               </td>
               <td className="delete-cell">
-                {showDeleteBtn.show && showDeleteBtn.id === id && (
+                {hoveredId === id && (
                   <button
                     className="delete-btn"
                     onClick={() => handelDeleteTask(id)}
