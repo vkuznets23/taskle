@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { IoSearch } from 'react-icons/io5'
-import '../styles/searchBar.css'
+import '../../styles/searchBar.css'
 
 export default function SearchInput({
   query,

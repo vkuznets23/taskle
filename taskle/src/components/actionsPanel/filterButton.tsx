@@ -1,7 +1,6 @@
 import { BiSortUp } from 'react-icons/bi'
 import { BiSortDown } from 'react-icons/bi'
-
-import '../styles/sortingBtns.css'
+import '../../styles/sortingBtns.css'
 
 interface FilterProps {
   sortOrder: 'asc' | 'desc'

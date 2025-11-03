@@ -1,5 +1,5 @@
 import { IoIosArrowDown } from 'react-icons/io'
-import type { Status, Task } from '../types/taskTypes'
+import type { Status, Task } from '../../types/taskTypes'
 
 const statusLabels: Record<Task['status'], string> = {
   TODO: 'To do',

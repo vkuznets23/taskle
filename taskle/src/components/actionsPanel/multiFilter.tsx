@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import '../styles/MultiFilter.css'
+import '../../styles/MultiFilter.css'
 
 interface MultiFilterDropdownProps {
   title: string

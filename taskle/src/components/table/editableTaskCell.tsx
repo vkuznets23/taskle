@@ -1,5 +1,5 @@
 import { MdEdit } from 'react-icons/md'
-import type { Task } from '../types/taskTypes'
+import type { Task } from '../../types/taskTypes'
 
 interface EditableTaskCellProps {
   id: number

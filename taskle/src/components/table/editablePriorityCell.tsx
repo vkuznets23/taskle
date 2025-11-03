@@ -1,5 +1,5 @@
-import type { Priority, Task } from '../types/taskTypes'
-import generatePriorityIcon from '../utils/generatePriorityIcon'
+import type { Priority, Task } from '../../types/taskTypes'
+import generatePriorityIcon from '../../utils/generatePriorityIcon'
 import PrioritySelector from './prioritySelector'
 
 interface EditablePriorityCellProps {

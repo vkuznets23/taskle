@@ -1,8 +1,8 @@
 import { IoIosArrowDown } from 'react-icons/io'
-import { tagLabels } from '../constants'
-import type { Tag, Task } from '../types/taskTypes'
-import { capitalizeFirstLetter } from '../utils/Capitalizer'
-import generateTagIcon from '../utils/generateTagIcon'
+import { tagLabels } from '../../constants'
+import type { Tag, Task } from '../../types/taskTypes'
+import { capitalizeFirstLetter } from '../../utils/Capitalizer'
+import generateTagIcon from '../../utils/generateTagIcon'
 
 interface EditableTagCellProps {
   id: number

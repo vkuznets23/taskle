@@ -1,10 +1,8 @@
 import { useState } from 'react'
-import FormTasks from './form'
-import type { Task } from '../types/taskTypes'
-import '../styles/panel.css'
-import SearchInput from './SearchInput'
-import Filter from './filterButton'
+import type { Task } from '../../types/taskTypes'
+import { SearchInput, Filter, FormTasks } from '../../components'
 import { MultiFilter } from './multiFilter'
+import '../../styles/panel.css'
 
 interface NavPanelProps {
   tableView: boolean

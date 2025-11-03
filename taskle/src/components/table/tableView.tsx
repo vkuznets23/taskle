@@ -1,14 +1,14 @@
-import '../styles/table.css'
+import '../../styles/table.css'
 import { useState } from 'react'
-import type { Task } from '../types/taskTypes'
+import type { Task } from '../../types/taskTypes'
 import {
   EditableTaskCell,
   EditablePriorityCell,
   EditableTagCell,
+  EditableStatusCell,
+  DeleteCell,
   NoTasks,
-} from '../components'
-import EditableStatusCell from './editableStatusCell'
-import DeleteCell from './deleteCell'
+} from '..'
 
 const tableThs = ['task', 'priority', 'tag', 'status']
 
