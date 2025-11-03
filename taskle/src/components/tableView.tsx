@@ -1,6 +1,5 @@
 import '../styles/table.css'
 import { useState } from 'react'
-import { RiDeleteBin5Line } from 'react-icons/ri'
 import type { Task } from '../types/taskTypes'
 import {
   EditableTaskCell,
@@ -9,6 +8,7 @@ import {
   NoTasks,
 } from '../components'
 import EditableStatusCell from './editableStatusCell'
+import DeleteCell from './deleteCell'
 
 const tableThs = ['task', 'priority', 'tag', 'status']
 
@@ -89,16 +89,11 @@ export default function TableView({
                 handleFieldChange={handleFieldChange}
               />
 
-              <td className="delete-cell">
-                {hoveredId === id && (
-                  <button
-                    className="delete-btn"
-                    onClick={() => handelDeleteTask(id)}
-                  >
-                    <RiDeleteBin5Line />
-                  </button>
-                )}
-              </td>
+              <DeleteCell
+                id={id}
+                hoveredId={hoveredId}
+                handelDeleteTask={handelDeleteTask}
+              />
             </tr>
           )
         })}
