@@ -112,6 +112,7 @@ export default function TasksList({
           setStatusFilter={setStatusFilter}
           tagFilter={tagFilter}
           setTagFilter={setTagFilter}
+          showStatusFilter={tableView}
         />
         <NoTasks />
       </>
@@ -132,6 +133,7 @@ export default function TasksList({
         setStatusFilter={setStatusFilter}
         tagFilter={tagFilter}
         setTagFilter={setTagFilter}
+        showStatusFilter={tableView}
       />
 
       {tableView ? (
@@ -141,7 +143,7 @@ export default function TasksList({
           handelDeleteTask={handelDeleteTask}
         />
       ) : (
-        <KanbanView tasks={filteredTasks} handleUpdate={handleUpdate} />
+        <KanbanView tasks={sortedTasks} handleUpdate={handleUpdate} />
       )}
     </>
   )

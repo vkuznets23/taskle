@@ -16,6 +16,7 @@ interface NavPanelProps {
   setStatusFilter: React.Dispatch<React.SetStateAction<string[]>>
   tagFilter: string[]
   setTagFilter: React.Dispatch<React.SetStateAction<string[]>>
+  showStatusFilter: boolean
 }
 
 export default function NavPanel({
@@ -30,6 +31,7 @@ export default function NavPanel({
   setStatusFilter,
   tagFilter,
   setTagFilter,
+  showStatusFilter,
 }: NavPanelProps) {
   const [modalOpen, setModalOpen] = useState(false)
 
@@ -85,12 +87,14 @@ export default function NavPanel({
           selected={tagFilter}
           onChange={setTagFilter}
         />
-        <MultiFilter
-          title="Status"
-          options={['active', 'done', 'todo']}
-          selected={statusFilter}
-          onChange={setStatusFilter}
-        />
+        {showStatusFilter && (
+          <MultiFilter
+            title="Status"
+            options={['active', 'done', 'todo']}
+            selected={statusFilter}
+            onChange={setStatusFilter}
+          />
+        )}
       </div>
     </div>
   )
