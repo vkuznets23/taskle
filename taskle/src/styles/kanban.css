@@ -2,7 +2,7 @@
   display: flex;
   gap: 20px;
   align-items: flex-start;
-  overflow-x: auto;
+  overflow-x: hidden;
 }
 
 .kanban-column {

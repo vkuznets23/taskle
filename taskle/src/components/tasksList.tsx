@@ -22,6 +22,11 @@ export default function TasksList({
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc')
 
   const handleUpdate = async (id: number, updates: Partial<Task>) => {
+    const previousTasks = [...tasks]
+    setTasks((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, ...updates } : t))
+    )
+
     try {
       const res = await fetch(`http://localhost:3005/api/tasks/tasks/${id}`, {
         method: 'PUT',
@@ -31,17 +36,15 @@ export default function TasksList({
       })
 
       const data = await res.json()
-      if (res.ok) {
-        setTasks((prev) =>
-          prev.map((t) => (t.id === id ? { ...t, ...data } : t))
-        )
-      } else {
+      if (!res.ok) {
         console.error(data.error)
         throw new Error(data.error || 'Failed to update task')
       }
+
+      setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, ...data } : t)))
     } catch (err) {
       console.error('Error updating task:', err)
-      throw err // Re-throw the error so optimistic updates can revert
+      setTasks(previousTasks)
     }
   }
 
@@ -138,7 +141,7 @@ export default function TasksList({
           handelDeleteTask={handelDeleteTask}
         />
       ) : (
-        <KanbanView tasks={filteredTasks} />
+        <KanbanView tasks={filteredTasks} handleUpdate={handleUpdate} />
       )}
     </>
   )
