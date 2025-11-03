@@ -1,4 +1,3 @@
-import generatePriorityIcon from '../utils/generatePriorityIcon'
 import generateTagIcon from '../utils/generateTagIcon'
 import '../styles/table.css'
 import { useState } from 'react'
@@ -6,10 +5,10 @@ import { IoIosArrowDown } from 'react-icons/io'
 import { capitalizeFirstLetter } from '../utils/Capitalizer'
 import { tagLabels } from '../constants'
 import type { Task } from '../types/taskTypes'
-import PrioritySelector from './prioritySelector'
 import { RiDeleteBin5Line } from 'react-icons/ri'
 import NoTasks from './noTasks'
 import EditableTaskCell from './editableTaskCell'
+import EditablePriorityCell from './editablePriorityCell'
 
 const tableThs = ['task', 'priority', 'tag', 'status']
 const statusLabels: Record<Task['status'], string> = {
@@ -71,29 +70,13 @@ export default function TableView({
                 handleFieldChange={handleFieldChange}
               />
 
-              {/* PRIORITY */}
-              <td
-                className="priority"
-                onMouseEnter={() => setEditing({ id, field: 'priority' })}
-                onMouseLeave={() => setEditing(null)}
-              >
-                {editing?.id === id && editing?.field === 'priority' ? (
-                  <PrioritySelector
-                    id={id}
-                    currentPriority={priority}
-                    onChange={(newPriority) =>
-                      handleFieldChange(id, 'priority', newPriority)
-                    }
-                  />
-                ) : (
-                  <div
-                    className="priority-selector"
-                    title="Click to change priority"
-                  >
-                    {generatePriorityIcon(priority)}
-                  </div>
-                )}
-              </td>
+              <EditablePriorityCell
+                id={id}
+                priority={priority}
+                editing={editing}
+                setEditing={setEditing}
+                handleFieldChange={handleFieldChange}
+              />
 
               {/* TAG */}
               <td>
