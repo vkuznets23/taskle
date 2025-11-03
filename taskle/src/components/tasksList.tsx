@@ -65,11 +65,14 @@ export default function TasksList({
     .filter((task) =>
       task.task.toLowerCase().includes(searchQuery.toLowerCase())
     )
-    .filter(
-      (task) =>
-        statusFilter.length === 0 ||
-        statusFilter.includes(task.status.toLowerCase())
-    )
+    .filter((task) => {
+      const status =
+        task.status.toLowerCase() === 'in_progress'
+          ? 'active'
+          : task.status.toLowerCase()
+
+      return statusFilter.length === 0 || statusFilter.includes(status)
+    })
     .filter(
       (task) =>
         tagFilter.length === 0 || tagFilter.includes(task.tag.toLowerCase())

@@ -4,7 +4,7 @@ import type { Task } from '../types/taskTypes'
 import '../styles/panel.css'
 import SearchInput from './SearchInput'
 import Filter from './filterButton'
-import { MultiFilter } from './sortButton'
+import { MultiFilter } from './multiFilter'
 
 interface NavPanelProps {
   tableView: boolean
@@ -89,7 +89,7 @@ export default function NavPanel({
         />
         <MultiFilter
           title="Status"
-          options={['in_progress', 'done', 'todo']}
+          options={['active', 'done', 'todo']}
           selected={statusFilter}
           onChange={setStatusFilter}
         />
