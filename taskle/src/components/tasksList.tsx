@@ -1,6 +1,13 @@
 import { useState } from 'react'
 import type { Task } from '../types/taskTypes'
 import { TableView, KanbanView, NoTasks, NavPanel } from '../components'
+
+const priorityOrder: Record<string, number> = {
+  LOW: 1,
+  MEDIUM: 2,
+  HIGH: 3,
+}
+
 export default function TasksList({
   tasks,
   setTasks,
@@ -10,8 +17,16 @@ export default function TasksList({
 }) {
   const [tableView, setTableView] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
+  const [statusFilter, setStatusFilter] = useState<string[]>([])
+  const [tagFilter, setTagFilter] = useState<string[]>([])
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc')
 
   const handleUpdate = async (id: number, updates: Partial<Task>) => {
+    const previousTasks = [...tasks]
+    setTasks((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, ...updates } : t))
+    )
+
     try {
       const res = await fetch(`http://localhost:3005/api/tasks/tasks/${id}`, {
         method: 'PUT',
@@ -21,23 +36,24 @@ export default function TasksList({
       })
 
       const data = await res.json()
-      if (res.ok) {
-        setTasks((prev) =>
-          prev.map((t) => (t.id === id ? { ...t, ...data } : t))
-        )
-      } else {
+      if (!res.ok) {
         console.error(data.error)
         throw new Error(data.error || 'Failed to update task')
       }
+
+      setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, ...data } : t)))
     } catch (err) {
       console.error('Error updating task:', err)
-      throw err // Re-throw the error so optimistic updates can revert
+      setTasks(previousTasks)
     }
   }
 
   const handelDeleteTask = async (id: number) => {
     const confirmDelete = window.confirm('Are you sure you wanna delete task?')
     if (!confirmDelete) return
+
+    const previousTasks = [...tasks]
+    setTasks((prev) => prev.filter((task) => task.id !== id))
 
     try {
       const res = await fetch(`http://localhost:3005/api/tasks/tasks/${id}`, {
@@ -46,42 +62,33 @@ export default function TasksList({
         credentials: 'include',
       })
       const data = await res.json()
-      if (res.ok) {
-        setTasks((prev) => prev.filter((task) => task.id !== id))
-        console.log('Task deleted successfully')
-      } else {
+      if (!res.ok) {
         console.error(data.error)
         throw new Error(data.error || 'Failed to delete task')
       }
     } catch (err) {
+      setTasks(previousTasks)
+      alert('Something went wrong while deleting the task')
       console.error('Error deleting task:', err)
     }
   }
-
-  const [statusFilter, setStatusFilter] = useState<string[]>([])
-  const [tagFilter, setTagFilter] = useState<string[]>([])
 
   const filteredTasks = tasks
     .filter((task) =>
       task.task.toLowerCase().includes(searchQuery.toLowerCase())
     )
-    .filter(
-      (task) =>
-        statusFilter.length === 0 ||
-        statusFilter.includes(task.status.toLowerCase())
-    )
+    .filter((task) => {
+      const status =
+        task.status.toLowerCase() === 'in_progress'
+          ? 'active'
+          : task.status.toLowerCase()
+
+      return statusFilter.length === 0 || statusFilter.includes(status)
+    })
     .filter(
       (task) =>
         tagFilter.length === 0 || tagFilter.includes(task.tag.toLowerCase())
     )
-
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc')
-
-  const priorityOrder: Record<string, number> = {
-    LOW: 1,
-    MEDIUM: 2,
-    HIGH: 3,
-  }
 
   const sortedTasks = [...filteredTasks].sort((a, b) => {
     const aValue = priorityOrder[a.priority] || 0
@@ -105,6 +112,7 @@ export default function TasksList({
           setStatusFilter={setStatusFilter}
           tagFilter={tagFilter}
           setTagFilter={setTagFilter}
+          showStatusFilter={tableView}
         />
         <NoTasks />
       </>
@@ -125,6 +133,7 @@ export default function TasksList({
         setStatusFilter={setStatusFilter}
         tagFilter={tagFilter}
         setTagFilter={setTagFilter}
+        showStatusFilter={tableView}
       />
 
       {tableView ? (
@@ -134,7 +143,7 @@ export default function TasksList({
           handelDeleteTask={handelDeleteTask}
         />
       ) : (
-        <KanbanView tasks={filteredTasks} />
+        <KanbanView tasks={sortedTasks} handleUpdate={handleUpdate} />
       )}
     </>
   )

@@ -1,10 +1,8 @@
 import { useState } from 'react'
-import FormTasks from './form'
-import type { Task } from '../types/taskTypes'
-import '../styles/panel.css'
-import SearchInput from './SearchInput'
-import Filter from './filterButton'
-import { MultiFilter } from './sortButton'
+import type { Task } from '../../types/taskTypes'
+import { SearchInput, Filter, FormTasks } from '../../components'
+import { MultiFilter } from './multiFilter'
+import '../../styles/panel.css'
 
 interface NavPanelProps {
   tableView: boolean
@@ -18,6 +16,7 @@ interface NavPanelProps {
   setStatusFilter: React.Dispatch<React.SetStateAction<string[]>>
   tagFilter: string[]
   setTagFilter: React.Dispatch<React.SetStateAction<string[]>>
+  showStatusFilter: boolean
 }
 
 export default function NavPanel({
@@ -32,6 +31,7 @@ export default function NavPanel({
   setStatusFilter,
   tagFilter,
   setTagFilter,
+  showStatusFilter,
 }: NavPanelProps) {
   const [modalOpen, setModalOpen] = useState(false)
 
@@ -82,17 +82,19 @@ export default function NavPanel({
         <SearchInput query={searchQuery} onChange={onSearchChange} />
         <Filter sortOrder={sortOrder} setSortOrder={setSortOrder} />
         <MultiFilter
-          title="Status"
-          options={['in_progress', 'done', 'todo']}
-          selected={statusFilter}
-          onChange={setStatusFilter}
-        />
-        <MultiFilter
           title="Tags"
           options={['work', 'studying', 'personal']}
           selected={tagFilter}
           onChange={setTagFilter}
         />
+        {showStatusFilter && (
+          <MultiFilter
+            title="Status"
+            options={['active', 'done', 'todo']}
+            selected={statusFilter}
+            onChange={setStatusFilter}
+          />
+        )}
       </div>
     </div>
   )

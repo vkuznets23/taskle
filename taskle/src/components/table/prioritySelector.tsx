@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { capitalizeFirstLetter } from '../utils/Capitalizer'
-import type { Priority } from '../types/taskTypes'
+import { capitalizeFirstLetter } from '../../utils/Capitalizer'
+import type { Priority } from '../../types/taskTypes'
 
 const levels: Priority[] = ['LOW', 'MEDIUM', 'HIGH']
 

@@ -10,7 +10,7 @@
   border: 1px solid var(--border-color);
   border-radius: 50px;
   background-color: transparent;
-  padding: 0 14px;
+  padding: 0 22px;
   opacity: 0;
   pointer-events: none;
   transition: width 0.3s ease, opacity 0.25s ease, padding 0.3s ease;
@@ -23,11 +23,16 @@
   padding: 0 16px 0 40px;
 }
 
+.seacrh-container.open .search-btn {
+  background-color: transparent;
+  border: none;
+}
+
 .search-btn {
   width: 45px;
   height: 45px;
-  background-color: transparent;
-  border: none;
+  background-color: #66dc7e;
+  border: 1px solid black;
   cursor: pointer;
   border-radius: 50%;
   position: absolute;

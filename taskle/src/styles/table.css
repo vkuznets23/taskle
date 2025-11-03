@@ -161,6 +161,16 @@ thead th:nth-child(4) {
   width: 100px;
 }
 
+/* tableView inline styles extracted */
+.task-cell {
+  padding-right: 80px;
+}
+
+.task-cell-content {
+  display: flex;
+  gap: 10px;
+}
+
 /* priority */
 .priority {
   position: relative;
