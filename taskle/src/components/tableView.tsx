@@ -36,7 +36,7 @@ export default function TableView({
 
   const handleFieldChange = (id: number, field: keyof Task, value: string) => {
     handleUpdate(id, { [field]: value }).catch((error) => {
-      console.error('Failed to update task:', error)
+      console.error(`Failed to update ${field} for task ${id}:`, error)
     })
   }
 
