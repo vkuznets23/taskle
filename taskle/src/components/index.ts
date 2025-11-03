@@ -1,6 +1,6 @@
 export { default as InputField } from './inputField'
 export { default as InputError } from './inputError'
-export { default as FormTasks } from './form'
+export { default as FormTasks } from './actionsPanel/form'
 export { default as Loader } from './loader'
 export { default as Logo } from './logoIcon'
 export { default as Navbar } from './navBar'
