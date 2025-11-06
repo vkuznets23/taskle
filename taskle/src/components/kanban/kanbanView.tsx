@@ -1,10 +1,9 @@
-import type { Task } from '../types/taskTypes'
-import '../styles/kanban.css'
-import generatePriorityIcon from '../utils/generatePriorityIcon'
-import generateTagIcon from '../utils/generateTagIcon'
+import type { Task } from '../../types/taskTypes'
+import '../../styles/kanban.css'
+import generatePriorityIcon from '../../utils/generatePriorityIcon'
+import generateTagIcon from '../../utils/generateTagIcon'
 import { DndContext, type DragEndEvent } from '@dnd-kit/core'
-import { useDraggable, useDroppable } from '@dnd-kit/core'
-import type { ReactNode } from 'react'
+import { Card, Column } from '../.'
 
 export default function KanbanView({
   tasks,
@@ -57,47 +56,5 @@ export default function KanbanView({
         ))}
       </div>
     </DndContext>
-  )
-}
-
-interface ColumnProps {
-  id: Task['status']
-  title: string
-  children: ReactNode
-}
-function Column({ id, title, children }: ColumnProps) {
-  const { setNodeRef, isOver } = useDroppable({ id })
-  return (
-    <div ref={setNodeRef} className={`kanban-column ${isOver ? 'over' : ''}`}>
-      <h3>{title}</h3>
-      <div className="kanban-tasks">{children}</div>
-    </div>
-  )
-}
-
-interface CardProps {
-  id: number
-  tag: Task['tag']
-  children: ReactNode
-}
-function Card({ id, tag, children }: CardProps) {
-  const { attributes, listeners, setNodeRef, transform, isDragging } =
-    useDraggable({ id })
-  const style = {
-    transform: transform
-      ? `translate(${transform.x}px, ${transform.y}px)`
-      : undefined,
-    opacity: isDragging ? 0.7 : 1,
-  } as React.CSSProperties
-  return (
-    <div
-      ref={setNodeRef}
-      {...listeners}
-      {...attributes}
-      style={style}
-      className={`kanban-card ${tag.toLowerCase()}`}
-    >
-      {children}
-    </div>
   )
 }

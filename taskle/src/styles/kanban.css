@@ -27,17 +27,21 @@
 .kanban-card p {
   font-size: 18px;
   margin: 0px;
+  color: black;
 }
 
 .kanban-card.work {
+  color: black;
   background: #ef89e7;
 }
 
 .kanban-card.studying {
+  color: black;
   background: #948af5;
 }
 
 .kanban-card.personal {
+  color: black;
   background: #fa713c;
 }
 
