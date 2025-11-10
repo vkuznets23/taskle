@@ -49,6 +49,7 @@
 .seacrh-container.open .search-btn {
   background-color: transparent;
   border: none;
+  color: var(--border-color);
 }
 
 .nav-panel-right .seacrh-container.open .search-input {
