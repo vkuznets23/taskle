@@ -98,7 +98,7 @@ export default function NavPanel({
         <div className="filters-container">
           <Filter sortOrder={sortOrder} setSortOrder={setSortOrder} />
           <MultiFilter
-            isMobile={isSmallerThan1250}
+            isMobile={isTablet}
             icon={<FaTag />}
             title="Tags"
             options={['work', 'studying', 'personal']}
@@ -108,7 +108,7 @@ export default function NavPanel({
           {showStatusFilter && (
             <MultiFilter
               icon={<FaTasks />}
-              isMobile={isSmallerThan1250}
+              isMobile={isTablet}
               title="Status"
               options={['active', 'done', 'todo']}
               selected={statusFilter}

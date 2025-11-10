@@ -161,7 +161,6 @@ thead th:nth-child(4) {
   width: 100px;
 }
 
-/* tableView inline styles extracted */
 .task-cell {
   padding-right: 80px;
 }
@@ -171,7 +170,6 @@ thead th:nth-child(4) {
   gap: 10px;
 }
 
-/* priority */
 .priority {
   position: relative;
 }
@@ -253,4 +251,10 @@ thead th:nth-child(4) {
 
 .delete-btn:hover {
   transform: scale(105%);
+}
+
+@media (max-width: 1020px) {
+  .task-cell {
+    padding-right: 60px;
+  }
 }
