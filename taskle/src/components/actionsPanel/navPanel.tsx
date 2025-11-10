@@ -6,6 +6,8 @@ import { FaTasks, FaTag } from 'react-icons/fa'
 
 import '../../styles/panel.css'
 
+const NAV_PANEL_BREAKPOINTS = [1250, 900] as const
+
 interface NavPanelProps {
   tableView: boolean
   onChange: (tableView: boolean) => void
@@ -19,6 +21,27 @@ interface NavPanelProps {
   tagFilter: string[]
   setTagFilter: React.Dispatch<React.SetStateAction<string[]>>
   showStatusFilter: boolean
+}
+
+function useViewportFlags(breakpoints: readonly number[]) {
+  const [flags, setFlags] = useState<boolean[]>(() =>
+    breakpoints.map(
+      (bp) => typeof window !== 'undefined' && window.innerWidth < bp
+    )
+  )
+
+  useEffect(() => {
+    const updateFlags = () => {
+      if (typeof window === 'undefined') return
+      setFlags(breakpoints.map((bp) => window.innerWidth < bp))
+    }
+
+    updateFlags()
+    window.addEventListener('resize', updateFlags)
+    return () => window.removeEventListener('resize', updateFlags)
+  }, [breakpoints])
+
+  return flags
 }
 
 export default function NavPanel({
@@ -36,28 +59,7 @@ export default function NavPanel({
   showStatusFilter,
 }: NavPanelProps) {
   const [modalOpen, setModalOpen] = useState(false)
-  const [isSmallerThan1250, setIsSmallerThan1250] = useState(false)
-  const [isTablet, setIsTablet] = useState(false)
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsSmallerThan1250(window.innerWidth < 1250)
-    }
-    window.addEventListener('resize', handleResize)
-    handleResize()
-
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsTablet(window.innerWidth < 900)
-    }
-    window.addEventListener('resize', handleResize)
-    handleResize()
-
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
+  const [isSmallerThan1250, isTablet] = useViewportFlags(NAV_PANEL_BREAKPOINTS)
 
   return (
     <div className="nav-panel">

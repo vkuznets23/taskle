@@ -1,5 +1,5 @@
 import '../../styles/table.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { Task } from '../../types/taskTypes'
 import {
   EditableTaskCell,
@@ -27,6 +27,18 @@ export default function TableView({
   } | null>(null)
 
   const [hoveredId, setHoveredId] = useState<number | null>(null)
+  const [isNarrow, setIsNarrow] = useState(false)
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (typeof window === 'undefined') return
+      setIsNarrow(window.innerWidth <= 1020)
+    }
+
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   const handleFieldChange = (id: number, field: keyof Task, value: string) => {
     handleUpdate(id, { [field]: value }).catch((error) => {
@@ -93,6 +105,7 @@ export default function TableView({
                 id={id}
                 hoveredId={hoveredId}
                 handelDeleteTask={handelDeleteTask}
+                alwaysVisible={isNarrow}
               />
             </tr>
           )

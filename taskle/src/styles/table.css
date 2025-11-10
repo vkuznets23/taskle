@@ -93,6 +93,7 @@ thead th:nth-child(4) {
   display: inline-flex;
   width: 130px;
   height: 40px;
+  color: black;
 }
 
 .select {
@@ -253,8 +254,13 @@ thead th:nth-child(4) {
   transform: scale(105%);
 }
 
-@media (max-width: 1020px) {
+@media (max-width: 1000px) {
   .task-cell {
-    padding-right: 60px;
+    padding-right: 50px;
+  }
+
+  th:nth-child(3),
+  td:nth-child(3) {
+    padding-left: 40px;
   }
 }
