@@ -1,7 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { Task } from '../../types/taskTypes'
 import { SearchInput, Filter, FormTasks } from '../../components'
 import { MultiFilter } from './multiFilter'
+import { FaTasks, FaTag } from 'react-icons/fa'
+
 import '../../styles/panel.css'
 
 interface NavPanelProps {
@@ -34,25 +36,34 @@ export default function NavPanel({
   showStatusFilter,
 }: NavPanelProps) {
   const [modalOpen, setModalOpen] = useState(false)
+  const [isSmallerThan1250, setIsSmallerThan1250] = useState(false)
+  const [isTablet, setIsTablet] = useState(false)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallerThan1250(window.innerWidth < 1250)
+    }
+    window.addEventListener('resize', handleResize)
+    handleResize()
+
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsTablet(window.innerWidth < 900)
+    }
+    window.addEventListener('resize', handleResize)
+    handleResize()
+
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        marginTop: '50px',
-        marginBottom: '10px',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          gap: '20px',
-        }}
-      >
+    <div className="nav-panel">
+      <div className="nav-panel-left">
         <button className="add-btn" onClick={() => setModalOpen(true)}>
-          + Add
+          {isSmallerThan1250 ? '+' : '+ Add'}
         </button>
         {modalOpen && (
           <FormTasks setTasks={setTasks} setModalOpen={setModalOpen} />
@@ -68,33 +79,43 @@ export default function NavPanel({
             className={`toggle-btn ${tableView ? 'active' : ''}`}
             onClick={() => onChange(true)}
           >
-            Table View
+            {isSmallerThan1250 ? 'Table' : 'Table View'}
           </button>
           <button
             className={`toggle-btn ${!tableView ? 'active' : ''}`}
             onClick={() => onChange(false)}
           >
-            Kanban Board
+            {isSmallerThan1250 ? 'Kanban' : 'Kanban Board'}
           </button>
         </div>
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-        <SearchInput query={searchQuery} onChange={onSearchChange} />
-        <Filter sortOrder={sortOrder} setSortOrder={setSortOrder} />
-        <MultiFilter
-          title="Tags"
-          options={['work', 'studying', 'personal']}
-          selected={tagFilter}
-          onChange={setTagFilter}
+      <div className="nav-panel-right">
+        <SearchInput
+          alwaysOpen={isTablet}
+          query={searchQuery}
+          onChange={onSearchChange}
         />
-        {showStatusFilter && (
+        <div className="filters-container">
+          <Filter sortOrder={sortOrder} setSortOrder={setSortOrder} />
           <MultiFilter
-            title="Status"
-            options={['active', 'done', 'todo']}
-            selected={statusFilter}
-            onChange={setStatusFilter}
+            isMobile={isSmallerThan1250}
+            icon={<FaTag />}
+            title="Tags"
+            options={['work', 'studying', 'personal']}
+            selected={tagFilter}
+            onChange={setTagFilter}
           />
-        )}
+          {showStatusFilter && (
+            <MultiFilter
+              icon={<FaTasks />}
+              isMobile={isSmallerThan1250}
+              title="Status"
+              options={['active', 'done', 'todo']}
+              selected={statusFilter}
+              onChange={setStatusFilter}
+            />
+          )}
+        </div>
       </div>
     </div>
   )

@@ -75,3 +75,22 @@
     transform: scale(1);
   }
 }
+
+@media (max-width: 1250px) {
+  .multi-filter__button {
+    width: 100px;
+    font-size: 16px;
+  }
+  .multi-filter__menu {
+    width: 100px;
+  }
+}
+
+@media (max-width: 955px) {
+  .multi-filter__button {
+    width: 80px;
+  }
+  .multi-filter__menu {
+    width: 80px;
+  }
+}
