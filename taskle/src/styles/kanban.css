@@ -3,6 +3,10 @@
   gap: 20px;
   align-items: flex-start;
   overflow-x: hidden;
+  overflow-y: hidden;
+  position: relative;
+  width: 100%;
+  max-width: 100%;
 }
 
 .kanban-column {
@@ -52,6 +56,8 @@
   margin-top: 20px;
 }
 
-.priority {
+.priority-kanban {
   color: black;
+  display: flex;
+  gap: 5px;
 }
