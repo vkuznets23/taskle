@@ -1,6 +1,5 @@
 import type { Priority, Task } from '../../types/taskTypes'
-import generatePriorityIcon from '../../utils/generatePriorityIcon'
-import PrioritySelector from './prioritySelector'
+import EditablePriority from './editablePriority'
 
 interface EditablePriorityCellProps {
   id: number
@@ -30,19 +29,12 @@ export default function EditablePriorityCell({
       onMouseEnter={() => setEditing({ id, field: 'priority' })}
       onMouseLeave={() => setEditing(null)}
     >
-      {editing?.id === id && editing?.field === 'priority' ? (
-        <PrioritySelector
-          id={id}
-          currentPriority={priority}
-          onChange={(newPriority) =>
-            handleFieldChange(id, 'priority', newPriority)
-          }
-        />
-      ) : (
-        <div className="priority-selector" title="Click to change priority">
-          {generatePriorityIcon(priority)}
-        </div>
-      )}
+      <EditablePriority
+        id={id}
+        priority={priority}
+        editing={editing}
+        handleFieldChange={handleFieldChange}
+      />
     </td>
   )
 }

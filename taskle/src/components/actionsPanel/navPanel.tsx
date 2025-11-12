@@ -2,7 +2,10 @@ import { useState } from 'react'
 import type { Task } from '../../types/taskTypes'
 import { SearchInput, Filter, FormTasks } from '../../components'
 import { MultiFilter } from './multiFilter'
+import { FaTasks, FaTag } from 'react-icons/fa'
 import '../../styles/panel.css'
+import ChangeNameBtn from './changeNameBtn'
+import useBreakpoint from '../../hooks/useWidth'
 
 interface NavPanelProps {
   tableView: boolean
@@ -35,25 +38,19 @@ export default function NavPanel({
 }: NavPanelProps) {
   const [modalOpen, setModalOpen] = useState(false)
 
+  const is1250 = useBreakpoint('(max-width: 1250px)')
+  const is900 = useBreakpoint('(max-width: 900px)')
+
   return (
-    <div
-      style={{
-        display: 'flex',
-        marginTop: '50px',
-        marginBottom: '10px',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          gap: '20px',
-        }}
-      >
-        <button className="add-btn" onClick={() => setModalOpen(true)}>
-          + Add
-        </button>
+    <div className="nav-panel">
+      <div className="nav-panel-left">
+        <ChangeNameBtn
+          className="add-btn"
+          onClick={() => setModalOpen(true)}
+          text1="+"
+          text2="+ Add"
+          bp={is1250}
+        />
         {modalOpen && (
           <FormTasks setTasks={setTasks} setModalOpen={setModalOpen} />
         )}
@@ -64,37 +61,49 @@ export default function NavPanel({
               transform: tableView ? 'translateX(0%)' : 'translateX(100%)',
             }}
           />
-          <button
+          <ChangeNameBtn
             className={`toggle-btn ${tableView ? 'active' : ''}`}
             onClick={() => onChange(true)}
-          >
-            Table View
-          </button>
-          <button
+            text1="Table"
+            text2="Table View"
+            bp={is1250}
+          />
+          <ChangeNameBtn
             className={`toggle-btn ${!tableView ? 'active' : ''}`}
             onClick={() => onChange(false)}
-          >
-            Kanban Board
-          </button>
+            text1="Kanban"
+            text2="Kanban Board"
+            bp={is1250}
+          />
         </div>
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-        <SearchInput query={searchQuery} onChange={onSearchChange} />
-        <Filter sortOrder={sortOrder} setSortOrder={setSortOrder} />
-        <MultiFilter
-          title="Tags"
-          options={['work', 'studying', 'personal']}
-          selected={tagFilter}
-          onChange={setTagFilter}
+      <div className="nav-panel-right">
+        <SearchInput
+          alwaysOpen={is900}
+          query={searchQuery}
+          onChange={onSearchChange}
         />
-        {showStatusFilter && (
+        <div className="filters-container">
+          <Filter sortOrder={sortOrder} setSortOrder={setSortOrder} />
           <MultiFilter
-            title="Status"
-            options={['active', 'done', 'todo']}
-            selected={statusFilter}
-            onChange={setStatusFilter}
+            isMobile={is900}
+            icon={<FaTag />}
+            title="Tags"
+            options={['work', 'studying', 'personal']}
+            selected={tagFilter}
+            onChange={setTagFilter}
           />
-        )}
+          {showStatusFilter && (
+            <MultiFilter
+              icon={<FaTasks />}
+              isMobile={is900}
+              title="Status"
+              options={['active', 'done', 'todo']}
+              selected={statusFilter}
+              onChange={setStatusFilter}
+            />
+          )}
+        </div>
       </div>
     </div>
   )

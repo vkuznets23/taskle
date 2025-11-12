@@ -3,10 +3,12 @@ import { IoSearch } from 'react-icons/io5'
 import '../../styles/searchBar.css'
 
 export default function SearchInput({
+  alwaysOpen,
   query,
   onChange,
   placeholder = 'Search tasks...',
 }: {
+  alwaysOpen: boolean
   query: string
   onChange: (value: string) => void
   placeholder?: string
@@ -15,6 +17,10 @@ export default function SearchInput({
   const wrapperRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    if (alwaysOpen) {
+      return
+    }
+
     function handleClickOutside(event: MouseEvent) {
       if (
         wrapperRef.current &&
@@ -28,7 +34,27 @@ export default function SearchInput({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [])
+  }, [alwaysOpen])
+
+  if (alwaysOpen) {
+    return (
+      <div className="seacrh-container open">
+        <button
+          className="search-btn"
+          onClick={() => setShowFull((v) => !v)}
+          aria-label="Toggle search"
+        >
+          <IoSearch />
+        </button>
+        <input
+          className="search-input"
+          value={query}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+        />
+      </div>
+    )
+  }
 
   return (
     <div

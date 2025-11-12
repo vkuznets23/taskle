@@ -3,7 +3,7 @@
   font-size: 20px;
   height: 45px;
   aspect-ratio: 1/1;
-  border: 1px solid var(--border-color);
+  border: 1px solid black;
   border-radius: 50px;
   display: flex;
   align-items: center;

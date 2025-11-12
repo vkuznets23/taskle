@@ -3,6 +3,10 @@
   gap: 20px;
   align-items: flex-start;
   overflow-x: hidden;
+  overflow-y: hidden;
+  position: relative;
+  width: 100%;
+  max-width: 100%;
 }
 
 .kanban-column {
@@ -27,17 +31,21 @@
 .kanban-card p {
   font-size: 18px;
   margin: 0px;
+  color: black;
 }
 
 .kanban-card.work {
+  color: black;
   background: #ef89e7;
 }
 
 .kanban-card.studying {
+  color: black;
   background: #948af5;
 }
 
 .kanban-card.personal {
+  color: black;
   background: #fa713c;
 }
 
@@ -48,6 +56,8 @@
   margin-top: 20px;
 }
 
-.priority {
+.priority-kanban {
   color: black;
+  display: flex;
+  gap: 5px;
 }

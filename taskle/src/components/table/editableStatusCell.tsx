@@ -1,11 +1,5 @@
-import { IoIosArrowDown } from 'react-icons/io'
 import type { Status, Task } from '../../types/taskTypes'
-
-const statusLabels: Record<Task['status'], string> = {
-  TODO: 'To do',
-  IN_PROGRESS: 'Active',
-  DONE: 'Done',
-}
+import EditableStatus from './editableStatus'
 
 interface EditableStatusCellProps {
   id: number
@@ -31,36 +25,13 @@ export default function EditableStatusCell({
 }: EditableStatusCellProps) {
   return (
     <td>
-      {editing?.id === id && editing?.field === 'status' ? (
-        <div className="select-wrapper status">
-          <select
-            className="select status"
-            autoFocus
-            value={status}
-            onBlur={() => setEditing(null)}
-            onMouseLeave={() => setEditing(null)}
-            onChange={(e) => {
-              handleFieldChange(id, 'status', e.target.value as Task['status'])
-              setEditing(null)
-            }}
-          >
-            {Object.entries(statusLabels).map(([value, label], index) => (
-              <option key={index} value={value}>
-                {label.toUpperCase()}
-              </option>
-            ))}
-          </select>
-          <IoIosArrowDown className="select-icon" />
-        </div>
-      ) : (
-        <div
-          className="status-div"
-          onMouseEnter={() => setEditing({ id, field: 'status' })}
-          title="Click to edit status"
-        >
-          {statusLabels[status].toUpperCase()}
-        </div>
-      )}
+      <EditableStatus
+        id={id}
+        status={status}
+        editing={editing}
+        setEditing={setEditing}
+        handleFieldChange={handleFieldChange}
+      />
     </td>
   )
 }

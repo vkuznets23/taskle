@@ -1,7 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react'
 import '../../styles/MultiFilter.css'
+import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
 
 interface MultiFilterDropdownProps {
+  isMobile: boolean
+  icon: React.ReactNode
   title: string
   options: string[]
   selected: string[]
@@ -9,6 +12,8 @@ interface MultiFilterDropdownProps {
 }
 
 export const MultiFilter: React.FC<MultiFilterDropdownProps> = ({
+  isMobile,
+  icon,
   title,
   options,
   selected,
@@ -41,8 +46,17 @@ export const MultiFilter: React.FC<MultiFilterDropdownProps> = ({
         className="multi-filter__button"
         onClick={() => setOpen((prev) => !prev)}
       >
-        <span>{title}</span>
-        <span className={`arrow ${open ? 'open' : ''}`}>▼</span>
+        {isMobile ? icon : <span>{title}</span>}
+        <span
+          className={`arrow ${open ? 'open' : ''}`}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          {open ? <IoIosArrowUp /> : <IoIosArrowDown />}
+        </span>
       </button>
 
       {open && (

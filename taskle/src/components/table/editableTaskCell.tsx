@@ -1,5 +1,5 @@
-import { MdEdit } from 'react-icons/md'
 import type { Task } from '../../types/taskTypes'
+import EditableTask from './editableTask'
 
 interface EditableTaskCellProps {
   id: number
@@ -34,43 +34,15 @@ export default function EditableTaskCell({
       onMouseEnter={() => setHoveredId(id)}
       onMouseLeave={() => setHoveredId(null)}
     >
-      {editing?.id === id && editing?.field === 'task' ? (
-        <textarea
-          className="task-textarea"
-          autoFocus
-          rows={3}
-          defaultValue={task}
-          onBlur={(e) => {
-            const newValue = e.target.value.trim()
-            if (newValue && newValue !== task) {
-              handleFieldChange(id, 'task', newValue)
-            }
-            setEditing(null)
-          }}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-              e.preventDefault()
-              const newValue = (e.target as HTMLTextAreaElement).value.trim()
-              if (newValue && newValue !== task) {
-                handleFieldChange(id, 'task', newValue)
-              }
-              setEditing(null)
-            }
-          }}
-        />
-      ) : (
-        <div className="task-cell-content">
-          <p>{task}</p>
-          {hoveredId === id && (
-            <button
-              className="edit-btn"
-              onClick={() => setEditing({ id, field: 'task' })}
-            >
-              <MdEdit />
-            </button>
-          )}
-        </div>
-      )}
+      <EditableTask
+        id={id}
+        task={task}
+        editing={editing}
+        setEditing={setEditing}
+        hoveredId={hoveredId}
+        setHoveredId={setHoveredId}
+        handleFieldChange={handleFieldChange}
+      />
     </td>
   )
 }
