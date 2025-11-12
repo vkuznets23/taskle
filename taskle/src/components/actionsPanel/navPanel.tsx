@@ -61,18 +61,20 @@ export default function NavPanel({
               transform: tableView ? 'translateX(0%)' : 'translateX(100%)',
             }}
           />
-          <button
+          <ChangeNameBtn
             className={`toggle-btn ${tableView ? 'active' : ''}`}
             onClick={() => onChange(true)}
-          >
-            {is1250 ? 'Table' : 'Table View'}
-          </button>
-          <button
+            text1="Table"
+            text2="Table View"
+            bp={is1250}
+          />
+          <ChangeNameBtn
             className={`toggle-btn ${!tableView ? 'active' : ''}`}
             onClick={() => onChange(false)}
-          >
-            {is1250 ? 'Kanban' : 'Kanban Board'}
-          </button>
+            text1="Kanban"
+            text2="Kanban Board"
+            bp={is1250}
+          />
         </div>
       </div>
       <div className="nav-panel-right">
