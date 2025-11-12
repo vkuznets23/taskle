@@ -3,8 +3,10 @@ import { tagLabels } from '../../constants'
 import type { Tag, Task } from '../../types/taskTypes'
 import { capitalizeFirstLetter } from '../../utils/Capitalizer'
 import generateTagIcon from '../../utils/generateTagIcon'
+import type { JSX } from 'react'
 
 interface EditableTagCellProps {
+  as?: keyof JSX.IntrinsicElements
   id: number
   tag: Tag
   editing: {
@@ -20,6 +22,7 @@ interface EditableTagCellProps {
   handleFieldChange: (id: number, field: keyof Task, value: string) => void
 }
 export default function EditableTagCell({
+  as: Component = 'td',
   id,
   tag,
   editing,
@@ -27,7 +30,7 @@ export default function EditableTagCell({
   handleFieldChange,
 }: EditableTagCellProps) {
   return (
-    <td>
+    <Component>
       {editing?.id === id && editing?.field === 'tag' ? (
         <div className="select-wrapper">
           <select
@@ -58,6 +61,6 @@ export default function EditableTagCell({
           {generateTagIcon(tag)}
         </div>
       )}
-    </td>
+    </Component>
   )
 }

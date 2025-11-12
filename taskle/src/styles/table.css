@@ -264,3 +264,11 @@ thead th:nth-child(4) {
     padding-left: 40px;
   }
 }
+
+.task-card {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 20px;
+  padding-top: 20px;
+  border-top: 1px solid black;
+}

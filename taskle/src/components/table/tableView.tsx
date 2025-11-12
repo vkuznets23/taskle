@@ -1,5 +1,5 @@
 import '../../styles/table.css'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import type { Task } from '../../types/taskTypes'
 import {
   EditableTaskCell,
@@ -9,6 +9,8 @@ import {
   DeleteCell,
   NoTasks,
 } from '..'
+import useBreakpoint from '../../hooks/useWidth'
+import EditableTaskCard from './editableTaskCard'
 
 const tableThs = ['task', 'priority', 'tag', 'status']
 
@@ -27,18 +29,6 @@ export default function TableView({
   } | null>(null)
 
   const [hoveredId, setHoveredId] = useState<number | null>(null)
-  const [isNarrow, setIsNarrow] = useState(false)
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (typeof window === 'undefined') return
-      setIsNarrow(window.innerWidth <= 1020)
-    }
-
-    handleResize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
 
   const handleFieldChange = (id: number, field: keyof Task, value: string) => {
     handleUpdate(id, { [field]: value }).catch((error) => {
@@ -46,7 +36,34 @@ export default function TableView({
     })
   }
 
+  const is1020 = useBreakpoint('(max-width: 1020px)')
+  const is850 = useBreakpoint('(max-width: 850px)')
+
   if (tasks.length === 0) return <NoTasks />
+
+  if (is850) {
+    return (
+      <div>
+        {tasks.map(({ id, task, priority, tag, status }) => {
+          return (
+            <EditableTaskCard
+              key={id}
+              id={id}
+              task={task}
+              priority={priority}
+              status={status}
+              tag={tag}
+              editing={editing}
+              setEditing={setEditing}
+              hoveredId={hoveredId}
+              setHoveredId={setHoveredId}
+              handleFieldChange={handleFieldChange}
+            />
+          )
+        })}
+      </div>
+    )
+  }
 
   return (
     <table>
@@ -105,7 +122,7 @@ export default function TableView({
                 id={id}
                 hoveredId={hoveredId}
                 handelDeleteTask={handelDeleteTask}
-                alwaysVisible={isNarrow}
+                alwaysVisible={is1020}
               />
             </tr>
           )
