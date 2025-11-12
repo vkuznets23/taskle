@@ -1,5 +1,6 @@
 import { IoIosArrowDown } from 'react-icons/io'
 import type { Status, Task } from '../../types/taskTypes'
+import useBreakpoint from '../../hooks/useWidth'
 
 const statusLabels: Record<Task['status'], string> = {
   TODO: 'To do',
@@ -29,6 +30,8 @@ export default function EditableStaus({
   setEditing,
   handleFieldChange,
 }: EditableStatusProps) {
+  const is850 = useBreakpoint('(max-width: 850px)')
+
   return (
     <>
       {editing?.id === id && editing?.field === 'status' ? (
@@ -54,7 +57,7 @@ export default function EditableStaus({
         </div>
       ) : (
         <div
-          className="status-div"
+          className={is850 ? 'status-div-850' : 'status-div'}
           onMouseEnter={() => setEditing({ id, field: 'status' })}
           title="Click to edit status"
         >

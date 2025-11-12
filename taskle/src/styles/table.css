@@ -162,6 +162,15 @@ thead th:nth-child(4) {
   width: 100px;
 }
 
+.status-div-850 {
+  width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid black;
+  border-radius: 50px;
+}
+
 .task-cell {
   padding-right: 80px;
 }
