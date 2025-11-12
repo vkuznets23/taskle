@@ -1,12 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import type { Task } from '../../types/taskTypes'
 import { SearchInput, Filter, FormTasks } from '../../components'
 import { MultiFilter } from './multiFilter'
 import { FaTasks, FaTag } from 'react-icons/fa'
-
 import '../../styles/panel.css'
-
-const NAV_PANEL_BREAKPOINTS = [1250, 900] as const
+import ChangeNameBtn from './changeNameBtn'
+import useBreakpoint from '../../hooks/useWidth'
 
 interface NavPanelProps {
   tableView: boolean
@@ -21,27 +20,6 @@ interface NavPanelProps {
   tagFilter: string[]
   setTagFilter: React.Dispatch<React.SetStateAction<string[]>>
   showStatusFilter: boolean
-}
-
-function useViewportFlags(breakpoints: readonly number[]) {
-  const [flags, setFlags] = useState<boolean[]>(() =>
-    breakpoints.map(
-      (bp) => typeof window !== 'undefined' && window.innerWidth < bp
-    )
-  )
-
-  useEffect(() => {
-    const updateFlags = () => {
-      if (typeof window === 'undefined') return
-      setFlags(breakpoints.map((bp) => window.innerWidth < bp))
-    }
-
-    updateFlags()
-    window.addEventListener('resize', updateFlags)
-    return () => window.removeEventListener('resize', updateFlags)
-  }, [breakpoints])
-
-  return flags
 }
 
 export default function NavPanel({
@@ -59,14 +37,23 @@ export default function NavPanel({
   showStatusFilter,
 }: NavPanelProps) {
   const [modalOpen, setModalOpen] = useState(false)
-  const [isSmallerThan1250, isTablet] = useViewportFlags(NAV_PANEL_BREAKPOINTS)
+  // const width = useWidth()
+  // const is1250 = width <= 1250
+  // const is900 = width <= 900
+
+  const is1250 = useBreakpoint('(max-width: 1250px)')
+  const is900 = useBreakpoint('(max-width: 900px)')
 
   return (
     <div className="nav-panel">
       <div className="nav-panel-left">
-        <button className="add-btn" onClick={() => setModalOpen(true)}>
-          {isSmallerThan1250 ? '+' : '+ Add'}
-        </button>
+        <ChangeNameBtn
+          className="add-btn"
+          onClick={() => setModalOpen(true)}
+          text1="+"
+          text2="+ Add"
+          bp={is1250}
+        />
         {modalOpen && (
           <FormTasks setTasks={setTasks} setModalOpen={setModalOpen} />
         )}
@@ -81,26 +68,26 @@ export default function NavPanel({
             className={`toggle-btn ${tableView ? 'active' : ''}`}
             onClick={() => onChange(true)}
           >
-            {isSmallerThan1250 ? 'Table' : 'Table View'}
+            {is1250 ? 'Table' : 'Table View'}
           </button>
           <button
             className={`toggle-btn ${!tableView ? 'active' : ''}`}
             onClick={() => onChange(false)}
           >
-            {isSmallerThan1250 ? 'Kanban' : 'Kanban Board'}
+            {is1250 ? 'Kanban' : 'Kanban Board'}
           </button>
         </div>
       </div>
       <div className="nav-panel-right">
         <SearchInput
-          alwaysOpen={isTablet}
+          alwaysOpen={is900}
           query={searchQuery}
           onChange={onSearchChange}
         />
         <div className="filters-container">
           <Filter sortOrder={sortOrder} setSortOrder={setSortOrder} />
           <MultiFilter
-            isMobile={isTablet}
+            isMobile={is900}
             icon={<FaTag />}
             title="Tags"
             options={['work', 'studying', 'personal']}
@@ -110,7 +97,7 @@ export default function NavPanel({
           {showStatusFilter && (
             <MultiFilter
               icon={<FaTasks />}
-              isMobile={isTablet}
+              isMobile={is900}
               title="Status"
               options={['active', 'done', 'todo']}
               selected={statusFilter}

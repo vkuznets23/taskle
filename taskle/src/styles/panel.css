@@ -75,6 +75,7 @@
     width: 50px;
     font-size: 18px;
   }
+
   .toggle-wrapper {
     width: 220px;
   }
@@ -109,5 +110,13 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
+  }
+
+  .toggle-wrapper {
+    width: 100%;
+  }
+
+  .toggle-btn {
+    width: 50%;
   }
 }
