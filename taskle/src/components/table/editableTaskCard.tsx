@@ -52,12 +52,7 @@ export default function EditableTaskCard({
         setHoveredId={setHoveredId}
         handleFieldChange={handleFieldChange}
       />
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-        }}
-      >
+      <div className="task-card-actions">
         <EditableStatus
           id={id}
           status={status}
