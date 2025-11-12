@@ -37,9 +37,6 @@ export default function NavPanel({
   showStatusFilter,
 }: NavPanelProps) {
   const [modalOpen, setModalOpen] = useState(false)
-  // const width = useWidth()
-  // const is1250 = width <= 1250
-  // const is900 = width <= 900
 
   const is1250 = useBreakpoint('(max-width: 1250px)')
   const is900 = useBreakpoint('(max-width: 900px)')
