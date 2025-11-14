@@ -9,7 +9,7 @@ export default function PrioritySelector({
   currentPriority,
   onChange,
 }: {
-  id: number
+  id?: number
   currentPriority: Priority
   onChange: (priority: Priority) => void
 }) {
@@ -27,7 +27,7 @@ export default function PrioritySelector({
 
         return (
           <div
-            key={`${id}-${level}`}
+            key={id !== undefined ? `${id}-${level}` : level}
             className={`priority-dot ${level.toLowerCase()} ${
               shouldHighlight ? 'highlight' : ''
             }`}

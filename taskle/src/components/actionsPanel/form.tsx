@@ -1,12 +1,14 @@
 import { useRef, useState } from 'react'
-import { priorityLabels, tagLabels } from '../../constants'
+import { tagLabels } from '../../constants'
 import type { Priority, Tag, Task } from '../../types/taskTypes'
 import { capitalizeFirstLetter } from '../../utils/Capitalizer'
 import type { Errors } from '../dashboard'
 import InputError from '../inputError'
 import '../../styles/formModal.css'
+import '../../styles/table.css'
 import { IoIosArrowDown } from 'react-icons/io'
 import { IoCloseSharp } from 'react-icons/io5'
+import PrioritySelector from '../table/prioritySelector'
 
 export default function FormTasks({
   setTasks,
@@ -88,16 +90,18 @@ export default function FormTasks({
           <IoCloseSharp />
         </button>
         <div className="form-textarea">
+          <label htmlFor="textarea" className="sr-only">
+            new task
+          </label>
           <textarea
             id="textarea"
-            placeholder=" "
+            placeholder="What's your task?"
             value={task}
             ref={textareaRef}
             onChange={handleChangeTextarea}
             className={errors?.tasksErrorMsg ? 'textarea-error' : ''}
             style={{ overflow: 'hidden', resize: 'none' }}
           />
-          <label htmlFor="textarea">new task</label>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <div style={{ minWidth: '120px' }}>
               <InputError errorMessage={errors?.tasksErrorMsg} />
@@ -114,16 +118,13 @@ export default function FormTasks({
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <select
-            value={priority}
-            onChange={(e) => setPriority(e.target.value as Priority)}
-          >
-            {priorityLabels.map((priority, index) => (
-              <option key={index} value={priority.toUpperCase()}>
-                {capitalizeFirstLetter(priority)}
-              </option>
-            ))}
-          </select>
+          <div className="priority-selector-wrapper">
+            <label className="priority-label">priority</label>
+            <PrioritySelector
+              currentPriority={priority}
+              onChange={setPriority}
+            />
+          </div>
 
           <div className="select-wrapper">
             <select
