@@ -45,6 +45,10 @@ export default function EditableTaskCard({
   const [isSwiping, setIsSwiping] = useState(false)
   const touchStartX = useRef<number | null>(null)
   const touchStartY = useRef<number | null>(null)
+  const mouseStartX = useRef<number | null>(null)
+  const mouseStartY = useRef<number | null>(null)
+  const isMouseDown = useRef(false)
+  const hasMouseMoved = useRef(false)
   const cardRef = useRef<HTMLDivElement>(null)
 
   const SWIPE_THRESHOLD = 80
@@ -116,6 +120,106 @@ export default function EditableTaskCard({
       touchStartY.current = null
     }
 
+    // Mouse handlers for desktop drag
+    const handleMouseDown = (e: MouseEvent) => {
+      // Only handle left mouse button
+      if (e.button !== 0) return
+
+      // Don't start drag if clicking on interactive elements
+      const target = e.target as HTMLElement
+      if (
+        target.closest('button') ||
+        target.closest('select') ||
+        target.closest('textarea') ||
+        target.closest('input') ||
+        target.closest('.edit-btn')
+      ) {
+        return
+      }
+
+      mouseStartX.current = e.clientX
+      mouseStartY.current = e.clientY
+      isMouseDown.current = true
+      hasMouseMoved.current = false
+      e.preventDefault()
+    }
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isMouseDown.current || mouseStartX.current === null) return
+
+      const deltaX = e.clientX - mouseStartX.current
+      const deltaY = Math.abs(e.clientY - (mouseStartY.current || 0))
+
+      // Only start dragging if mouse moved more than threshold
+      if (!hasMouseMoved.current) {
+        if (Math.abs(deltaX) < 5 && deltaY < 5) {
+          return // Too small movement, don't start dragging
+        }
+        hasMouseMoved.current = true
+        setIsSwiping(true)
+      }
+
+      // Only allow horizontal drag (prevent vertical scrolling interference)
+      if (deltaY > 10 && Math.abs(deltaX) < 10) {
+        return
+      }
+
+      // Only allow dragging left (negative deltaX)
+      if (deltaX < 0) {
+        const newOffset = Math.max(-DELETE_BUTTON_WIDTH, deltaX)
+        setSwipeOffset(newOffset)
+      } else if (deltaX > 0) {
+        setSwipeOffset((prevOffset) => {
+          if (prevOffset < 0) {
+            // Allow dragging back to close
+            return Math.min(0, prevOffset + deltaX)
+          }
+          return prevOffset
+        })
+      }
+    }
+
+    const handleMouseUp = (e: MouseEvent) => {
+      if (!isMouseDown.current || mouseStartX.current === null) {
+        setIsSwiping(false)
+        return
+      }
+
+      const finalDeltaX = e.clientX - mouseStartX.current
+      const wasDragging = hasMouseMoved.current
+
+      isMouseDown.current = false
+      hasMouseMoved.current = false
+
+      // Only process drag if mouse actually moved
+      if (wasDragging) {
+        // If dragged more than threshold, keep it open, otherwise snap back
+        if (finalDeltaX < -SWIPE_THRESHOLD) {
+          setSwipeOffset(-DELETE_BUTTON_WIDTH)
+        } else {
+          setSwipeOffset(0)
+        }
+        setIsSwiping(false)
+      } else {
+        // Just a click, not a drag
+        setIsSwiping(false)
+      }
+
+      mouseStartX.current = null
+      mouseStartY.current = null
+    }
+
+    const handleMouseLeave = () => {
+      if (isMouseDown.current) {
+        // If mouse leaves while dragging, snap back
+        isMouseDown.current = false
+        setIsSwiping(false)
+        setSwipeOffset(0)
+        mouseStartX.current = null
+        mouseStartY.current = null
+      }
+    }
+
     cardElement.addEventListener('touchstart', handleTouchStart, {
       passive: true,
     })
@@ -124,10 +228,19 @@ export default function EditableTaskCard({
     })
     cardElement.addEventListener('touchend', handleTouchEnd, { passive: true })
 
+    cardElement.addEventListener('mousedown', handleMouseDown)
+    document.addEventListener('mousemove', handleMouseMove)
+    document.addEventListener('mouseup', handleMouseUp)
+    cardElement.addEventListener('mouseleave', handleMouseLeave)
+
     return () => {
       cardElement.removeEventListener('touchstart', handleTouchStart)
       cardElement.removeEventListener('touchmove', handleTouchMove)
       cardElement.removeEventListener('touchend', handleTouchEnd)
+      cardElement.removeEventListener('mousedown', handleMouseDown)
+      document.removeEventListener('mousemove', handleMouseMove)
+      document.removeEventListener('mouseup', handleMouseUp)
+      cardElement.removeEventListener('mouseleave', handleMouseLeave)
     }
   }, [])
 

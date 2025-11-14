@@ -281,6 +281,12 @@ thead th:nth-child(4) {
 .swipeable-card {
   touch-action: pan-y pan-x;
   will-change: transform;
+  cursor: grab;
+  user-select: none;
+}
+
+.swipeable-card:active {
+  cursor: grabbing;
 }
 
 .task-card-actions {
