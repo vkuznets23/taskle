@@ -1,6 +1,5 @@
 .kanban {
   display: flex;
-  gap: 20px;
   align-items: flex-start;
   overflow-x: hidden;
   overflow-y: hidden;
@@ -12,6 +11,7 @@
 .kanban-column {
   flex: 1;
   padding: 15px;
+  padding-top: 0px;
   min-width: 250px;
   border-radius: 12px;
   border: 2px solid transparent;
