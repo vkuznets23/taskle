@@ -12,7 +12,10 @@ export default function Column({ id, title, children }: ColumnProps) {
   return (
     <div ref={setNodeRef} className={`kanban-column ${isOver ? 'over' : ''}`}>
       <h3>{title}</h3>
-      <div className="kanban-tasks">{children}</div>
+      <div className="kanban-tasks">
+        {children}
+        {isOver && <div className="kanban-drop-placeholder" />}
+      </div>
     </div>
   )
 }
