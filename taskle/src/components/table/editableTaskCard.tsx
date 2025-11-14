@@ -181,6 +181,7 @@ export default function EditableTaskCard({
           hoveredId={hoveredId}
           setHoveredId={setHoveredId}
           handleFieldChange={handleFieldChange}
+          alwaysShowEdit={true}
         />
         <div className="task-card-actions">
           <EditableStatus

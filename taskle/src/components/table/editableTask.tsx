@@ -17,6 +17,7 @@ interface EditableTaskProps {
   hoveredId: number | null
   setHoveredId: (value: React.SetStateAction<number | null>) => void
   handleFieldChange: (id: number, field: keyof Task, value: string) => void
+  alwaysShowEdit?: boolean
 }
 export default function EditableTask({
   id,
@@ -25,6 +26,7 @@ export default function EditableTask({
   setEditing,
   hoveredId,
   handleFieldChange,
+  alwaysShowEdit = false,
 }: EditableTaskProps) {
   return (
     <>
@@ -55,7 +57,7 @@ export default function EditableTask({
       ) : (
         <div className="task-cell-content">
           <p>{task}</p>
-          {hoveredId === id && (
+          {(alwaysShowEdit || hoveredId === id) && (
             <button
               className="edit-btn"
               onClick={() => setEditing({ id, field: 'task' })}
