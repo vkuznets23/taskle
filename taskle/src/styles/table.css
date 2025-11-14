@@ -317,9 +317,9 @@ thead th:nth-child(4) {
     position: absolute;
     right: 0;
     top: 0;
-    width: 80px;
+    width: 60px;
     height: 100%;
-    background-color: #ff3b30;
+    background-color: #d32f2f;
     border: none;
     color: white;
     font-size: 20px;
@@ -340,7 +340,7 @@ thead th:nth-child(4) {
   }
 
   .swipeable-delete-btn-content span {
-    font-size: 16px;
+    font-size: 14px;
   }
 
   .swipeable-delete-btn:active {
