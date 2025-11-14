@@ -22,8 +22,6 @@ interface EditableTaskCardProps {
       field: keyof Task | null
     } | null>
   ) => void
-  hoveredId: number | null
-  setHoveredId: (value: React.SetStateAction<number | null>) => void
   handleFieldChange: (id: number, field: keyof Task, value: string) => void
   onDelete: (id: number) => void
 }
@@ -36,8 +34,6 @@ export default function EditableTaskCard({
   status,
   editing,
   setEditing,
-  hoveredId,
-  setHoveredId,
   handleFieldChange,
   onDelete,
 }: EditableTaskCardProps) {
@@ -283,18 +279,13 @@ export default function EditableTaskCard({
           transform: `translateX(${swipeOffset}px)`,
           transition: isSwiping ? 'none' : 'transform 0.3s ease-out',
         }}
-        onMouseEnter={() => setHoveredId(id)}
-        onMouseLeave={() => setHoveredId(null)}
       >
         <EditableTask
           id={id}
           task={task}
           editing={editing}
           setEditing={setEditing}
-          hoveredId={hoveredId}
-          setHoveredId={setHoveredId}
           handleFieldChange={handleFieldChange}
-          alwaysShowEdit={true}
         />
         <div className="task-card-actions">
           <EditableStatus

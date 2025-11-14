@@ -55,8 +55,6 @@ export default function TableView({
               tag={tag}
               editing={editing}
               setEditing={setEditing}
-              hoveredId={hoveredId}
-              setHoveredId={setHoveredId}
               handleFieldChange={handleFieldChange}
               onDelete={handelDeleteTask}
             />
@@ -90,8 +88,6 @@ export default function TableView({
                 task={task}
                 editing={editing}
                 setEditing={setEditing}
-                hoveredId={hoveredId}
-                setHoveredId={setHoveredId}
                 handleFieldChange={handleFieldChange}
               />
 

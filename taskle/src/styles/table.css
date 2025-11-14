@@ -171,6 +171,10 @@ thead th:nth-child(4) {
   gap: 10px;
 }
 
+.task-cell-content:hover {
+  cursor: pointer;
+}
+
 .priority {
   position: relative;
 }
@@ -211,26 +215,13 @@ thead th:nth-child(4) {
   resize: vertical;
   line-height: 1.4;
   box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .task-textarea:focus {
   border-color: var(--border-color);
   background-color: var(--bg-color);
   color: var(--text-color);
-}
-
-.edit-btn {
-  border: none;
-  cursor: pointer;
-  font-size: 18px;
-  width: 45px;
-  color: var(--text-color);
-  background: transparent;
-  aspect-ratio: 1/1;
-}
-
-.edit-btn:hover {
-  transform: scale(105%);
 }
 
 /* delete */
