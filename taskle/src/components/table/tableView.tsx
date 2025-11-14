@@ -58,6 +58,7 @@ export default function TableView({
               hoveredId={hoveredId}
               setHoveredId={setHoveredId}
               handleFieldChange={handleFieldChange}
+              onDelete={handelDeleteTask}
             />
           )
         })}

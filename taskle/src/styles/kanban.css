@@ -90,3 +90,30 @@
     opacity: 1;
   }
 }
+
+/* 870-750px width */
+@media (max-width: 870px) {
+  .kanban-column {
+    padding: 10px;
+    min-width: 200px;
+  }
+
+  .kanban-card {
+    padding: 20px;
+    border-radius: 20px;
+  }
+
+  .kanban-card p {
+    font-size: 16px;
+  }
+
+  .kanban-meta {
+    margin-top: 15px;
+  }
+
+  .kanban-drop-placeholder {
+    padding: 20px;
+    min-height: 100px;
+    border-radius: 20px;
+  }
+}

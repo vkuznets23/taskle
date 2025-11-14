@@ -276,12 +276,25 @@ thead th:nth-child(4) {
   }
 }
 
+.task-card-wrapper {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
 .task-card {
   display: flex;
   flex-direction: column;
   padding-bottom: 20px;
   padding-top: 20px;
   border-top: 1px solid black;
+  position: relative;
+  z-index: 1;
+}
+
+.swipeable-card {
+  touch-action: pan-y pan-x;
+  will-change: transform;
 }
 
 .task-card-actions {
@@ -296,5 +309,39 @@ thead th:nth-child(4) {
 
   .task-textarea {
     margin-bottom: 15px;
+  }
+
+  .swipeable-delete-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 80px;
+    height: 100%;
+    background-color: #ff3b30;
+    border: none;
+    color: white;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    pointer-events: auto;
+    z-index: 2;
+  }
+
+  .swipeable-delete-btn-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .swipeable-delete-btn-content span {
+    font-size: 16px;
+  }
+
+  .swipeable-delete-btn:active {
+    transform: translateX(0) scale(0.98) !important;
   }
 }
