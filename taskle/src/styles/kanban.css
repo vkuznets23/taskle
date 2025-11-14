@@ -34,6 +34,7 @@
   border-radius: 30px;
   border: 1px solid black;
   padding: 30px;
+  cursor: pointer;
 }
 
 .kanban-card p {
@@ -75,7 +76,7 @@
   border: 2px dashed #66dc7e;
   border-radius: 30px;
   padding: 30px;
-  min-height: 80px;
+  min-height: 130px;
   animation: pulse 1.5s ease-in-out infinite;
   box-sizing: border-box;
 }
