@@ -19,7 +19,17 @@ export default function DeleteCell({
     <td className="delete-cell">
       {showDelete && (
         <button className="delete-btn" onClick={() => handelDeleteTask(id)}>
-          <RiDeleteBin5Line />
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '5px',
+            }}
+          >
+            <RiDeleteBin5Line />
+            <span style={{ fontSize: '14px' }}>Delete</span>
+          </div>
         </button>
       )}
     </td>

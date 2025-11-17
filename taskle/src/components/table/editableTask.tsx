@@ -1,4 +1,3 @@
-import { MdEdit } from 'react-icons/md'
 import type { Task } from '../../types/taskTypes'
 
 interface EditableTaskProps {
@@ -14,8 +13,6 @@ interface EditableTaskProps {
       field: keyof Task | null
     } | null>
   ) => void
-  hoveredId: number | null
-  setHoveredId: (value: React.SetStateAction<number | null>) => void
   handleFieldChange: (id: number, field: keyof Task, value: string) => void
 }
 export default function EditableTask({
@@ -23,7 +20,6 @@ export default function EditableTask({
   task,
   editing,
   setEditing,
-  hoveredId,
   handleFieldChange,
 }: EditableTaskProps) {
   return (
@@ -53,16 +49,12 @@ export default function EditableTask({
           }}
         />
       ) : (
-        <div className="task-cell-content">
+        <div
+          className="task-cell-content"
+          title="Edit the task"
+          onClick={() => setEditing({ id, field: 'task' })}
+        >
           <p>{task}</p>
-          {hoveredId === id && (
-            <button
-              className="edit-btn"
-              onClick={() => setEditing({ id, field: 'task' })}
-            >
-              <MdEdit />
-            </button>
-          )}
         </div>
       )}
     </>

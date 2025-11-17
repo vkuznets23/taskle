@@ -47,37 +47,20 @@
   color: var(--text-color);
 }
 
-.form label {
+.form-textarea .sr-only {
   position: absolute;
-  left: 20px;
-  top: 12px;
-  color: var(--text-color);
-  pointer-events: none;
-  transition: all 0.3s ease;
-  background-color: var(--bg-color);
-}
-
-.form textarea:focus + label {
-  top: -8px;
-  left: 15px;
-  font-size: 12px;
-  padding: 0 6px;
-  color: #52c86a;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 
 .form textarea.textarea-error {
   border-color: #fa713c;
-}
-
-.form textarea.textarea-error + label {
-  color: #fa713c;
-}
-
-.form textarea:not(:placeholder-shown) + label {
-  top: -8px;
-  left: 15px;
-  font-size: 12px;
-  padding: 0 6px;
 }
 
 .close-btn {
@@ -92,4 +75,21 @@
   color: white;
   top: 20px;
   right: 20px;
+}
+
+.priority-selector-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.priority-label {
+  font-size: 12px;
+  color: var(--text-color);
+  text-transform: lowercase;
+  margin: 0;
+  padding: 0;
+  position: static;
+  pointer-events: auto;
+  background-color: transparent;
 }

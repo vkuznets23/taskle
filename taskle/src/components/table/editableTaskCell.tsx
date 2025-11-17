@@ -14,8 +14,6 @@ interface EditableTaskCellProps {
       field: keyof Task | null
     } | null>
   ) => void
-  hoveredId: number | null
-  setHoveredId: (value: React.SetStateAction<number | null>) => void
   handleFieldChange: (id: number, field: keyof Task, value: string) => void
 }
 
@@ -24,23 +22,15 @@ export default function EditableTaskCell({
   task,
   editing,
   setEditing,
-  hoveredId,
-  setHoveredId,
   handleFieldChange,
 }: EditableTaskCellProps) {
   return (
-    <td
-      className="task-cell"
-      onMouseEnter={() => setHoveredId(id)}
-      onMouseLeave={() => setHoveredId(null)}
-    >
+    <td className="task-cell">
       <EditableTask
         id={id}
         task={task}
         editing={editing}
         setEditing={setEditing}
-        hoveredId={hoveredId}
-        setHoveredId={setHoveredId}
         handleFieldChange={handleFieldChange}
       />
     </td>

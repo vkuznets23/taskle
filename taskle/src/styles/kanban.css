@@ -1,6 +1,5 @@
 .kanban {
   display: flex;
-  gap: 20px;
   align-items: flex-start;
   overflow-x: hidden;
   overflow-y: hidden;
@@ -12,7 +11,16 @@
 .kanban-column {
   flex: 1;
   padding: 15px;
+  padding-top: 0px;
   min-width: 250px;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.kanban-column.over {
+  border: 2px solid #66dc7e;
+  background-color: rgba(102, 220, 126, 0.05);
 }
 
 .kanban-tasks {
@@ -26,6 +34,7 @@
   border-radius: 30px;
   border: 1px solid black;
   padding: 30px;
+  cursor: grab;
 }
 
 .kanban-card p {
@@ -60,4 +69,51 @@
   color: black;
   display: flex;
   gap: 5px;
+}
+
+.kanban-drop-placeholder {
+  background: rgba(102, 220, 126, 0.1);
+  border: 2px dashed #66dc7e;
+  border-radius: 30px;
+  padding: 30px;
+  min-height: 130px;
+  animation: pulse 1.5s ease-in-out infinite;
+  box-sizing: border-box;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* 870-750px width */
+@media (max-width: 870px) {
+  .kanban-column {
+    padding: 10px;
+    min-width: 200px;
+  }
+
+  .kanban-card {
+    padding: 20px;
+    border-radius: 20px;
+  }
+
+  .kanban-card p {
+    font-size: 16px;
+  }
+
+  .kanban-meta {
+    margin-top: 15px;
+  }
+
+  .kanban-drop-placeholder {
+    padding: 20px;
+    min-height: 100px;
+    border-radius: 20px;
+  }
 }

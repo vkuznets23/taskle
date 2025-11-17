@@ -162,17 +162,6 @@ thead th:nth-child(4) {
   width: 100px;
 }
 
-@media (max-width: 850px) {
-  .status-div {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid black;
-    border-radius: 50px;
-    padding: 0px;
-  }
-}
-
 .task-cell {
   padding-right: 80px;
 }
@@ -180,6 +169,10 @@ thead th:nth-child(4) {
 .task-cell-content {
   display: flex;
   gap: 10px;
+}
+
+.task-cell-content:hover {
+  cursor: pointer;
 }
 
 .priority {
@@ -222,47 +215,31 @@ thead th:nth-child(4) {
   resize: vertical;
   line-height: 1.4;
   box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .task-textarea:focus {
   border-color: var(--border-color);
-  background-color: #f7f7f7;
-}
-
-.edit-btn {
-  border: none;
-  cursor: pointer;
-  font-size: 18px;
-  width: 45px;
+  background-color: var(--bg-color);
   color: var(--text-color);
-  background: transparent;
-  aspect-ratio: 1/1;
-}
-
-.edit-btn:hover {
-  transform: scale(105%);
 }
 
 /* delete */
 .delete-cell {
   width: 80px;
   text-align: right;
-  padding-right: 10px;
+  padding-top: 0px;
+  padding-bottom: 0px;
 }
 
 .delete-btn {
-  background: none;
   border: none;
   cursor: pointer;
-  width: 45px;
-  aspect-ratio: 1/1;
   font-size: 18px;
-  color: var(--text-color);
-  background: transparent;
-}
-
-.delete-btn:hover {
-  transform: scale(105%);
+  width: 60px;
+  background-color: #d32f2f;
+  color: white;
+  height: 100%;
 }
 
 @media (max-width: 1000px) {
@@ -276,12 +253,31 @@ thead th:nth-child(4) {
   }
 }
 
+.task-card-wrapper {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
 .task-card {
   display: flex;
   flex-direction: column;
   padding-bottom: 20px;
-  padding-top: 20px;
-  border-top: 1px solid black;
+  padding-top: 5px;
+  border-top: 1px solid var(--border-color);
+  position: relative;
+  z-index: 1;
+}
+
+.swipeable-card {
+  touch-action: pan-y pan-x;
+  will-change: transform;
+  cursor: grab;
+  user-select: none;
+}
+
+.swipeable-card:active {
+  cursor: grabbing;
 }
 
 .task-card-actions {
@@ -289,12 +285,56 @@ thead th:nth-child(4) {
   gap: 20px;
 }
 
-@media (max-width: 850px) {
+@media (max-width: 900px) {
+  .status-div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-color);
+    border-radius: 50px;
+    padding: 0px;
+  }
+
   .task-cell-content {
     margin-bottom: 10px;
   }
 
   .task-textarea {
+    margin-top: 15px;
     margin-bottom: 15px;
+  }
+
+  .swipeable-delete-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 60px;
+    height: 100%;
+    background-color: #d32f2f;
+    border: none;
+    color: white;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    pointer-events: auto;
+    z-index: 2;
+  }
+
+  .swipeable-delete-btn-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .swipeable-delete-btn-content span {
+    font-size: 14px;
+  }
+
+  .swipeable-delete-btn:active {
+    transform: translateX(0) scale(0.98) !important;
   }
 }

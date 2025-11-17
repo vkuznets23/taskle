@@ -37,11 +37,11 @@ export default function TableView({
   }
 
   const is1020 = useBreakpoint('(max-width: 1020px)')
-  const is850 = useBreakpoint('(max-width: 850px)')
+  const is900 = useBreakpoint('(max-width: 900px)')
 
   if (tasks.length === 0) return <NoTasks />
 
-  if (is850) {
+  if (is900) {
     return (
       <div>
         {tasks.map(({ id, task, priority, tag, status }) => {
@@ -55,9 +55,8 @@ export default function TableView({
               tag={tag}
               editing={editing}
               setEditing={setEditing}
-              hoveredId={hoveredId}
-              setHoveredId={setHoveredId}
               handleFieldChange={handleFieldChange}
+              onDelete={handelDeleteTask}
             />
           )
         })}
@@ -89,8 +88,6 @@ export default function TableView({
                 task={task}
                 editing={editing}
                 setEditing={setEditing}
-                hoveredId={hoveredId}
-                setHoveredId={setHoveredId}
                 handleFieldChange={handleFieldChange}
               />
 

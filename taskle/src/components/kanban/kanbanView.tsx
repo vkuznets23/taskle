@@ -2,8 +2,13 @@ import type { Task } from '../../types/taskTypes'
 import '../../styles/kanban.css'
 import generatePriorityIcon from '../../utils/generatePriorityIcon'
 import generateTagIcon from '../../utils/generateTagIcon'
-import { DndContext, type DragEndEvent, type Modifier } from '@dnd-kit/core'
-import { useRef, useMemo } from 'react'
+import {
+  DndContext,
+  type DragEndEvent,
+  type DragStartEvent,
+  type Modifier,
+} from '@dnd-kit/core'
+import { useRef, useMemo, useState } from 'react'
 import { Card, Column } from '../.'
 
 export default function KanbanView({
@@ -50,13 +55,27 @@ export default function KanbanView({
     }
   }, [])
 
+  const [draggingTaskStatus, setDraggingTaskStatus] = useState<
+    Task['status'] | null
+  >(null)
+
   const counts = columns.reduce((acc, col) => {
     acc[col] = tasks.filter((t) => t.status === col).length
     return acc
   }, {} as Record<string, number>)
 
+  const handleDragStart = (event: DragStartEvent) => {
+    const taskId = Number(event.active.id)
+    const task = tasks.find((t) => t.id === taskId)
+    if (task) {
+      setDraggingTaskStatus(task.status)
+    }
+  }
+
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event
+
+    setDraggingTaskStatus(null)
 
     if (!over) return
 
@@ -68,6 +87,7 @@ export default function KanbanView({
 
   return (
     <DndContext
+      onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
       modifiers={[restrictToKanbanContainer]}
     >
@@ -79,6 +99,7 @@ export default function KanbanView({
             title={`${col
               .replace('IN_PROGRESS', 'ACTIVE')
               .replace('TODO', 'TO DO')} (${counts[col] || 0})`}
+            draggingFromStatus={draggingTaskStatus}
           >
             {tasks
               .filter((task) => task.status === col)
