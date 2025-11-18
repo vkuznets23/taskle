@@ -69,3 +69,26 @@ describe('POST /register', () => {
     expect(prismaMock.user.create).toHaveBeenCalled()
   })
 })
+
+describe('POST /login', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+    jest.resetAllMocks()
+  })
+
+  test('should return 400 if email or password is missing', async () => {
+    const res = await request(app).post('/login').send({})
+    expect(res.status).toBe(400)
+    expect(res.body.error).toBe('Email and password are required.')
+    expect(prismaMock.user.create).not.toHaveBeenCalled()
+  })
+
+  test('should return 401 if user does not exist', async () => {
+    prismaMock.user.findUnique.mockResolvedValueOnce(null)
+    const res = await request(app)
+      .post('/login')
+      .send({ email: 'nonexistent@test.com', password: 'Aa123456!' })
+    expect(res.status).toBe(401)
+    expect(res.body.error).toBe('Invalid email or password.')
+  })
+})
