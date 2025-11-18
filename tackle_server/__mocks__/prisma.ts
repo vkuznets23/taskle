@@ -4,8 +4,11 @@ import { mockDeep, DeepMockProxy } from 'jest-mock-extended'
 export const prismaMock =
   mockDeep<OriginalPrismaClient>() as DeepMockProxy<OriginalPrismaClient>
 
-export default class PrismaClient {
+class PrismaClient {
   constructor() {
     return prismaMock
   }
 }
+
+export { PrismaClient }
+export default PrismaClient
