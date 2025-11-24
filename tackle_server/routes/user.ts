@@ -6,6 +6,9 @@ import jwt, { JwtPayload } from 'jsonwebtoken'
 const prisma = new PrismaClient()
 const router = express.Router()
 
+const jwtSecret = process.env.JWT_SECRET as string
+const jwtRefreshSecret = process.env.JWT_REFRESH_SECRET as string
+
 // Register a new user
 router.post('/register', async (req, res) => {
   try {
@@ -61,18 +64,14 @@ router.post('/login', async (req, res) => {
     }
 
     // generate a short lived token
-    const token = jwt.sign(
-      { userId: user.id, email: user.email },
-      process.env.JWT_SECRET as string,
-      { expiresIn: '1h' }
-    )
+    const token = jwt.sign({ userId: user.id, email: user.email }, jwtSecret, {
+      expiresIn: '1h',
+    })
 
     // generate a long lived token
-    const refreshToken = jwt.sign(
-      { userId: user.id },
-      process.env.JWT_REFRESH_SECRET as string,
-      { expiresIn: '7d' }
-    )
+    const refreshToken = jwt.sign({ userId: user.id }, jwtRefreshSecret, {
+      expiresIn: '7d',
+    })
 
     // save to cookie
     res.cookie('accessToken', token, {
@@ -107,13 +106,10 @@ router.post('/refresh', async (req, res) => {
     return res.status(401).json({ error: 'Missing refresh token' })
 
   try {
-    const decoded = jwt.verify(
-      refreshToken,
-      process.env.JWT_REFRESH_SECRET as string
-    )
+    const decoded = jwt.verify(refreshToken, jwtRefreshSecret)
     const newAccessToken = jwt.sign(
       { userId: (decoded as JwtPayload).userId },
-      process.env.JWT_SECRET as string,
+      jwtSecret,
       { expiresIn: '1h' }
     )
 
@@ -137,10 +133,7 @@ router.get('/me', async (req, res) => {
     return res.status(401).json({ error: 'No token provided' })
   }
   try {
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET as string
-    ) as JwtPayload
+    const decoded = jwt.verify(token, jwtSecret) as JwtPayload
     const user = await prisma.user.findUnique({
       where: { id: decoded.userId },
       select: { id: true, email: true, createdAt: true },
