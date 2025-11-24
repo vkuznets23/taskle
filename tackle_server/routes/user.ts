@@ -76,13 +76,15 @@ router.post('/login', async (req, res) => {
     // save to cookie
     res.cookie('accessToken', token, {
       httpOnly: true, // protection from XSS
-      sameSite: 'lax',
+      sameSite: 'none',
+      secure: true,
       maxAge: 60 * 60 * 1000, // 1 hour
     })
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true, // protection from XSS
-      sameSite: 'lax',
+      sameSite: 'none',
+      secure: true,
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     })
 
@@ -115,7 +117,8 @@ router.post('/refresh', async (req, res) => {
 
     res.cookie('accessToken', newAccessToken, {
       httpOnly: true,
-      sameSite: 'lax',
+      sameSite: 'none',
+      secure: true,
       maxAge: 60 * 60 * 1000,
     })
 
