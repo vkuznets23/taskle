@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import '../../styles/MultiFilter.css'
+import '../../styles/multiFilter.css'
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
 
 interface MultiFilterDropdownProps {
