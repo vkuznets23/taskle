@@ -1,7 +1,7 @@
 import { MdOutlineWork } from 'react-icons/md'
 import { FaHeart } from 'react-icons/fa6'
 import { FaBook } from 'react-icons/fa'
-import { type Tag } from '../components/dashboard'
+import { type Tag } from '../types/taskTypes'
 
 export default function generateTagIcon(tag: Tag) {
   if (tag === 'PERSONAL')
