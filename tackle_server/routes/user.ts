@@ -1,4 +1,4 @@
-import { PrismaClient } from '../generated/prisma/index.js'
+import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcrypt'
 import express from 'express'
 import jwt, { JwtPayload } from 'jsonwebtoken'
@@ -8,6 +8,13 @@ const router = express.Router()
 
 const jwtSecret = process.env.JWT_SECRET as string
 const jwtRefreshSecret = process.env.JWT_REFRESH_SECRET as string
+const isProd = process.env.NODE_ENV === 'production'
+const sameSiteSetting: 'lax' | 'strict' | 'none' = isProd ? 'none' : 'lax'
+const baseCookieOptions = {
+  httpOnly: true,
+  sameSite: sameSiteSetting,
+  secure: isProd,
+} as const
 
 // Register a new user
 router.post('/register', async (req, res) => {
@@ -75,16 +82,12 @@ router.post('/login', async (req, res) => {
 
     // save to cookie
     res.cookie('accessToken', token, {
-      httpOnly: true, // protection from XSS
-      sameSite: 'none',
-      secure: true,
+      ...baseCookieOptions,
       maxAge: 60 * 60 * 1000, // 1 hour
     })
 
     res.cookie('refreshToken', refreshToken, {
-      httpOnly: true, // protection from XSS
-      sameSite: 'none',
-      secure: true,
+      ...baseCookieOptions,
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     })
 
@@ -116,9 +119,7 @@ router.post('/refresh', async (req, res) => {
     )
 
     res.cookie('accessToken', newAccessToken, {
-      httpOnly: true,
-      sameSite: 'none',
-      secure: true,
+      ...baseCookieOptions,
       maxAge: 60 * 60 * 1000,
     })
 
@@ -153,8 +154,8 @@ router.get('/me', async (req, res) => {
 
 // Logout
 router.post('/logout', (req, res) => {
-  res.clearCookie('accessToken')
-  res.clearCookie('refreshToken')
+  res.clearCookie('accessToken', baseCookieOptions)
+  res.clearCookie('refreshToken', baseCookieOptions)
   res.json({ message: 'Logged out successfully' })
 })
 

@@ -7,6 +7,9 @@ import taskRoutes from './routes/taskRoutes'
 
 const app = express()
 
+// Behind proxies (Render, Vercel) we must trust the first hop so secure cookies work
+app.set('trust proxy', 1)
+
 // Middleware
 app.use(
   cors({
