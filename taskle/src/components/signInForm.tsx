@@ -5,6 +5,7 @@ import InputField from './inputField'
 import InputError from './inputError'
 import SubmitButton from './submitButton'
 import { useAuth } from '../hooks/useAuth'
+import { API_URL } from '../types/api_url'
 
 export default function SignInform() {
   const [email, setEmail] = useState<string>('')
@@ -50,7 +51,7 @@ export default function SignInform() {
     }
 
     try {
-      const res = await fetch('http://localhost:3005/api/users/login', {
+      const res = await fetch(`${API_URL}/api/users/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

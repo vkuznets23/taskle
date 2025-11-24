@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Navbar, TasksList, Loader } from '../components'
 import type { Task } from '../types/taskTypes'
+import { API_URL } from '../types/api_url'
 
 export interface Errors {
   tasksErrorMsg: string
@@ -14,7 +15,7 @@ export function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true)
-      const res = await fetch('http://localhost:3005/api/tasks/tasks', {
+      const res = await fetch(`${API_URL}/api/tasks/tasks`, {
         method: 'GET',
         credentials: 'include',
       })

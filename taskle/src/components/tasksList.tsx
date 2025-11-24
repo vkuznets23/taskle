@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { Task } from '../types/taskTypes'
 import { TableView, KanbanView, NoTasks, NavPanel } from '../components'
+import { API_URL } from '../types/api_url'
 
 const priorityOrder: Record<string, number> = {
   LOW: 1,
@@ -28,7 +29,7 @@ export default function TasksList({
     )
 
     try {
-      const res = await fetch(`http://localhost:3005/api/tasks/tasks/${id}`, {
+      const res = await fetch(`${API_URL}/api/tasks/tasks/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

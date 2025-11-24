@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState, type ReactNode } from 'react'
 import type { User } from '../types/registrationTypes'
+import { API_URL } from '../types/api_url'
 
 interface AuthContextType {
   user: User | null
@@ -17,7 +18,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const fetchUser = async () => {
     try {
       setLoading(true)
-      const res = await fetch('http://localhost:3005/api/users/me', {
+      const res = await fetch(`${API_URL}/api/users/me`, {
         method: 'GET',
         credentials: 'include', // important to send cookies
       })
@@ -35,7 +36,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = async () => {
     try {
-      const res = await fetch('http://localhost:3005/api/users/logout', {
+      const res = await fetch(`${API_URL}/api/users/logout`, {
         method: 'POST',
         credentials: 'include',
       })

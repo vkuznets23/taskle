@@ -4,6 +4,7 @@ import { type Error } from '../types/registrationTypes'
 import InputField from './inputField'
 import InputError from './inputError'
 import SubmitButton from './submitButton'
+import { API_URL } from '../types/api_url'
 
 export default function RegistrationForm() {
   const [email, setEmail] = useState<string>('')
@@ -60,7 +61,7 @@ export default function RegistrationForm() {
     setError({})
 
     try {
-      const res = await fetch('http://localhost:3005/api/users/register', {
+      const res = await fetch(`${API_URL}/api/users/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

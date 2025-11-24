@@ -9,6 +9,7 @@ import '../../styles/table.css'
 import { IoIosArrowDown } from 'react-icons/io'
 import { IoCloseSharp } from 'react-icons/io5'
 import PrioritySelector from '../table/prioritySelector'
+import { API_URL } from '../../types/api_url'
 
 export default function FormTasks({
   setTasks,
@@ -40,7 +41,7 @@ export default function FormTasks({
     }
 
     try {
-      const res = await fetch('http://localhost:3005/api/tasks/tasks', {
+      const res = await fetch(`${API_URL}/api/tasks/tasks`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
