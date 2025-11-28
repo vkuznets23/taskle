@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { IoCloseSharp } from 'react-icons/io5'
 
 function formatTime(seconds: number) {
   const m = Math.floor(seconds / 60)
@@ -8,7 +9,8 @@ function formatTime(seconds: number) {
 
 export default function Timer() {
   const [isRunning, setIsRunning] = useState(false)
-  const [time, setTime] = useState(1 * 60) // timer for 5 mins
+  const [time, setTime] = useState(1 * 60)
+  const [modalOpen, setModalOpen] = useState(false)
 
   const endRef = useRef<number | null>(null)
 
@@ -44,20 +46,46 @@ export default function Timer() {
   }, [isRunning, time])
 
   return (
-    <div>
-      <p>{formatTime(time)}</p>
-      {!isRunning ? (
-        <button onClick={() => setIsRunning(!isRunning)}>start</button>
-      ) : (
-        <button
-          onClick={() => {
-            setIsRunning(!isRunning)
-            endRef.current = null
-          }}
-        >
-          pause
-        </button>
+    <>
+      <button onClick={() => setModalOpen(true)}>timer</button>
+      {modalOpen && (
+        <div className="modal">
+          <button
+            className="close-btn"
+            onClick={() => {
+              setModalOpen(false)
+              // need to reset timer
+              setIsRunning(false)
+            }}
+          >
+            <IoCloseSharp />
+          </button>
+          <div
+            style={{
+              backgroundColor: 'white',
+              width: '150px',
+              height: '150px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <p>{formatTime(time)}</p>
+            {!isRunning ? (
+              <button onClick={() => setIsRunning(!isRunning)}>start</button>
+            ) : (
+              <button
+                onClick={() => {
+                  setIsRunning(!isRunning)
+                  endRef.current = null
+                }}
+              >
+                pause
+              </button>
+            )}
+          </div>
+        </div>
       )}
-    </div>
+    </>
   )
 }
