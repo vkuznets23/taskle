@@ -45,6 +45,12 @@ export default function Timer() {
     return () => cancelAnimationFrame(animationId)
   }, [isRunning, time])
 
+  const reset = () => {
+    setTime(1 * 60)
+    setIsRunning(false)
+    endRef.current = null
+  }
+
   return (
     <>
       <button onClick={() => setModalOpen(true)}>timer</button>
@@ -54,8 +60,7 @@ export default function Timer() {
             className="close-btn"
             onClick={() => {
               setModalOpen(false)
-              // need to reset timer
-              setIsRunning(false)
+              reset()
             }}
           >
             <IoCloseSharp />
