@@ -82,8 +82,8 @@ export default function Timer() {
           <div
             style={{
               backgroundColor: 'white',
-              width: '320px',
-              height: '340px',
+              width: '260px',
+              height: '300px',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
