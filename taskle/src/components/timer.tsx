@@ -82,8 +82,8 @@ export default function Timer() {
           <div
             style={{
               backgroundColor: 'white',
-              width: '260px',
-              height: '300px',
+              width: '230px',
+              height: '280px',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
@@ -174,8 +174,8 @@ export default function Timer() {
                 loop
                 muted
                 style={{
-                  width: '200px',
-                  height: '200px',
+                  width: '180px',
+                  height: '180px',
                 }}
               />
             )}
