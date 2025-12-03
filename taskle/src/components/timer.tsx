@@ -50,17 +50,15 @@ export default function Timer() {
 
   const radius = 80
   const strokeWidth = 10
-  const circumference = 2 * Math.PI * radius // длинна окружности
-  const progress = 1 - timeLeft / TOTAL_TIME // процент который прошел от времени
+  const circumference = 2 * Math.PI * radius
+  const rawProgress = 1 - timeLeft / TOTAL_TIME
+  const progress = Math.max(0, Math.min(1, rawProgress))
 
-  // since its not a circle but half circle
-  const arcLength = circumference * 0.8
-  const gapLength = circumference - arcLength
+  const bgDasharray = `${circumference}`
 
-  const baseOffset = gapLength / 2 // move start
-  const bgDasharray = `${arcLength} ${gapLength}`
-  const progressDasharray = `${circumference}` // весь круг
-  const progressDashoffset = baseOffset + arcLength * (1 - progress)
+  const progressLength = circumference * progress
+  const progressDasharray = `${progressLength} ${circumference}`
+  const progressDashoffset = 0
 
   return (
     <>
@@ -102,7 +100,7 @@ export default function Timer() {
                 width={2 * (radius + strokeWidth)}
                 height={2 * (radius + strokeWidth)}
               >
-                {/* background arc */}
+                {/* background circle */}
                 <circle
                   cx={radius + strokeWidth}
                   cy={radius + strokeWidth}
@@ -112,12 +110,11 @@ export default function Timer() {
                   strokeWidth={strokeWidth}
                   strokeLinecap="round"
                   strokeDasharray={bgDasharray}
-                  strokeDashoffset={baseOffset}
-                  transform={`rotate(160 ${radius + strokeWidth} ${
+                  transform={`rotate(-90 ${radius + strokeWidth} ${
                     radius + strokeWidth
                   })`}
                 />
-                {/* progress arc */}
+                {/* progress circle */}
                 <circle
                   cx={radius + strokeWidth}
                   cy={radius + strokeWidth}
@@ -128,7 +125,7 @@ export default function Timer() {
                   strokeLinecap="round"
                   strokeDasharray={progressDasharray}
                   strokeDashoffset={progressDashoffset}
-                  transform={`rotate(110 ${radius + strokeWidth} ${
+                  transform={`rotate(-90 ${radius + strokeWidth} ${
                     radius + strokeWidth
                   })`}
                 />
