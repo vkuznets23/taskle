@@ -172,8 +172,8 @@ export default function Timer() {
                 }
               }}
               style={{
-                width: 70,
-                height: 70,
+                width: 50,
+                height: 50,
                 borderRadius: '999px',
                 border: 'none',
                 backgroundColor: '#4f46e5',
@@ -194,8 +194,8 @@ export default function Timer() {
                 >
                   <span
                     style={{
-                      width: 6,
-                      height: 18,
+                      width: 4,
+                      height: 14,
                       borderRadius: 3,
                       backgroundColor: 'white',
                       display: 'block',
@@ -203,8 +203,8 @@ export default function Timer() {
                   />
                   <span
                     style={{
-                      width: 6,
-                      height: 18,
+                      width: 4,
+                      height: 14,
                       borderRadius: 3,
                       backgroundColor: 'white',
                       display: 'block',
