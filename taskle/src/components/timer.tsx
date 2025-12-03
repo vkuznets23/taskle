@@ -1,15 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { IoCloseSharp } from 'react-icons/io5'
+import { formatTime } from '../utils/formatTime'
 
-function formatTime(seconds: number) {
-  const m = Math.floor(seconds / 60)
-  const s = seconds % 60
-  return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
-}
+const TOTAL_TIME = 60
 
 export default function Timer() {
   const [isRunning, setIsRunning] = useState(false)
-  const [time, setTime] = useState(1 * 60)
+  const [timeLeft, setTimeLeft] = useState(TOTAL_TIME)
   const [modalOpen, setModalOpen] = useState(false)
 
   const endRef = useRef<number | null>(null)
@@ -18,7 +15,7 @@ export default function Timer() {
     if (!isRunning) return
 
     if (!endRef.current) {
-      endRef.current = Date.now() + time * 1000
+      endRef.current = Date.now() + timeLeft * 1000
     }
 
     let animationId: number
@@ -29,7 +26,7 @@ export default function Timer() {
         Math.floor((endRef.current! - Date.now()) / 1000)
       )
 
-      setTime(diff)
+      setTimeLeft(diff)
 
       if (diff === 0) {
         endRef.current = null
@@ -43,13 +40,27 @@ export default function Timer() {
     tick()
 
     return () => cancelAnimationFrame(animationId)
-  }, [isRunning, time])
+  }, [isRunning, timeLeft])
 
   const reset = () => {
-    setTime(1 * 60)
+    setTimeLeft(TOTAL_TIME)
     setIsRunning(false)
     endRef.current = null
   }
+
+  const radius = 80
+  const strokeWidth = 10
+  const circumference = 2 * Math.PI * radius // длинна окружности
+  const progress = 1 - timeLeft / TOTAL_TIME // процент который прошел от времени
+
+  // since its not a circle but half circle
+  const arcLength = circumference * 0.8
+  const gapLength = circumference - arcLength
+
+  const baseOffset = gapLength / 2 // move start
+  const bgDasharray = `${arcLength} ${gapLength}`
+  const progressDasharray = `${circumference}` // весь круг
+  const progressDashoffset = baseOffset + arcLength * (1 - progress)
 
   return (
     <>
@@ -68,26 +79,155 @@ export default function Timer() {
           <div
             style={{
               backgroundColor: 'white',
-              width: '150px',
-              height: '150px',
+              width: '320px',
+              height: '340px',
               display: 'flex',
+              flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
+              gap: '20px',
+              borderRadius: '24px',
+              boxShadow: '0 12px 32px rgba(0,0,0,0.12)',
+              padding: '20px',
             }}
           >
-            <p>{formatTime(time)}</p>
-            {!isRunning ? (
-              <button onClick={() => setIsRunning(!isRunning)}>start</button>
-            ) : (
-              <button
-                onClick={() => {
-                  setIsRunning(!isRunning)
-                  endRef.current = null
+            <div
+              style={{
+                position: 'relative',
+                width: 2 * (radius + strokeWidth),
+                height: 2 * (radius + strokeWidth),
+              }}
+            >
+              <svg
+                width={2 * (radius + strokeWidth)}
+                height={2 * (radius + strokeWidth)}
+              >
+                {/* background arc */}
+                <circle
+                  cx={radius + strokeWidth}
+                  cy={radius + strokeWidth}
+                  r={radius}
+                  fill="none"
+                  stroke="#f1f1f1"
+                  strokeWidth={strokeWidth}
+                  strokeLinecap="round"
+                  strokeDasharray={bgDasharray}
+                  strokeDashoffset={baseOffset}
+                  transform={`rotate(160 ${radius + strokeWidth} ${
+                    radius + strokeWidth
+                  })`}
+                />
+                {/* progress arc */}
+                <circle
+                  cx={radius + strokeWidth}
+                  cy={radius + strokeWidth}
+                  r={radius}
+                  fill="none"
+                  stroke="#4f46e5"
+                  strokeWidth={strokeWidth}
+                  strokeLinecap="round"
+                  strokeDasharray={progressDasharray}
+                  strokeDashoffset={progressDashoffset}
+                  transform={`rotate(110 ${radius + strokeWidth} ${
+                    radius + strokeWidth
+                  })`}
+                />
+              </svg>
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexDirection: 'column',
+                  gap: '6px',
+                  pointerEvents: 'none',
                 }}
               >
-                pause
-              </button>
-            )}
+                <span
+                  style={{
+                    fontSize: '12px',
+                    color: '#9ca3af',
+                  }}
+                >
+                  Focus session
+                </span>
+                <span
+                  style={{
+                    fontVariantNumeric: 'tabular-nums',
+                    fontSize: '24px',
+                    fontWeight: 600,
+                  }}
+                >
+                  {formatTime(timeLeft)}
+                </span>
+              </div>
+            </div>
+
+            <button
+              onClick={() => {
+                if (isRunning) {
+                  setIsRunning(false)
+                  endRef.current = null
+                } else {
+                  setIsRunning(true)
+                }
+              }}
+              style={{
+                width: 70,
+                height: 70,
+                borderRadius: '999px',
+                border: 'none',
+                backgroundColor: '#4f46e5',
+                color: 'white',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                boxShadow: '0 10px 24px rgba(79,70,229,0.45)',
+              }}
+            >
+              {isRunning ? (
+                <div
+                  style={{
+                    display: 'flex',
+                    gap: 4,
+                  }}
+                >
+                  <span
+                    style={{
+                      width: 6,
+                      height: 18,
+                      borderRadius: 3,
+                      backgroundColor: 'white',
+                      display: 'block',
+                    }}
+                  />
+                  <span
+                    style={{
+                      width: 6,
+                      height: 18,
+                      borderRadius: 3,
+                      backgroundColor: 'white',
+                      display: 'block',
+                    }}
+                  />
+                </div>
+              ) : (
+                <span
+                  style={{
+                    marginLeft: 3,
+                    width: 0,
+                    height: 0,
+                    borderTop: '9px solid transparent',
+                    borderBottom: '9px solid transparent',
+                    borderLeft: '14px solid white',
+                    display: 'block',
+                  }}
+                />
+              )}
+            </button>
           </div>
         </div>
       )}
