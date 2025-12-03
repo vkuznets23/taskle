@@ -2,13 +2,17 @@ import { useEffect, useRef, useState } from 'react'
 import { IoCloseSharp } from 'react-icons/io5'
 import { GrPowerReset } from 'react-icons/gr'
 import { formatTime } from '../utils/formatTime'
+import { IoMusicalNotesSharp } from 'react-icons/io5'
+import { LuTimer } from 'react-icons/lu'
+import { LuTimerOff } from 'react-icons/lu'
 
-const TOTAL_TIME = 60
+const TOTAL_TIME = 45 * 60
 
 export default function Timer() {
   const [isRunning, setIsRunning] = useState(false)
   const [timeLeft, setTimeLeft] = useState(TOTAL_TIME)
   const [modalOpen, setModalOpen] = useState(false)
+  const [zenMode, setZenMode] = useState(false)
 
   const endRef = useRef<number | null>(null)
 
@@ -90,149 +94,201 @@ export default function Timer() {
               padding: '20px',
             }}
           >
-            <div
-              style={{
-                position: 'relative',
-                width: 2 * (radius + strokeWidth),
-                height: 2 * (radius + strokeWidth),
-              }}
-            >
-              <svg
-                width={2 * (radius + strokeWidth)}
-                height={2 * (radius + strokeWidth)}
-              >
-                {/* background circle */}
-                <circle
-                  cx={radius + strokeWidth}
-                  cy={radius + strokeWidth}
-                  r={radius}
-                  fill="none"
-                  stroke="#f1f1f1"
-                  strokeWidth={strokeWidth}
-                  strokeLinecap="round"
-                  strokeDasharray={bgDasharray}
-                  transform={`rotate(-90 ${radius + strokeWidth} ${
-                    radius + strokeWidth
-                  })`}
-                />
-                {/* progress circle */}
-                <circle
-                  cx={radius + strokeWidth}
-                  cy={radius + strokeWidth}
-                  r={radius}
-                  fill="none"
-                  stroke="#4f46e5"
-                  strokeWidth={strokeWidth}
-                  strokeLinecap="round"
-                  strokeDasharray={progressDasharray}
-                  strokeDashoffset={progressDashoffset}
-                  transform={`rotate(-90 ${radius + strokeWidth} ${
-                    radius + strokeWidth
-                  })`}
-                />
-              </svg>
+            {!zenMode ? (
               <div
                 style={{
-                  position: 'absolute',
-                  inset: 0,
+                  position: 'relative',
+                  width: 2 * (radius + strokeWidth),
+                  height: 2 * (radius + strokeWidth),
+                }}
+              >
+                <svg
+                  width={2 * (radius + strokeWidth)}
+                  height={2 * (radius + strokeWidth)}
+                >
+                  {/* background circle */}
+                  <circle
+                    cx={radius + strokeWidth}
+                    cy={radius + strokeWidth}
+                    r={radius}
+                    fill="none"
+                    stroke="#f1f1f1"
+                    strokeWidth={strokeWidth}
+                    strokeLinecap="round"
+                    strokeDasharray={bgDasharray}
+                    transform={`rotate(-90 ${radius + strokeWidth} ${
+                      radius + strokeWidth
+                    })`}
+                  />
+                  {/* progress circle */}
+                  <circle
+                    cx={radius + strokeWidth}
+                    cy={radius + strokeWidth}
+                    r={radius}
+                    fill="none"
+                    stroke="#4f46e5"
+                    strokeWidth={strokeWidth}
+                    strokeLinecap="round"
+                    strokeDasharray={progressDasharray}
+                    strokeDashoffset={progressDashoffset}
+                    transform={`rotate(-90 ${radius + strokeWidth} ${
+                      radius + strokeWidth
+                    })`}
+                  />
+                </svg>
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                    gap: '6px',
+                    pointerEvents: 'none',
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: '12px',
+                      color: '#9ca3af',
+                    }}
+                  >
+                    Focus session
+                  </span>
+                  <span
+                    style={{
+                      fontVariantNumeric: 'tabular-nums',
+                      fontSize: '24px',
+                      fontWeight: 600,
+                    }}
+                  >
+                    {formatTime(timeLeft)}
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <video
+                src="/lofi.mov"
+                autoPlay
+                loop
+                muted
+                style={{
+                  width: '200px',
+                  height: '200px',
+                }}
+              />
+            )}
+            <div style={{ display: 'flex', gap: '20px' }}>
+              <button
+                style={{
+                  width: 50,
+                  height: 50,
+                  borderRadius: '999px',
+                  border: 'none',
+                  backgroundColor: '#EF89E7',
+                  color: 'white',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  flexDirection: 'column',
-                  gap: '6px',
-                  pointerEvents: 'none',
+                  cursor: 'pointer',
                 }}
               >
-                <span
-                  style={{
-                    fontSize: '12px',
-                    color: '#9ca3af',
-                  }}
-                >
-                  Focus session
-                </span>
-                <span
-                  style={{
-                    fontVariantNumeric: 'tabular-nums',
-                    fontSize: '24px',
-                    fontWeight: 600,
-                  }}
-                >
-                  {formatTime(timeLeft)}
-                </span>
-              </div>
+                <IoMusicalNotesSharp style={{ fontSize: '18px' }} />
+              </button>
+              <button
+                onClick={() => {
+                  if (isRunning) {
+                    setIsRunning(false)
+                    endRef.current = null
+                  } else if (timeLeft === 0) {
+                    setIsRunning(false)
+                    endRef.current = null
+                    setTimeLeft(TOTAL_TIME)
+                    setIsRunning(true)
+                  } else {
+                    setIsRunning(true)
+                  }
+                }}
+                style={{
+                  width: 50,
+                  height: 50,
+                  borderRadius: '999px',
+                  border: 'none',
+                  backgroundColor: '#4f46e5',
+                  color: 'white',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                }}
+              >
+                {isRunning && (
+                  <div
+                    style={{
+                      display: 'flex',
+                      gap: 4,
+                    }}
+                  >
+                    <span
+                      style={{
+                        width: 4,
+                        height: 14,
+                        borderRadius: 3,
+                        backgroundColor: 'white',
+                        display: 'block',
+                      }}
+                    />
+                    <span
+                      style={{
+                        width: 4,
+                        height: 14,
+                        borderRadius: 3,
+                        backgroundColor: 'white',
+                        display: 'block',
+                      }}
+                    />
+                  </div>
+                )}
+                {timeLeft === 0 && (
+                  <GrPowerReset style={{ fontSize: '18px' }} />
+                )}
+                {!isRunning && timeLeft !== 0 && (
+                  <span
+                    style={{
+                      marginLeft: 3,
+                      width: 0,
+                      height: 0,
+                      borderTop: '9px solid transparent',
+                      borderBottom: '9px solid transparent',
+                      borderLeft: '14px solid white',
+                      display: 'block',
+                    }}
+                  />
+                )}
+              </button>
+              <button
+                onClick={() => setZenMode(!zenMode)}
+                style={{
+                  width: 50,
+                  height: 50,
+                  borderRadius: '999px',
+                  border: 'none',
+                  backgroundColor: '#66DC7E',
+                  color: 'white',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                }}
+              >
+                {!zenMode ? (
+                  <LuTimerOff style={{ fontSize: '18px' }} />
+                ) : (
+                  <LuTimer style={{ fontSize: '18px' }} />
+                )}
+              </button>
             </div>
-
-            <button
-              onClick={() => {
-                if (isRunning) {
-                  setIsRunning(false)
-                  endRef.current = null
-                } else if (timeLeft === 0) {
-                  setIsRunning(false)
-                  endRef.current = null
-                  setTimeLeft(TOTAL_TIME)
-                  setIsRunning(true)
-                } else {
-                  setIsRunning(true)
-                }
-              }}
-              style={{
-                width: 50,
-                height: 50,
-                borderRadius: '999px',
-                border: 'none',
-                backgroundColor: '#4f46e5',
-                color: 'white',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                boxShadow: '0 10px 24px rgba(79,70,229,0.45)',
-              }}
-            >
-              {isRunning && (
-                <div
-                  style={{
-                    display: 'flex',
-                    gap: 4,
-                  }}
-                >
-                  <span
-                    style={{
-                      width: 4,
-                      height: 14,
-                      borderRadius: 3,
-                      backgroundColor: 'white',
-                      display: 'block',
-                    }}
-                  />
-                  <span
-                    style={{
-                      width: 4,
-                      height: 14,
-                      borderRadius: 3,
-                      backgroundColor: 'white',
-                      display: 'block',
-                    }}
-                  />
-                </div>
-              )}
-              {timeLeft === 0 && <GrPowerReset style={{ fontSize: '18px' }} />}
-              {!isRunning && timeLeft !== 0 && (
-                <span
-                  style={{
-                    marginLeft: 3,
-                    width: 0,
-                    height: 0,
-                    borderTop: '9px solid transparent',
-                    borderBottom: '9px solid transparent',
-                    borderLeft: '14px solid white',
-                    display: 'block',
-                  }}
-                />
-              )}
-            </button>
           </div>
         </div>
       )}
