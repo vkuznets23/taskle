@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { IoCloseSharp } from 'react-icons/io5'
+import { GrPowerReset } from 'react-icons/gr'
 import { formatTime } from '../utils/formatTime'
 
 const TOTAL_TIME = 60
@@ -167,6 +168,11 @@ export default function Timer() {
                 if (isRunning) {
                   setIsRunning(false)
                   endRef.current = null
+                } else if (timeLeft === 0) {
+                  setIsRunning(false)
+                  endRef.current = null
+                  setTimeLeft(TOTAL_TIME)
+                  setIsRunning(true)
                 } else {
                   setIsRunning(true)
                 }
@@ -185,7 +191,7 @@ export default function Timer() {
                 boxShadow: '0 10px 24px rgba(79,70,229,0.45)',
               }}
             >
-              {isRunning ? (
+              {isRunning && (
                 <div
                   style={{
                     display: 'flex',
@@ -211,7 +217,9 @@ export default function Timer() {
                     }}
                   />
                 </div>
-              ) : (
+              )}
+              {timeLeft === 0 && <GrPowerReset style={{ fontSize: '18px' }} />}
+              {!isRunning && timeLeft !== 0 && (
                 <span
                   style={{
                     marginLeft: 3,
