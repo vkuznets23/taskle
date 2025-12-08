@@ -74,6 +74,7 @@ export default function Timer() {
             className="close-btn"
             onClick={() => {
               setModalOpen(false)
+              setZenMode(false)
               reset()
             }}
           >
