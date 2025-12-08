@@ -53,6 +53,14 @@ export default function Timer() {
     endRef.current = null
   }
 
+  const closePopup = () => {
+    if (confirm('Are you sure you want to close?')) {
+      setModalOpen(false)
+      setZenMode(false)
+      reset()
+    }
+  }
+
   const radius = 80
   const strokeWidth = 10
   const circumference = 2 * Math.PI * radius
@@ -70,14 +78,7 @@ export default function Timer() {
       <button onClick={() => setModalOpen(true)}>timer</button>
       {modalOpen && (
         <div className="modal">
-          <button
-            className="close-btn"
-            onClick={() => {
-              setModalOpen(false)
-              setZenMode(false)
-              reset()
-            }}
-          >
+          <button className="close-btn" onClick={closePopup}>
             <IoCloseSharp />
           </button>
           <div
