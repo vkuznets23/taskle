@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { Navbar, TasksList, Loader } from '../components'
 import type { Task } from '../types/taskTypes'
 import { API_URL } from '../types/api_url'
-import Timer from './timer'
 
 export interface Errors {
   tasksErrorMsg: string
@@ -49,7 +48,6 @@ export function Dashboard() {
   return (
     <div>
       <Navbar />
-      <Timer />
       <TasksList tasks={tasks} setTasks={setTasks} />
     </div>
   )

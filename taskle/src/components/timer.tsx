@@ -5,6 +5,7 @@ import { formatTime } from '../utils/formatTime'
 import { IoMusicalNotesSharp } from 'react-icons/io5'
 import { LuTimer } from 'react-icons/lu'
 import { LuTimerOff } from 'react-icons/lu'
+import { MdTimer } from 'react-icons/md'
 
 const TOTAL_TIME = 45 * 60
 
@@ -75,7 +76,20 @@ export default function Timer() {
 
   return (
     <>
-      <button onClick={() => setModalOpen(true)}>timer</button>
+      <button
+        onClick={() => setModalOpen(true)}
+        style={{
+          backgroundColor: 'none',
+          border: 'none',
+          fontSize: '18px',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <MdTimer />
+      </button>
       {modalOpen && (
         <div className="modal">
           <button className="close-btn" onClick={closePopup}>
@@ -84,7 +98,7 @@ export default function Timer() {
           <div
             style={{
               backgroundColor: 'white',
-              width: '230px',
+              width: '200px',
               height: '280px',
               display: 'flex',
               flexDirection: 'column',

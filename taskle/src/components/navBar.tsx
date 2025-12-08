@@ -4,6 +4,7 @@ import Logo from './logoIcon'
 import { MdWbSunny } from 'react-icons/md'
 import { IoMoon, IoLogInOutline } from 'react-icons/io5'
 import '../styles/navbar.css'
+import Timer from './timer'
 
 export default function Navbar() {
   const { logout } = useAuth()
@@ -13,6 +14,7 @@ export default function Navbar() {
     <div className="navbar">
       <Logo width={100} height={40} />
       <div className="buttons-container">
+        <Timer />
         <button
           onClick={toggleTheme}
           title="Set theme manually"
