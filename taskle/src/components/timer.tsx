@@ -6,6 +6,7 @@ import { IoMusicalNotesSharp } from 'react-icons/io5'
 import { LuTimer } from 'react-icons/lu'
 import { LuTimerOff } from 'react-icons/lu'
 import { MdTimer } from 'react-icons/md'
+import '../styles/timer.css'
 
 const TOTAL_TIME = 45 * 60
 
@@ -62,6 +63,20 @@ export default function Timer() {
     }
   }
 
+  const clickTimer = () => {
+    if (isRunning) {
+      setIsRunning(false)
+      endRef.current = null
+    } else if (timeLeft === 0) {
+      setIsRunning(false)
+      endRef.current = null
+      setTimeLeft(TOTAL_TIME)
+      setIsRunning(true)
+    } else {
+      setIsRunning(true)
+    }
+  }
+
   const radius = 80
   const strokeWidth = 10
   const circumference = 2 * Math.PI * radius
@@ -76,48 +91,17 @@ export default function Timer() {
 
   return (
     <>
-      <button
-        onClick={() => setModalOpen(true)}
-        style={{
-          backgroundColor: 'none',
-          border: 'none',
-          fontSize: '18px',
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <MdTimer />
+      <button className="timer-open" onClick={() => setModalOpen(true)}>
+        <MdTimer className="timer-open__icon" />
       </button>
       {modalOpen && (
         <div className="modal">
           <button className="close-btn" onClick={closePopup}>
             <IoCloseSharp />
           </button>
-          <div
-            style={{
-              backgroundColor: 'white',
-              width: '200px',
-              height: '280px',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '20px',
-              borderRadius: '24px',
-              boxShadow: '0 12px 32px rgba(0,0,0,0.12)',
-              padding: '20px',
-            }}
-          >
+          <div className="timer-card">
             {!zenMode ? (
-              <div
-                style={{
-                  position: 'relative',
-                  width: 2 * (radius + strokeWidth),
-                  height: 2 * (radius + strokeWidth),
-                }}
-              >
+              <div className="timer-ring">
                 <svg
                   width={2 * (radius + strokeWidth)}
                   height={2 * (radius + strokeWidth)}
@@ -152,35 +136,9 @@ export default function Timer() {
                     })`}
                   />
                 </svg>
-                <div
-                  style={{
-                    position: 'absolute',
-                    inset: 0,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexDirection: 'column',
-                    gap: '6px',
-                    pointerEvents: 'none',
-                  }}
-                >
-                  <span
-                    style={{
-                      fontSize: '12px',
-                      color: '#9ca3af',
-                    }}
-                  >
-                    Focus session
-                  </span>
-                  <span
-                    style={{
-                      fontVariantNumeric: 'tabular-nums',
-                      fontSize: '24px',
-                      fontWeight: 600,
-                    }}
-                  >
-                    {formatTime(timeLeft)}
-                  </span>
+                <div className="timer-center">
+                  <span className="timer-label">Focus session</span>
+                  <span className="timer-time">{formatTime(timeLeft)}</span>
                 </div>
               </div>
             ) : (
@@ -189,119 +147,38 @@ export default function Timer() {
                 autoPlay
                 loop
                 muted
-                style={{
-                  width: '180px',
-                  height: '180px',
-                }}
+                className="timer-video"
               />
             )}
-            <div style={{ display: 'flex', gap: '20px' }}>
-              <button
-                style={{
-                  width: 50,
-                  height: 50,
-                  borderRadius: '999px',
-                  border: 'none',
-                  backgroundColor: '#EF89E7',
-                  color: 'white',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  cursor: 'pointer',
-                }}
-              >
-                <IoMusicalNotesSharp style={{ fontSize: '18px' }} />
+            <div className="timer-controls">
+              <button className="timer-btn timer-btn--music" type="button">
+                <IoMusicalNotesSharp className="timer-btn__icon" />
               </button>
               <button
-                onClick={() => {
-                  if (isRunning) {
-                    setIsRunning(false)
-                    endRef.current = null
-                  } else if (timeLeft === 0) {
-                    setIsRunning(false)
-                    endRef.current = null
-                    setTimeLeft(TOTAL_TIME)
-                    setIsRunning(true)
-                  } else {
-                    setIsRunning(true)
-                  }
-                }}
-                style={{
-                  width: 50,
-                  height: 50,
-                  borderRadius: '999px',
-                  border: 'none',
-                  backgroundColor: '#4f46e5',
-                  color: 'white',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  cursor: 'pointer',
-                }}
+                type="button"
+                onClick={clickTimer}
+                className="timer-btn timer-btn--primary"
               >
                 {isRunning && (
-                  <div
-                    style={{
-                      display: 'flex',
-                      gap: 4,
-                    }}
-                  >
-                    <span
-                      style={{
-                        width: 4,
-                        height: 14,
-                        borderRadius: 3,
-                        backgroundColor: 'white',
-                        display: 'block',
-                      }}
-                    />
-                    <span
-                      style={{
-                        width: 4,
-                        height: 14,
-                        borderRadius: 3,
-                        backgroundColor: 'white',
-                        display: 'block',
-                      }}
-                    />
+                  <div className="timer-pause">
+                    <span className="timer-pause__bar" />
+                    <span className="timer-pause__bar" />
                   </div>
                 )}
-                {timeLeft === 0 && (
-                  <GrPowerReset style={{ fontSize: '18px' }} />
-                )}
+                {timeLeft === 0 && <GrPowerReset className="timer-btn__icon" />}
                 {!isRunning && timeLeft !== 0 && (
-                  <span
-                    style={{
-                      marginLeft: 3,
-                      width: 0,
-                      height: 0,
-                      borderTop: '9px solid transparent',
-                      borderBottom: '9px solid transparent',
-                      borderLeft: '14px solid white',
-                      display: 'block',
-                    }}
-                  />
+                  <span className="timer-play" />
                 )}
               </button>
               <button
+                type="button"
                 onClick={() => setZenMode(!zenMode)}
-                style={{
-                  width: 50,
-                  height: 50,
-                  borderRadius: '999px',
-                  border: 'none',
-                  backgroundColor: '#66DC7E',
-                  color: 'white',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  cursor: 'pointer',
-                }}
+                className="timer-btn timer-btn--zen"
               >
                 {!zenMode ? (
-                  <LuTimerOff style={{ fontSize: '18px' }} />
+                  <LuTimerOff className="timer-btn__icon" />
                 ) : (
-                  <LuTimer style={{ fontSize: '18px' }} />
+                  <LuTimer className="timer-btn__icon" />
                 )}
               </button>
             </div>
