@@ -2,12 +2,13 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import RegistrationToggle from './components/registrationToggle'
 import { useAuth } from './hooks/useAuth'
 import { Dashboard } from './components/dashboard'
+import Loader from './components/loader'
 
 function Home() {
   const { user, loading } = useAuth()
 
+  if (loading) return <Loader />
   if (user) return <Dashboard />
-  if (loading) return <RegistrationToggle />
   return <RegistrationToggle />
 }
 
