@@ -8,14 +8,19 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 const prisma = new PrismaClient()
 const router = express.Router()
 
-const jwtSecret = process.env.JWT_SECRET as string
-const jwtRefreshSecret = process.env.JWT_REFRESH_SECRET as string
+// check if JWT secrets are configured
+if (!process.env.JWT_SECRET || !process.env.JWT_REFRESH_SECRET) {
+  throw new Error('JWT secrets are not configured')
+}
+const jwtSecret = process.env.JWT_SECRET
+const jwtRefreshSecret = process.env.JWT_REFRESH_SECRET
+
 const isProd = process.env.NODE_ENV === 'production'
 const sameSiteSetting: 'lax' | 'strict' | 'none' = isProd ? 'none' : 'lax'
 const baseCookieOptions = {
-  httpOnly: true,
-  sameSite: sameSiteSetting,
-  secure: isProd,
+  httpOnly: true, // prevent XSS attacks
+  sameSite: sameSiteSetting, // prevent CSRF attacks
+  secure: isProd, // only send cookie over HTTPS in production
 } as const
 
 // Register a new user
