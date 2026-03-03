@@ -44,6 +44,7 @@ router.post('/register', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10)
     const user = await prisma.user.create({
       data: { email, password: hashedPassword },
+      select: { id: true, email: true, createdAt: true }, // ensure that we only get the id, email and createdAt fields
     })
     res.json(user)
   } catch (error) {
@@ -115,7 +116,7 @@ router.post('/refresh', async (req, res) => {
     const newAccessToken = jwt.sign(
       { userId: (decoded as JwtPayload).userId },
       jwtSecret,
-      { expiresIn: '1h' }
+      { expiresIn: '1h' },
     )
 
     res.cookie('accessToken', newAccessToken, {

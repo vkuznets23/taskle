@@ -16,20 +16,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true)
 
   const fetchUser = async () => {
+    const controller = new AbortController() //used to abort the request if it takes too long
+    const timeoutId = window.setTimeout(() => controller.abort(), 8000)
     try {
       setLoading(true)
       const res = await fetch(`${API_URL}/api/users/me`, {
         method: 'GET',
         credentials: 'include', // important to send cookies
+        signal: controller.signal, // used to abort the request if it takes too long
       })
       if (res.ok) {
         const data = await res.json()
         setUser(data.user)
       } else setUser(null)
     } catch (err) {
+      // AbortError is expected on slow cold-started backends
       console.log(err)
       setUser(null)
     } finally {
+      window.clearTimeout(timeoutId)
       setLoading(false)
     }
   }

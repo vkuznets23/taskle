@@ -14,8 +14,8 @@ app.set('trust proxy', 1)
 app.use(
   cors({
     origin: ['http://localhost:5173', 'https://taskly-eosin-ten.vercel.app'],
-    credentials: true,
-  })
+    credentials: true, // lets to send cookies to the client
+  }),
 )
 
 // JSON middleware
