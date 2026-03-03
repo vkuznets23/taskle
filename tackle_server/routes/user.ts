@@ -2,27 +2,36 @@ import { PrismaClient } from '../generated/prisma'
 import bcrypt from 'bcrypt'
 import express from 'express'
 import jwt, { JwtPayload } from 'jsonwebtoken'
+import { inputValidation, emptyInputValidation } from '../utils/validation'
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 
 const prisma = new PrismaClient()
 const router = express.Router()
 
-const jwtSecret = process.env.JWT_SECRET as string
-const jwtRefreshSecret = process.env.JWT_REFRESH_SECRET as string
+// check if JWT secrets are configured
+const jwtSecret = process.env.JWT_SECRET
+const jwtRefreshSecret = process.env.JWT_REFRESH_SECRET
+if (!jwtSecret || !jwtRefreshSecret) {
+  throw new Error('JWT secrets are not configured')
+}
+
 const isProd = process.env.NODE_ENV === 'production'
 const sameSiteSetting: 'lax' | 'strict' | 'none' = isProd ? 'none' : 'lax'
 const baseCookieOptions = {
-  httpOnly: true,
-  sameSite: sameSiteSetting,
-  secure: isProd,
+  httpOnly: true, // prevent XSS attacks
+  sameSite: sameSiteSetting, // prevent CSRF attacks
+  secure: isProd, // only send cookie over HTTPS in production
 } as const
 
 // Register a new user
 router.post('/register', async (req, res) => {
   try {
     const { email, password } = req.body
-    if (!email || !password) {
-      return res.status(400).json({ error: 'Email and password are required.' })
+    const error = inputValidation(email, password)
+    if (error) {
+      return res.status(400).json({ error })
     }
+
     const existingUser = await prisma.user.findUnique({
       where: { email },
     })
@@ -30,25 +39,20 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ error: 'User already exists.' })
     }
 
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-    if (!emailRegex.test(email)) {
-      return res.status(400).json({ error: 'Invalid email address.' })
-    }
-
-    const passwordRegex =
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,32}$/
-    if (!passwordRegex.test(password)) {
-      return res.status(400).json({ error: 'Invalid password.' })
-    }
-
     const hashedPassword = await bcrypt.hash(password, 10)
     const user = await prisma.user.create({
       data: { email, password: hashedPassword },
       select: { id: true, email: true, createdAt: true }, // ensure that we only get the id, email and createdAt fields
     })
-    res.json(user)
-  } catch (error) {
-    console.error(error)
+    return res.status(201).json(user)
+  } catch (error: unknown) {
+    // race condition error
+    if (
+      error instanceof PrismaClientKnownRequestError &&
+      error.code === 'P2002'
+    ) {
+      return res.status(400).json({ error: 'Email already exists' })
+    }
     return res.status(500).json({ error: 'Unable to register user.' })
   }
 })
@@ -57,7 +61,8 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body
-    if (!email || !password) {
+
+    if (!emptyInputValidation(email, password)) {
       return res.status(400).json({ error: 'Email and password are required.' })
     }
     // find a user in prisma by email
