@@ -9,11 +9,11 @@ const prisma = new PrismaClient()
 const router = express.Router()
 
 // check if JWT secrets are configured
-if (!process.env.JWT_SECRET || !process.env.JWT_REFRESH_SECRET) {
-  throw new Error('JWT secrets are not configured')
-}
 const jwtSecret = process.env.JWT_SECRET
 const jwtRefreshSecret = process.env.JWT_REFRESH_SECRET
+if (!jwtSecret || !jwtRefreshSecret) {
+  throw new Error('JWT secrets are not configured')
+}
 
 const isProd = process.env.NODE_ENV === 'production'
 const sameSiteSetting: 'lax' | 'strict' | 'none' = isProd ? 'none' : 'lax'
@@ -61,6 +61,7 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body
+
     if (!emptyInputValidation(email, password)) {
       return res.status(400).json({ error: 'Email and password are required.' })
     }
