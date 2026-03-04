@@ -52,7 +52,7 @@ router.get('/tasks', authenticateToken, async (req, res) => {
     const allTasks = await prisma.task.findMany({
       where: { userId: req.userId },
     })
-    res.json(allTasks)
+    return res.status(200).json(allTasks)
   } catch (err) {
     console.error(err)
     res.status(500).json({ error: 'Unable to fetch tasks' })
@@ -64,30 +64,49 @@ router.put('/tasks/:id', authenticateToken, async (req, res) => {
   const { id } = req.params
   const { task, priority, tag, status } = req.body
 
+  // check that id is num
+  const taskId = Number(id)
+  if (Number.isNaN(taskId)) {
+    return res.status(400).json({ error: 'Invalid task ID' })
+  }
+
+  // validate input
+  const taskErr = taskValidation(task)
+  if (taskErr) {
+    return res.status(400).json({ taskErr })
+  }
+
+  const {
+    priority: validatedPriority,
+    tag: validatedTag,
+    status: validatedStatus,
+  } = validateAll(priority, tag, status)
+
   try {
+    // does task exist?
     const existingTask = await prisma.task.findUnique({
       where: { id: Number(id) },
     })
 
     if (!existingTask || existingTask.userId !== req.userId)
-      return res.status(400).json({ error: 'Task not found' })
+      return res.status(404).json({ error: 'Task not found' })
 
+    // update task
     const updatedTask = await prisma.task.update({
       where: { id: Number(id) },
       data: {
         task,
-        priority,
-        tag,
-        status,
+        priority: validatedPriority,
+        tag: validatedTag,
+        status: validatedStatus,
       },
     })
 
-    console.log('updates', updatedTask)
-
-    res.status(200).json(updatedTask)
+    return res.status(200).json(updatedTask)
   } catch (err) {
+    // check errors
     console.error(err)
-    res.status(500).json({ error: 'Unable to update task' })
+    return res.status(500).json({ error: 'Unable to update task' })
   }
 })
 
