@@ -1,27 +1,13 @@
-import { PrismaClient } from '../generated/prisma'
 import bcrypt from 'bcrypt'
 import express from 'express'
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import { inputValidation, emptyInputValidation } from '../utils/validation'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
+import { jwtRefreshSecret, jwtSecret, prisma } from '../config'
+import { authenticateToken } from '../middlewares/auth'
+import { clearAuthCookies, setAuthCookies } from '../utils/cookie'
 
-const prisma = new PrismaClient()
 const router = express.Router()
-
-// check if JWT secrets are configured
-const jwtSecret = process.env.JWT_SECRET
-const jwtRefreshSecret = process.env.JWT_REFRESH_SECRET
-if (!jwtSecret || !jwtRefreshSecret) {
-  throw new Error('JWT secrets are not configured')
-}
-
-const isProd = process.env.NODE_ENV === 'production'
-const sameSiteSetting: 'lax' | 'strict' | 'none' = isProd ? 'none' : 'lax'
-const baseCookieOptions = {
-  httpOnly: true, // prevent XSS attacks
-  sameSite: sameSiteSetting, // prevent CSRF attacks
-  secure: isProd, // only send cookie over HTTPS in production
-} as const
 
 // Register a new user
 router.post('/register', async (req, res) => {
@@ -66,7 +52,10 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ error: 'Email and password are required.' })
     }
     // find a user in prisma by email
-    const user = await prisma.user.findUnique({ where: { email } })
+    const user = await prisma.user.findUnique({
+      where: { email },
+      select: { id: true, email: true, password: true },
+    })
     if (!user) {
       return res.status(401).json({ error: 'Invalid email or password.' })
     }
@@ -87,15 +76,7 @@ router.post('/login', async (req, res) => {
     })
 
     // save to cookie
-    res.cookie('accessToken', token, {
-      ...baseCookieOptions,
-      maxAge: 60 * 60 * 1000, // 1 hour
-    })
-
-    res.cookie('refreshToken', refreshToken, {
-      ...baseCookieOptions,
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    })
+    setAuthCookies(res, token, refreshToken)
 
     return res.json({
       message: 'Login successful',
@@ -124,10 +105,7 @@ router.post('/refresh', async (req, res) => {
       { expiresIn: '1h' },
     )
 
-    res.cookie('accessToken', newAccessToken, {
-      ...baseCookieOptions,
-      maxAge: 60 * 60 * 1000,
-    })
+    setAuthCookies(res, newAccessToken)
 
     return res.json({ message: 'Token refreshed' })
   } catch (err) {
@@ -137,31 +115,20 @@ router.post('/refresh', async (req, res) => {
 })
 
 // Check if user is authenticated
-router.get('/me', async (req, res) => {
-  const token = req.cookies.accessToken
-  if (!token) {
-    return res.status(401).json({ error: 'No token provided' })
+router.get('/me', authenticateToken, async (req, res) => {
+  const user = await prisma.user.findUnique({
+    where: { id: req.userId },
+    select: { id: true, email: true, createdAt: true },
+  })
+  if (!user) {
+    return res.status(401).json({ error: 'User not found' })
   }
-  try {
-    const decoded = jwt.verify(token, jwtSecret) as JwtPayload
-    const user = await prisma.user.findUnique({
-      where: { id: decoded.userId },
-      select: { id: true, email: true, createdAt: true },
-    })
-    if (!user) {
-      return res.status(401).json({ error: 'User not found' })
-    }
-    return res.json({ user })
-  } catch (err) {
-    console.error(err)
-    return res.status(401).json({ error: 'Invalid token' })
-  }
+  return res.json({ user })
 })
 
 // Logout
 router.post('/logout', (req, res) => {
-  res.clearCookie('accessToken', baseCookieOptions)
-  res.clearCookie('refreshToken', baseCookieOptions)
+  clearAuthCookies(res)
   res.json({ message: 'Logged out successfully' })
 })
 

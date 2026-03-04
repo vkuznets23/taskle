@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState, type ReactNode } from 'react'
 import type { User } from '../types/registrationTypes'
-import { API_URL } from '../types/api_url'
+import { API_URL } from '../config/api'
 
 interface AuthContextType {
   user: User | null

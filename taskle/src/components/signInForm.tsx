@@ -5,7 +5,7 @@ import InputField from './inputField'
 import InputError from './inputError'
 import SubmitButton from './submitButton'
 import { useAuth } from '../hooks/useAuth'
-import { API_URL } from '../types/api_url'
+import { API_URL } from '../config/api'
 
 export default function SignInform() {
   const [email, setEmail] = useState<string>('')
