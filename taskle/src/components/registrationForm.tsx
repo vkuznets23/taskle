@@ -4,7 +4,7 @@ import { type Error } from '../types/registrationTypes'
 import InputField from './inputField'
 import InputError from './inputError'
 import SubmitButton from './submitButton'
-import { API_URL } from '../types/api_url'
+import { API_URL } from '../config/api'
 
 export default function RegistrationForm() {
   const [email, setEmail] = useState<string>('')
@@ -47,7 +47,7 @@ export default function RegistrationForm() {
     const newError = RegistrationFormValidation(
       email,
       password,
-      confirmPassword
+      confirmPassword,
     )
 
     // If there are any errors, show them all and return

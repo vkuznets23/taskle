@@ -23,7 +23,6 @@ export const authenticateToken = (
 
   try {
     const decoded = jwt.verify(token, jwtSecret) as JwtPayload
-
     req.userId = Number(decoded.userId)
     next()
   } catch (err) {

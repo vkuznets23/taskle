@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { Task } from '../types/taskTypes'
 import { TableView, KanbanView, NoTasks, NavPanel } from '../components'
-import { API_URL } from '../types/api_url'
+import { API_URL } from '../config/api'
 
 const priorityOrder: Record<string, number> = {
   LOW: 1,
@@ -25,7 +25,7 @@ export default function TasksList({
   const handleUpdate = async (id: number, updates: Partial<Task>) => {
     const previousTasks = [...tasks]
     setTasks((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, ...updates } : t))
+      prev.map((t) => (t.id === id ? { ...t, ...updates } : t)),
     )
 
     try {
@@ -76,7 +76,7 @@ export default function TasksList({
 
   const filteredTasks = tasks
     .filter((task) =>
-      task.task.toLowerCase().includes(searchQuery.toLowerCase())
+      task.task.toLowerCase().includes(searchQuery.toLowerCase()),
     )
     .filter((task) => {
       const status =
@@ -88,7 +88,7 @@ export default function TasksList({
     })
     .filter(
       (task) =>
-        tagFilter.length === 0 || tagFilter.includes(task.tag.toLowerCase())
+        tagFilter.length === 0 || tagFilter.includes(task.tag.toLowerCase()),
     )
 
   const sortedTasks = [...filteredTasks].sort((a, b) => {

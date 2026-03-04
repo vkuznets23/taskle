@@ -9,7 +9,7 @@ import '../../styles/table.css'
 import { IoIosArrowDown } from 'react-icons/io'
 import { IoCloseSharp } from 'react-icons/io5'
 import PrioritySelector from '../table/prioritySelector'
-import { API_URL } from '../../types/api_url'
+import { API_URL } from '../../config/api'
 
 export default function FormTasks({
   setTasks,

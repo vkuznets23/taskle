@@ -4,6 +4,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken'
 import { inputValidation, emptyInputValidation } from '../utils/validation'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import { jwtRefreshSecret, jwtSecret, prisma } from '../config'
+import { authenticateToken } from '../middlewares/auth'
 
 const router = express.Router()
 
@@ -129,25 +130,15 @@ router.post('/refresh', async (req, res) => {
 })
 
 // Check if user is authenticated
-router.get('/me', async (req, res) => {
-  const token = req.cookies.accessToken
-  if (!token) {
-    return res.status(401).json({ error: 'No token provided' })
+router.get('/me', authenticateToken, async (req, res) => {
+  const user = await prisma.user.findUnique({
+    where: { id: req.userId },
+    select: { id: true, email: true, createdAt: true },
+  })
+  if (!user) {
+    return res.status(401).json({ error: 'User not found' })
   }
-  try {
-    const decoded = jwt.verify(token, jwtSecret) as JwtPayload
-    const user = await prisma.user.findUnique({
-      where: { id: decoded.userId },
-      select: { id: true, email: true, createdAt: true },
-    })
-    if (!user) {
-      return res.status(401).json({ error: 'User not found' })
-    }
-    return res.json({ user })
-  } catch (err) {
-    console.error(err)
-    return res.status(401).json({ error: 'Invalid token' })
-  }
+  return res.json({ user })
 })
 
 // Logout
