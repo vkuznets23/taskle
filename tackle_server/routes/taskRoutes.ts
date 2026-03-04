@@ -104,21 +104,20 @@ router.put('/tasks/:id', authenticateToken, async (req, res) => {
 
     return res.status(200).json(updatedTask)
   } catch (err) {
-    // check errors
     console.error(err)
     return res.status(500).json({ error: 'Unable to update task' })
   }
 })
 
 // count amount of tasks
-router.get('/tasks/count', async (req, res) => {
+router.get('/tasks/count', authenticateToken, async (req, res) => {
   try {
     const counts = await prisma.task.groupBy({
       by: ['status'],
       _count: { id: true },
       where: { userId: req.userId },
     })
-    res.json(counts)
+    return res.status(200).json(counts)
   } catch (err) {
     console.error(err)
     res.status(500).json({ error: 'Failed to get counts' })
@@ -126,10 +125,9 @@ router.get('/tasks/count', async (req, res) => {
 })
 
 // delete task
-router.delete('/tasks/:id', async (req, res) => {
+router.delete('/tasks/:id', authenticateToken, async (req, res) => {
   const { id } = req.params
   const taskId = Number(id)
-
   if (isNaN(taskId)) {
     return res.status(400).json({ error: 'Invalid task ID' })
   }
@@ -138,8 +136,8 @@ router.delete('/tasks/:id', async (req, res) => {
     const existingTask = await prisma.task.findUnique({
       where: { id: taskId },
     })
-    if (!existingTask) {
-      return res.status(400).json({ error: 'Task doesnt exist' })
+    if (!existingTask || existingTask.userId !== req.userId) {
+      return res.status(404).json({ error: 'Task not found' })
     }
 
     await prisma.task.delete({
