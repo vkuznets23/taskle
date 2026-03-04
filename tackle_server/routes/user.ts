@@ -5,16 +5,9 @@ import { inputValidation, emptyInputValidation } from '../utils/validation'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import { jwtRefreshSecret, jwtSecret, prisma } from '../config'
 import { authenticateToken } from '../middlewares/auth'
+import { clearAuthCookies, setAuthCookies } from '../utils/cookie'
 
 const router = express.Router()
-
-const isProd = process.env.NODE_ENV === 'production'
-const sameSiteSetting: 'lax' | 'strict' | 'none' = isProd ? 'none' : 'lax'
-const baseCookieOptions = {
-  httpOnly: true, // prevent XSS attacks
-  sameSite: sameSiteSetting, // prevent CSRF attacks
-  secure: isProd, // only send cookie over HTTPS in production
-} as const
 
 // Register a new user
 router.post('/register', async (req, res) => {
@@ -59,7 +52,10 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ error: 'Email and password are required.' })
     }
     // find a user in prisma by email
-    const user = await prisma.user.findUnique({ where: { email } })
+    const user = await prisma.user.findUnique({
+      where: { email },
+      select: { id: true, email: true, password: true },
+    })
     if (!user) {
       return res.status(401).json({ error: 'Invalid email or password.' })
     }
@@ -80,15 +76,7 @@ router.post('/login', async (req, res) => {
     })
 
     // save to cookie
-    res.cookie('accessToken', token, {
-      ...baseCookieOptions,
-      maxAge: 60 * 60 * 1000, // 1 hour
-    })
-
-    res.cookie('refreshToken', refreshToken, {
-      ...baseCookieOptions,
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    })
+    setAuthCookies(res, token, refreshToken)
 
     return res.json({
       message: 'Login successful',
@@ -117,10 +105,7 @@ router.post('/refresh', async (req, res) => {
       { expiresIn: '1h' },
     )
 
-    res.cookie('accessToken', newAccessToken, {
-      ...baseCookieOptions,
-      maxAge: 60 * 60 * 1000,
-    })
+    setAuthCookies(res, newAccessToken)
 
     return res.json({ message: 'Token refreshed' })
   } catch (err) {
@@ -143,8 +128,7 @@ router.get('/me', authenticateToken, async (req, res) => {
 
 // Logout
 router.post('/logout', (req, res) => {
-  res.clearCookie('accessToken', baseCookieOptions)
-  res.clearCookie('refreshToken', baseCookieOptions)
+  clearAuthCookies(res)
   res.json({ message: 'Logged out successfully' })
 })
 
