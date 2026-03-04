@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import jwt, { JwtPayload } from 'jsonwebtoken'
+import { jwtSecret } from '../config'
 
 declare global {
   namespace Express {
@@ -12,7 +13,7 @@ declare global {
 export const authenticateToken = (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const token = req.cookies.accessToken
 
@@ -21,10 +22,7 @@ export const authenticateToken = (
   }
 
   try {
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET as string
-    ) as JwtPayload
+    const decoded = jwt.verify(token, jwtSecret) as JwtPayload
 
     req.userId = Number(decoded.userId)
     next()

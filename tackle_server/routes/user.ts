@@ -1,19 +1,11 @@
-import { PrismaClient } from '../generated/prisma'
 import bcrypt from 'bcrypt'
 import express from 'express'
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import { inputValidation, emptyInputValidation } from '../utils/validation'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
+import { jwtRefreshSecret, jwtSecret, prisma } from '../config'
 
-const prisma = new PrismaClient()
 const router = express.Router()
-
-// check if JWT secrets are configured
-const jwtSecret = process.env.JWT_SECRET
-const jwtRefreshSecret = process.env.JWT_REFRESH_SECRET
-if (!jwtSecret || !jwtRefreshSecret) {
-  throw new Error('JWT secrets are not configured')
-}
 
 const isProd = process.env.NODE_ENV === 'production'
 const sameSiteSetting: 'lax' | 'strict' | 'none' = isProd ? 'none' : 'lax'
