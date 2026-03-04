@@ -1,24 +1,21 @@
-import { PrismaClient } from '../generated/prisma'
+import { prisma } from '../config'
 import express from 'express'
 import { authenticateToken } from '../middlewares/auth.js'
+import {
+  inputValidation,
+  taskValidation,
+  validateAll,
+} from '../utils/validation'
 
-const prisma = new PrismaClient()
 const router = express.Router()
 
 router.post('/tasks', authenticateToken, async (req, res) => {
   try {
     const { task, priority, tag, status } = req.body
 
-    if (!task || typeof task !== 'string' || task.trim().length === 0) {
-      return res
-        .status(400)
-        .json({ error: 'Task is required and must be a non-empty string' })
-    }
-
-    if (task.length > 150) {
-      return res
-        .status(400)
-        .json({ error: 'The task text must be under 150 characters.' })
+    const error = taskValidation(task)
+    if (error) {
+      return res.status(400).json({ error })
     }
 
     // get userId from middleware
@@ -27,15 +24,11 @@ router.post('/tasks', authenticateToken, async (req, res) => {
       return res.status(401).json({ error: 'User ID not found' })
     }
 
-    const validPriorities = ['HIGH', 'MEDIUM', 'LOW']
-    const validTags = ['NONE', 'WORK', 'STUDYING', 'PERSONAL']
-    const validStatuses = ['TODO', 'IN_PROGRESS', 'DONE']
-
-    const validatedPriority = validPriorities.includes(priority)
-      ? priority
-      : 'NONE'
-    const validatedTag = validTags.includes(tag) ? tag : 'LOW'
-    const validatedStatus = validStatuses.includes(status) ? status : 'TODO'
+    const {
+      priority: validatedPriority,
+      tag: validatedTag,
+      status: validatedStatus,
+    } = validateAll(priority, tag, status)
 
     const newTask = await prisma.task.create({
       data: {

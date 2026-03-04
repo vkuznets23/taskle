@@ -34,3 +34,55 @@ export const inputValidation = (
 
   return null
 }
+
+export const taskValidation = (task: any): string | null => {
+  if (!task || typeof task !== 'string' || task.trim() === '') {
+    return 'Task is required and must be a non-empty string'
+  }
+
+  if (task.length > 150) {
+    return 'The task text must be under 150 characters.'
+  }
+
+  return null
+}
+
+export enum Priority {
+  HIGH = 'HIGH',
+  MEDIUM = 'MEDIUM',
+  LOW = 'LOW',
+}
+
+export enum Tag {
+  NONE = 'NONE',
+  WORK = 'WORK',
+  STUDYING = 'STUDYING',
+  PERSONAL = 'PERSONAL',
+}
+
+export enum Status {
+  TODO = 'TODO',
+  IN_PROGRESS = 'IN_PROGRESS',
+  DONE = 'DONE',
+}
+
+const validPriorities = Object.values(Priority)
+const validTags = Object.values(Tag)
+const validStatuses = Object.values(Status)
+
+export const validateAll = (priority: any, tag: any, status: any) => {
+  const validatedPriority: Priority = validPriorities.includes(priority)
+    ? priority
+    : Priority.LOW
+
+  const validatedTag: Tag = validTags.includes(tag) ? tag : Tag.NONE
+
+  const validatedStatus: Status = validStatuses.includes(status)
+    ? status
+    : Status.TODO
+  return {
+    priority: validatedPriority,
+    tag: validatedTag,
+    status: validatedStatus,
+  }
+}
